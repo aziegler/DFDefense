@@ -28,30 +28,31 @@ GameplayVariable {
 }
 
 Tower{
-   range = 100,
+   name = "Tour 1",
+   range = 150,
    dps = 10,
    influence = 50,
-   influence_rate = 100,
+   influence_rate = 10,
    color = {200,100,100}
 }
 
 
 Tower{
-   name = "Tour 1",
-   range = 200,
+   name = "Tour 2",
+   range = 250,
    dps = 3,
    influence = 100,
-   influence_rate = 50,
+   influence_rate = 5,
    color = {200,30,30},
    img = "assets/buildings/BtmD_Tower.png"
 }
 
 Tower {
-   name = "Tour 2",
+   name = "Neutre",
    range = 200,
    dps = 1,
    influence = 200,
-   influence_rate = 50,
+   influence_rate = 0,
    color = {0,100,200},
    img = "assets/buildings/BtmN_ruin.png"
 }
