@@ -3,7 +3,7 @@ Video {
 }
 
 Audio {
-   start = 25,
+   start = 0,
    loops = {
       { loop = 0, voice = true, tbs = 2},
       { loop = 1, voice = false },
@@ -55,7 +55,7 @@ Tower {
    color = {200,100,100},
    img = "assets/buildings/BtmG_Garden.png",
    icon = "assets/UI/Icon_Garden.png",
-   tooltip = "Faible portee, grosse puissance"
+   tooltip = "Faible portée, grosse puissance"
 }
 
 
@@ -67,7 +67,7 @@ Tower {
    influence_rate = 8,
    color = {200,30,30},
    img = "assets/buildings/BtmG_library.png",
-   tooltip = "Moeynne porte, moyenne puissance"
+   tooltip = "Moyenne porte, moyenne puissance"
 }
 
 Tower {
@@ -79,7 +79,7 @@ Tower {
    color = {0,100,200},
    img = "assets/buildings/BtmG_assos.png",
    icon = "assets/UI/Icon_Assos.png",
-   tooltip = "Longue portee, faible puissance"
+   tooltip = "Longue portée, faible puissance"
 }
 
 Enemy {
