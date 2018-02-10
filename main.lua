@@ -205,6 +205,8 @@ end
 function draw_enemy(ennemy)
    love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
    love.graphics.rectangle("fill",ennemy.x - 10,ennemy.y - 10,20,20)
+   love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue, 50)
+   love.graphics.circle("fill", ennemy.x, ennemy.y, ennemy.range)
    love.graphics.setColor(0,0,0)
    love.graphics.print(math.floor(ennemy.life),ennemy.x - 7 ,ennemy.y - 5,0)
 end
@@ -216,13 +218,12 @@ function draw_tower(tower)
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,100)
    end
    love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
-   love.graphics.setColor(tower.color.red, tower.color.green, tower.color.blue, 50)
-   love.graphics.circle("fill", tower.x, tower.y, tower.range)
    local influenceRatio = tower.friendlyinfluence / (tower.friendlyinfluence + tower.enemyinfluence)
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
+   love.graphics.print("Friend "..math.floor(tower.friendlyinfluence/10).." Enemy"..math.floor(tower.enemyinfluence/10),tower.x + 10, tower.y + 20)
 
 end
 
