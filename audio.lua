@@ -113,8 +113,8 @@ function audioDraw()
    local angle = (math.pi*2*(audioGroups.voice[1]:tell("seconds")-tracks[i].start)/loop) - math.pi/2
 
    local r = 100
-   local x = love.graphics.getWidth() - r
-   local y = love.graphics.getHeight() - r
+   local x = r+5
+   local y = r+5
 
 
    love.graphics.setLineWidth(3)

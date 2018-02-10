@@ -1,8 +1,11 @@
-local tower_types = {}
+tower_types = {}
 
 local enemy_types = {}
 
 local layerData
+function Video (v)
+   videoSettings = v
+end
 
 function Tower (t)
    table.insert(tower_types, t)
