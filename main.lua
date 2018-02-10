@@ -137,6 +137,12 @@ function love.load(arg)
    dataLoad(roads, buildings)
    audioLoad(audioConfig)
 
+   imgBuildings = {
+      Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
+      Goche = love.graphics.newImage("assets/buildings/BtmG_Tower.png"),
+      Neutre = love.graphics.newImage("assets/buildings/BtmN_Tower.png")
+   }
+
    for k,v in pairs(buildings.list) do
       for n,v2 in pairs(v) do
          print(k, n,v2)
@@ -284,6 +290,12 @@ function draw_tower(tower)
                         tower.y+tower.height/2, tower.range)
 end
 
+function drawBuildings(img, building)
+   love.graphics.draw(img,
+                      building.x+building.width/2-img:getWidth()/2,
+                      building.y+building.height-img:getHeight())
+end
+
 function love.draw()
    love.graphics.scale(scale,scale)
 
@@ -295,32 +307,34 @@ function love.draw()
    end
    for _,building in pairs(buildings.list) do
       if not building.tower then
+         love.graphics.setColor(255,255,255,255)
          if building.score >= gameplayVariable.buildingTreshold then
-            love.graphics.setColor(255,0,0,255)
+            drawBuildings(imgBuildings.Goche, building)
          elseif building.score >= -100 then
-            love.graphics.setColor(100,100,100,255)
+            --love.graphics.setColor(100,100,100,255)
+            drawBuildings(imgBuildings.Neutre, building)
          else
-            love.graphics.setColor(0,0,255,255)
             love.graphics.setColor(50, 50, 180, 255)
             love.graphics.circle("line",
                         building.x+building.width/2,
                         building.y+building.height/2, enemyBuilding.range)
+            love.graphics.setColor(255,255,255,255)
+            drawBuildings(imgBuildings.Drouate, building)
          end
-         love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
-         love.graphics.setColor(120,255,120,255)
-         love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50,0,2,2)
-         
+         --love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
+         love.graphics.setColor(50,50,50,255)
+         love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y - 30, 0, 2, 2)
+
+      else
+         draw_tower(building.tower)
       end
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
    end
-   for _,tower in pairs(towers.list) do
-      draw_tower(tower)
-   end
-
-   -- we don't draw a tower on the mouse anymore, do we?
-   --   draw_tower(towers.current_tower)
+   --for _,tower in pairs(towers.list) do
+   --   draw_tower(tower)
+   --end
 
    if mouseMode == mouseModes.gui then
       drawMenu()
