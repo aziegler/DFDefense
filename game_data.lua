@@ -143,7 +143,7 @@ function loadSquare(cont, towers, R, G, B)
                end
                if x > 1500 then
                   local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
-                  local concertTower = {
+                  concertTower = {
                      name = "Concert",
                      range = gameplayVariable.concertRange,
                      dps = gameplayVariable.concertDps,
@@ -165,7 +165,7 @@ function loadSquare(cont, towers, R, G, B)
                   table.insert (cont.list, concertBuilding)
                   table.insert(towers.list, concertTower)
                else
-                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0, name="Tests"})
+                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0, name="Tests", hasGauge = true})
                end
             end
          end
