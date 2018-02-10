@@ -15,13 +15,13 @@ Audio {
       { loop = 2, voice = true , tbs = 1.1},
       { loop = 3, voice = false },
       { loop = 3, voice = false },
-	  
+
 	  { loop = 4, voice = true , tbs = 1.25},
 	  { loop = 4, voice = false },
-	  
+
 	  { loop = 5, voice = true , tbs = 1.25},
 	  { loop = 5, voice = false },
-	  
+
    }
 }
 
@@ -52,7 +52,9 @@ Tower{
    dps = 4,
    influence = 50,
    influence_rate = 10,
-   color = {200,100,100}
+   color = {200,100,100},
+   img = "assets/buildings/BtmG_Garden.png",
+   icon = "assets/UI/Icon_Garden.png"
 }
 
 
@@ -63,7 +65,7 @@ Tower{
    influence = 100,
    influence_rate = 8,
    color = {200,30,30},
-   img = "assets/buildings/BtmD_Tower.png"
+   img = "assets/buildings/BtmG_library.png",
 }
 
 Tower {
@@ -73,7 +75,8 @@ Tower {
    influence = 200,
    influence_rate = 8,
    color = {0,100,200},
-   img = "assets/buildings/BtmG_assos.png"
+   img = "assets/buildings/BtmG_assos.png",
+   icon = "assets/UI/Icon_Assos.png"
 }
 
 Enemy {
