@@ -18,6 +18,9 @@ function Tower (t)
 end
 
 function Enemy (e)
+   if e.img then
+      e.img = love.graphics.newImage(e.img)
+   end
    table.insert(enemy_types, e)
 end
 
@@ -135,7 +138,7 @@ function loadSquare(cont, towers, R, G, B)
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
-               if x > 1700 then
+               if x > 1500 then
                   local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
                   local concertTower = {
                      name = "Concert",
@@ -144,11 +147,12 @@ function loadSquare(cont, towers, R, G, B)
                      score = gameplayVariable.initialConcertInfluence,
                      influence_rate = gameplayVariable.concertInfluenceRate,
                      color = {red = 255,green = 30,blue = 30},
-                     img = nil,
+                     img = love.graphics.newImage("assets/buildings/BtmG_DanielFeryr.png"),
                      x = concertBuilding.x,
                      y = concertBuilding.y,
                      width = concertBuilding.width,
                      height = concertBuilding.height,
+                     center = true,
                      enabled = true,
                      building = concertBuilding,
                      name="DF"
@@ -222,6 +226,7 @@ function new_enemy(roads)
    enemy.color.red = enemy_type.color[1]
    enemy.color.green = enemy_type.color[2]
    enemy.color.blue = enemy_type.color[3]
+   enemy.img = enemy_type.img
    enemy.speed = enemy_type.speed
    enemy.dps = enemy_type.dps
    enemy.range = enemy_type.range

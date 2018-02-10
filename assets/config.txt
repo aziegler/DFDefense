@@ -8,10 +8,10 @@ Audio {
       { loop = 0, voice = true, tbs = 1},
       { loop = 1, voice = false },
       { loop = 1, voice = false },
-      { loop = 1, voice = true , tbs = 0.5},
+      { loop = 1, voice = true , tbs = 0.75},
       { loop = 2, voice = false },
+      { loop = 2, voice = true , tbs = 0.5},
       { loop = 2, voice = true , tbs = 0.25},
-      { loop = 2, voice = true , tbs = 0.125},
       { loop = 3, voice = false },
       { loop = 3, voice = false }
    }
@@ -26,9 +26,9 @@ EnemyBuilding {
 GameplayVariable {
    buildingTreshold = 20,
    initialConcertInfluence = 200,
-   concertRange = 200,
+   concertRange = 250,
    concertDps = 10,
-   concertInfluenceRate = 5,
+   concertInfluenceRate = 10,
    neutralName = "Habitations",
    friendlyName = "Habitat partagé"
 }
@@ -63,18 +63,20 @@ Tower {
    img = "assets/buildings/BtmN_ruin.png"
 }
 
-Enemy{
+Enemy {
    life = 30,
-   color={120,120,110},
+   color = {120,120,110},
    speed = 20,
-   dps = 50,
-   range = 150
+   dps = 15,
+   range = 150,
+   img = "assets/enemies/costard.png"
 }
 
-Enemy{
+Enemy {
    life = 50,
-   color={120,120,210},
+   color = {120,120,210},
    speed = 60,
-   dps = 20,
-   range = 150
+   dps = 10,
+   range = 150,
+      img = "assets/enemies/costard.png"
 }

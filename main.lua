@@ -295,21 +295,34 @@ function collide(tower1,tower2)
    return false
 end
 
-function draw_enemy(ennemy)
-   love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
-   love.graphics.rectangle("fill",ennemy.x - 20,ennemy.y - 20,40,40)
+function draw_enemy(enemy)
+   if enemy.img then
+      love.graphics.setColor(255, 255, 255, 255)
+      love.graphics.draw(enemy.img,
+                         enemy.x-enemy.img:getWidth()/2,
+                         enemy.y-enemy.img:getHeight())
+   else
+      love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
+      love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
+   end
+
    love.graphics.setColor(50, 50, 180, 255)
-   love.graphics.circle("line", ennemy.x, ennemy.y, ennemy.range)
-   love.graphics.setColor(0,0,0)
-   love.graphics.print(math.floor(ennemy.life),ennemy.x - 7 ,ennemy.y - 5,0)
+   love.graphics.circle("line", enemy.x, enemy.y, enemy.range)
+   love.graphics.setColor(255,0,0)
+   love.graphics.print(math.floor(enemy.life),enemy.x - 7 ,enemy.y - 5,0)
+
 end
 
 function draw_tower(tower)
    if tower.img then
       love.graphics.setColor(255, 255, 255)
+      local h  = tower.y - tower.img:getHeight() + tower.height
+      if tower.center == true then
+         h = tower.y - tower.img:getHeight()/2 + tower.height/2
+      end
       love.graphics.draw(tower.img,
-                         tower.x - tower.img:getWidth()/2 + tower.width/2,
-                         tower.y - tower.img:getHeight() + tower.height)
+                         tower.x - tower.img:getWidth()/2 + tower.width/2, h)
+
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
@@ -346,6 +359,10 @@ function drawHover(text)
    love.graphics.printf(text,mouseModes.mousePos[1] + 10,mouseModes.mousePos[2] + 5,180,"center")
 end
 
+function sortY(obj1, obj2)
+   return obj1.y < obj2.y
+end
+
 function love.draw()
    love.graphics.scale(scale,scale)
 
@@ -356,12 +373,22 @@ function love.draw()
       end
    end
 
+   local drawList = {}
    for _,enemy in pairs(enemies.list) do
-      draw_enemy(enemy)
+      enemy.enemy = true
+      table.insert(drawList, enemy)
    end
 
    for _,building in pairs(buildings.list) do
-      if not building.tower then
+      table.insert(drawList, building)
+   end
+
+   table.sort(drawList, sortY)
+
+   for _,building in pairs(drawList) do
+      if building.enemy then
+         draw_enemy(building)
+      elseif not building.tower then
          love.graphics.setColor(255,255,255,255)
          if building.score >= gameplayVariable.buildingTreshold then
             drawBuildings(imgBuildings.Goche, building)
