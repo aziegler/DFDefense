@@ -136,13 +136,13 @@ function loadBuildings(buildings, towers)
                end
                if x > 1700 then
                   local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
-                  local concertTower = Tower({
+                  local concertTower = {
                      name = "Concert",
                      range = gameplayVariable.concertRange,
                      dps = gameplayVariable.concertDps,
-                     influence = gameplayVariable.initialConcertInfluence,
+                     score = gameplayVariable.initialConcertInfluence,
                      influence_rate = gameplayVariable.concertInfluenceRate,
-                     color = {255,30,30},
+                     color = {red = 255,green = 30,blue = 30},
                      img = nil,
                      x = concertBuilding.x,
                      y = concertBuilding.y,
@@ -150,8 +150,9 @@ function loadBuildings(buildings, towers)
                      height = concertBuilding.height,
                      enabled = true,
                      building = concertBuilding
-                  })
+                  }
                   concertBuilding.tower = concertTower
+                  table.insert (buildings.list,concertBuilding)
                   table.insert(towers.list, concertTower)
                else
                   table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
