@@ -1,3 +1,4 @@
+require "audio"
 
 local layerData
 
@@ -43,7 +44,7 @@ function Ennemy (e)
 	table.insert(enemy_types, e)
 end
 
-function new_ennemy() 
+function new_ennemy()
 	local enemy_type = enemy_types[math.random(1,#enemy_types)]
 	local ennemy = {}
 	ennemy.color = {}
@@ -66,6 +67,8 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function love.load()
+   audioLoad()
+
 	dofile("assets/config.txt")
 	love.window.setFullscreen(true)
 	for i = 1, roads.count do
@@ -74,12 +77,12 @@ function love.load()
 	layerData = love.image.newImageData("assets/layer.bmp")
 	for x = 1, layerData:getWidth() - 1 do
     	local road_index = 1
-    	for y = 1, layerData:getHeight() - 1 do    		
+    	for y = 1, layerData:getHeight() - 1 do
         	local r,g,b,a = layerData:getPixel( x,y )
-        	if (r == 0 and g == 0 and b == 0) then	
+        	if (r == 0 and g == 0 and b == 0) then
         		if not(roads.list[road_index][x] == nil) and math.abs(roads.list[road_index][x] - y) > 10 then
-        			road_index = road_index + 1	        		
-				end			        		
+        			road_index = road_index + 1
+				end
         		local road = roads.list[road_index]
         		if (#road == 0 or x == 1 or math.abs(road[(x-1)] - y) < 10) then
         			road[x] = y
@@ -116,6 +119,8 @@ function compute_damage(dt)
 end
 
 function love.update (dt)
+   audioUpdate()
+
 	for _,ennemy in pairs(ennemies.list) do
 		ennemy.x = (ennemy.x + (ennemies.speed * dt))
 		if not (roads.list[ennemy.road_index][math.floor(ennemy.x)] == nil) then
@@ -137,11 +142,11 @@ function love.update (dt)
 
 	local r,g,b,a = layerData:getPixel(towers.current_tower.x,towers.current_tower.y)
 	if r == 255 and g == 0 and b == 0 then
-		towers.current_tower.enabled = true		
+		towers.current_tower.enabled = true
 		for _,tower in pairs(towers.list) do
 			if collide(tower,towers.current_tower) then
 				towers.current_tower.enabled = false
-			end						
+			end
 		end
 	end
 end
@@ -149,7 +154,7 @@ end
 
 
 function collide(tower1,tower2)
-	if (tower1.x < tower2.x + tower2.width and 
+	if (tower1.x < tower2.x + tower2.width and
 		tower1.x + tower1.width > tower2.x and
 		tower1.y < tower2.y + tower2.height and
 		tower1.height + tower1.y > tower2.y) then
@@ -174,7 +179,7 @@ function draw_tower(tower)
 		love.graphics.rectangle("fill",tower.x - (tower.width / 2),tower.y - (tower.height / 2),tower.width,tower.height)
 		love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,50)
 		love.graphics.circle("fill", tower.x, tower.y, tower.range)
-		
+
 end
 
 function love.draw()
@@ -195,4 +200,6 @@ function love.draw()
 		draw_tower(tower)
 	end
 	draw_tower(towers.current_tower)
+
+    audioDraw()
 end
