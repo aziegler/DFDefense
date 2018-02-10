@@ -175,6 +175,8 @@ function love.load(arg)
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
    enemy_gq.list[1].img = imgEnemyGQ.Defense
+   enemy_gq.list[1].hasGauge = false
+   enemy_gq.list[2].hasGauge = false
 
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
@@ -360,7 +362,7 @@ function draw_tower(tower)
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
-   local influenceRatio = math.max(0,math.min((tower.score) / 200,1))
+   local influenceRatio = math.max(0,math.min((tower.score + 200) / 400,1))
 
    if tower.hasGauge then
       draw_gauge(influenceRatio, x, h)
@@ -376,6 +378,10 @@ function drawBuildings(img, building)
    love.graphics.draw(img,
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
+    local influenceRatio = math.max(0,math.min((building.score + 200) / 400,1))
+    if building.hasGauge then
+      draw_gauge(influenceRatio, building.x+building.width/2-img:getWidth()/2, building.y+building.height-img:getHeight())
+    end
 end
 
 function drawBuildingsMiddle(img, building)
