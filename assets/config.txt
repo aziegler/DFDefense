@@ -32,17 +32,17 @@ Tower{
 
 
 Tower{
-   name = "Tour 1"
+   name = "Tour 1",
    range = 200,
    dps = 3,
    influence = 100,
    influence_rate = 50,
    color = {200,30,30},
-      img = "assets/buildings/BtmD_Tower.png"
+   img = "assets/buildings/BtmD_Tower.png"
 }
 
 Tower {
-   name = "Tour 2"
+   name = "Tour 2",
    range = 200,
    dps = 1,
    influence = 200,
