@@ -156,8 +156,8 @@ function love.load(arg)
 
    audioLoad(audioConfig)
    fonts = {
-      large = love.graphics.newFont("assets/ArmWrestler.ttf",24),
-      small = love.graphics.newFont("assets/ArmWrestler.ttf",18)
+      large = love.graphics.newFont("assets/arial.ttf",24),
+      small = love.graphics.newFont("assets/arial.ttf",18)
    }
    love.graphics.setFont(fonts.large)
 
@@ -266,8 +266,6 @@ function love.update (dt)
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         concertTower.score = concertTower.score - enemy.dps
-         enemy.score = enemy.score - dt
          --table.remove(enemies.list,idx)
       end
       if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
@@ -386,7 +384,7 @@ function drawBuildings(img, building)
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
     local influenceRatio = math.max(0,math.min((building.score + 200) / 400,1))
-    if building.hasGauge then
+    if building.hasGauge then 
       draw_gauge(influenceRatio, building.x+building.width/2-img:getWidth()/2, building.y+building.height-img:getHeight())
     end
 end
@@ -407,9 +405,9 @@ function drawHover(title,text,x,y)
    love.graphics.setColor(255,255,255,255)
    love.graphics.setFont(fonts.large)
    love.graphics.printf(title,x + 10,y + 5,width - 20,"center")
-   love.graphics.setFont(fonts.small) 
+   love.graphics.setFont(fonts.small)
    love.graphics.printf(text,x + 10,y + 75,width - 20,"center")
-   
+
 end
 
 function sortY(obj1, obj2)
