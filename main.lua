@@ -6,6 +6,7 @@ local roads = {}
 roads.count = 3
 roads.list = {}
 
+local enemyCoolDown = 0
 local enemies = {}
 enemies.list = {}
 
@@ -137,6 +138,8 @@ function love.load(arg)
    dataLoad(roads, buildings)
    audioLoad(audioConfig)
 
+   love.graphics.setFont(love.graphics.newFont("assets/ArmWrestler.ttf",24))
+
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
       Goche = love.graphics.newImage("assets/buildings/BtmG_Tower.png"),
@@ -221,7 +224,7 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-   voiceOn = audioUpdate()
+   voiceOn, tbs = audioUpdate()
 
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
@@ -240,8 +243,10 @@ function love.update (dt)
 
    compute_damage(dt)
 
-   if math.random(0,100) > 99 and voiceOn then
+   enemyCoolDown = enemyCoolDown + dt
+   if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
       table.insert(enemies.list, new_enemy(roads.count))
+      enemyCoolDown = 0
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
@@ -283,7 +288,7 @@ function draw_tower(tower)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
-   love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0,2,2)
+   love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
                         tower.x+tower.width/2,
@@ -323,7 +328,7 @@ function love.draw()
          end
          --love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
          love.graphics.setColor(50,50,50,255)
-         love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y - 30, 0, 2, 2)
+         love.graphics.print("Score "..math.floor(building.score), building.x + 20, building.y - 30, 0)
 
       else
          draw_tower(building.tower)
