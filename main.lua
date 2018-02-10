@@ -146,13 +146,6 @@ function love.load(arg)
       Neutre = love.graphics.newImage("assets/buildings/BtmN_Tower.png")
    }
 
-   for k,v in pairs(buildings.list) do
-      for n,v2 in pairs(v) do
-         print(k, n,v2)
-      end
-      print(" ")
-   end
-
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
       love.window.setMode(1920*scale,1080*scale)
