@@ -1,5 +1,6 @@
 tower_types = {}
 enemyBuilding = {}
+gameplayVariable = {}
 
 local enemy_types = {}
 
@@ -22,6 +23,10 @@ end
 
 function EnemyBuilding(b)
    enemyBuilding = b
+end
+
+function GameplayVariable(g)
+   gameplayVariable = g
 end
 
 function getAddedBuilding(x,y,buildings)
@@ -130,7 +135,7 @@ function loadBuildings(buildings)
                   height = height + 1
                end
                if x > 1700 then
-                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 500})
+                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence})
                else
                   table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
                end
