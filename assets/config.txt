@@ -27,7 +27,7 @@ Tower{
 
 
 Tower{
-   name = "Tour 1"
+   name = "Tour 1",
    range = 200,
    dps = 3,
    influence = 100,
@@ -37,7 +37,7 @@ Tower{
 }
 
 Tower {
-   name = "Tour 2"
+   name = "Tour 2",
    range = 200,
    dps = 1,
    influence = 200,
