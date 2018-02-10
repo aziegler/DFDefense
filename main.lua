@@ -279,7 +279,6 @@ function draw_tower(tower)
                          tower.x - tower.img:getWidth()/2 + tower.width/2,
                          tower.y - tower.img:getHeight() + tower.height)
    else
-      print("Tower")
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
@@ -288,6 +287,7 @@ function draw_tower(tower)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
+   love.graphics.setColor(255,255,255)
    love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
