@@ -7,6 +7,7 @@ roads.list = {}
 
 local enemies = {}
 enemies.list = {}
+enemies.influence = 0
 
 local towers = {}
 towers.list = {}
@@ -50,6 +51,8 @@ function new_enemy()
    enemy.color.blue = enemy_type.color[2]
    enemy.color.green = enemy_type.color[3]
    enemy.speed = enemy_type.speed
+   enemy.dps = enemy_type.dps
+   enemy.range = enemy_type.range
    enemy.road_index = math.random(1,#roads.list)
    enemy.x = 5
    enemy.y = 5
@@ -121,7 +124,9 @@ function love.update (dt)
       if not (roads.list[enemy.road_index][math.floor(enemy.x)] == nil) then
          enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
       end
+      enemies.influence = enemies.influence + enemy.dps * enemy.x * dt
    end
+
 
    compute_damage(dt)
 
@@ -173,7 +178,7 @@ function draw_tower(tower)
       end
       love.graphics.rectangle("fill",tower.x - (tower.width / 2),tower.y - (tower.height / 2),tower.width,tower.height)
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,50)
-      love.graphics.circle("fill", tower.x, tower.y, tower.range)
+      love.graphics.circle("line", tower.x, tower.y, tower.range)
       
 end
 
@@ -195,4 +200,8 @@ function love.draw()
       draw_tower(tower)
    end
    draw_tower(towers.current_tower)
+   love.graphics.setColor(0,0,255)
+   love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),20)
+   love.graphics.setColor(255,0,0)
+   love.graphics.rectangle("fill",0,0,love.graphics.getWidth() * enemies.influence/1000,20)
 end
