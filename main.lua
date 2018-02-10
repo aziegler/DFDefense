@@ -11,7 +11,6 @@ enemies.list = {}
 
 local towers = {}
 towers.list = {}
-towers.current_tower = {}
 
 local buildings = {}
 buildings.list = {}
