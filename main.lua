@@ -146,13 +146,6 @@ function love.load(arg)
       Neutre = love.graphics.newImage("assets/buildings/BtmN_Tower.png")
    }
 
-   for k,v in pairs(buildings.list) do
-      for n,v2 in pairs(v) do
-         print(k, n,v2)
-      end
-      print(" ")
-   end
-
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
       love.window.setMode(1920*scale,1080*scale)
@@ -207,11 +200,17 @@ function compute_damage(dt)
    end
 
    for _,building1 in pairs(buildings.list) do
-      for _,tower in pairs(towers.list) do
+      for tw_idx,tower in pairs(towers.list) do
          local width, height = tower.x-(building1.x+building1.width/2), tower.y-(building1.y+building1.height/2)
          local distance = (width*width + height*height)^0.5
          if building1.score < -100 and distance < enemyBuilding.range then
             tower.score = tower.score - enemyBuilding.dps * dt
+            if tower.score < 0 then
+               table.remove(towers.list,tw_idx)
+               tower.building.tower = nil
+               tower.building.score = tower.score
+               break
+            end
          end
       end
    end
@@ -266,7 +265,7 @@ end
 
 function draw_enemy(ennemy)
    love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
-   love.graphics.rectangle("fill",ennemy.x - 10,ennemy.y - 10,20,20)
+   love.graphics.rectangle("fill",ennemy.x - 20,ennemy.y - 20,40,40)
    love.graphics.setColor(50, 50, 180, 255)
    love.graphics.circle("line", ennemy.x, ennemy.y, ennemy.range)
    love.graphics.setColor(0,0,0)
