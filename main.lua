@@ -10,6 +10,8 @@ local enemyCoolDown = 0
 local enemies = {}
 enemies.list = {}
 
+local hoveredName = ""
+
 local towers = {}
 towers.list = {}
 
@@ -79,7 +81,7 @@ function mousePick(x,y,button,istouch)
       end
    end
    if button == 1 then
-      local clickedTower = getTower(x,y)
+      local _,clickedTower = getTower(x,y)
       if not(clickedTower == nil) then
          for _, tower in pairs(towers.list) do
             local infl = tower.score * 0.1
@@ -119,6 +121,9 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function getBuilding(x,y)
+   if x == nil or y == nil then 
+      return -1,nil
+   end
    for idx,building in pairs(buildings.list) do
       if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
          return idx,building
@@ -128,12 +133,15 @@ function getBuilding(x,y)
 end
 
 function getTower(x,y)
-   for _,tower in pairs(towers.list) do
+   if x == nil or y == nil then
+      return -1, nil
+   end
+   for idx,tower in pairs(towers.list) do
       if x >= tower.x and x <= tower.x + tower.width and y >= tower.y and y <= tower.y + tower.height then
-         return tower
+         return idx,tower
       end
    end
-
+   return -1, nil
 end
 
 function love.load(arg)
@@ -257,6 +265,22 @@ function love.update (dt)
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
+
+   local idx, tower = getTower(mouseModes.mousePos[1], mouseModes.mousePos[2])
+   local b_idx, building = getBuilding(mouseModes.mousePos[1], mouseModes.mousePos[2])
+   hoveredName = nil
+   if idx > -1 then
+      print("Tower hovered")
+      hoveredName = tower.name
+   elseif b_idx > -1 then
+      if building.score >= gameplayVariable.buildingTreshold then
+            hoveredName = gameplayVariable.friendlyName
+         elseif building.score >= -100 then
+            hoveredName = gameplayVariable.neutralName
+         else
+            hoveredName = enemyBuilding.name
+         end
+   end
 end
 
 
@@ -315,6 +339,12 @@ function drawBuildingsMiddle(img, building)
                       building.y+building.height/2-img:getHeight()/2)
 end
 
+function drawHover(text)
+   love.graphics.setColor(255,255,255,255)
+   love.graphics.rectangle("fill",mouseModes.mousePos[1],mouseModes.mousePos[2],200,100)
+   love.graphics.setColor(0,0,0,255)
+   love.graphics.printf(text,mouseModes.mousePos[1] + 10,mouseModes.mousePos[2] + 5,180,"center")
+end
 
 function love.draw()
    love.graphics.scale(scale,scale)
@@ -351,7 +381,6 @@ function love.draw()
          love.graphics.print("Score "..math.floor(building.score), building.x + 20, building.y - 30, 0)
 
       else
-         print("Has tower")
          draw_tower(building.tower)
       end
    end
@@ -367,6 +396,8 @@ function love.draw()
 
    if mouseMode == mouseModes.gui then
       drawMenu()
+   elseif not (hoveredName == nil) then
+      drawHover(hoveredName)
    end
 
    audioDraw()

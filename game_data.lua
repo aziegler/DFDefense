@@ -150,13 +150,14 @@ function loadSquare(cont, towers, R, G, B)
                      width = concertBuilding.width,
                      height = concertBuilding.height,
                      enabled = true,
-                     building = concertBuilding
+                     building = concertBuilding,
+                     name="DF"
                   }
                   concertBuilding.tower = concertTower
                   table.insert (cont.list, concertBuilding)
                   table.insert(towers.list, concertTower)
                else
-                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0})
+                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0, name="Tests"})
                end
             end
          end
@@ -209,6 +210,7 @@ function new_tower(idx)
    tower.dps = tower_type.dps
    tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
+   tower.name = tower_type.name
    return tower
 end
 

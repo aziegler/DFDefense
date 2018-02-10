@@ -19,7 +19,8 @@ Audio {
 
 EnemyBuilding {
    range = 300,
-   dps = 2
+   dps = 2,
+   name = "Horrible tour moche"
 }
 
 GameplayVariable {
@@ -27,11 +28,13 @@ GameplayVariable {
    initialConcertInfluence = 200,
    concertRange = 200,
    concertDps = 10,
-   concertInfluenceRate = 5
+   concertInfluenceRate = 5,
+   neutralName = "Habitations",
+   friendlyName = "Habitat partagé"
 }
 
 Tower{
-   name = "Tour 1",
+   name = "Jardin partagé",
    range = 150,
    dps = 10,
    influence = 50,
@@ -41,7 +44,7 @@ Tower{
 
 
 Tower{
-   name = "Tour 2",
+   name = "Bibliothèque",
    range = 250,
    dps = 3,
    influence = 100,
@@ -51,7 +54,7 @@ Tower{
 }
 
 Tower {
-   name = "Tour 3",
+   name = "Local associatif",
    range = 200,
    dps = 1,
    influence = 200,
