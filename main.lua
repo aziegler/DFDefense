@@ -156,8 +156,8 @@ function love.load(arg)
 
    audioLoad(audioConfig)
    fonts = {
-      large = love.graphics.newFont("assets/Arial.ttf",24),
-      small = love.graphics.newFont("assets/Arial.ttf",18)
+      large = love.graphics.newFont("assets/arial.ttf",24),
+      small = love.graphics.newFont("assets/arial.ttf",18)
    }
    love.graphics.setFont(fonts.large)
 
