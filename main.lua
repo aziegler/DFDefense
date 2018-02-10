@@ -266,8 +266,6 @@ function love.update (dt)
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         concertTower.score = concertTower.score - enemy.dps
-         enemy.score = enemy.score - dt
          --table.remove(enemies.list,idx)
       end
       if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
@@ -407,9 +405,9 @@ function drawHover(title,text,x,y)
    love.graphics.setColor(255,255,255,255)
    love.graphics.setFont(fonts.large)
    love.graphics.printf(title,x + 10,y + 5,width - 20,"center")
-   love.graphics.setFont(fonts.small) 
+   love.graphics.setFont(fonts.small)
    love.graphics.printf(text,x + 10,y + 75,width - 20,"center")
-   
+
 end
 
 function sortY(obj1, obj2)
