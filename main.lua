@@ -16,6 +16,9 @@ towers.list = {}
 local buildings = {}
 buildings.list = {}
 
+local enemy_gq = {}
+enemy_gq.list = {}
+
 function Audio (a)
    audioConfig = a
 end
@@ -135,7 +138,8 @@ end
 
 function love.load(arg)
 
-   dataLoad(roads, buildings)
+   dataLoad(roads, buildings, towers, enemy_gq)
+
    audioLoad(audioConfig)
 
    love.graphics.setFont(love.graphics.newFont("assets/ArmWrestler.ttf",24))
@@ -144,6 +148,10 @@ function love.load(arg)
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
       Goche = love.graphics.newImage("assets/buildings/BtmG_Tower.png"),
       Neutre = love.graphics.newImage("assets/buildings/BtmN_Tower.png")
+   }
+   imgEnemyGQ = {
+      Police = love.graphics.newImage("assets/buildings/BtmD_police.png"),
+      Defense = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
    }
 
    if videoSettings.fullscreen == false or arg[2] == "-w" then
@@ -263,13 +271,22 @@ function collide(tower1,tower2)
    return false
 end
 
-function draw_enemy(ennemy)
-   love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
-   love.graphics.rectangle("fill",ennemy.x - 20,ennemy.y - 20,40,40)
+function draw_enemy(enemy)
+   if enemy.img then
+      love.graphics.setColor(255, 255, 255, 255)
+      love.graphics.draw(enemy.img,
+                         enemy.x-enemy.img:getWidth()/2,
+                         enemy.y-enemy.img:getHeight())
+   else
+      love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
+      love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
+   end
+
    love.graphics.setColor(50, 50, 180, 255)
-   love.graphics.circle("line", ennemy.x, ennemy.y, ennemy.range)
-   love.graphics.setColor(0,0,0)
-   love.graphics.print(math.floor(ennemy.life),ennemy.x - 7 ,ennemy.y - 5,0)
+   love.graphics.circle("line", enemy.x, enemy.y, enemy.range)
+   love.graphics.setColor(255,0,0)
+   love.graphics.print(math.floor(enemy.life),enemy.x - 7 ,enemy.y - 5,0)
+
 end
 
 function draw_tower(tower)
@@ -287,6 +304,7 @@ function draw_tower(tower)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
+   love.graphics.setColor(255,255,255)
    love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
@@ -300,6 +318,17 @@ function drawBuildings(img, building)
                       building.y+building.height-img:getHeight())
 end
 
+function drawBuildingsMiddle(img, building)
+   love.graphics.draw(img,
+                      building.x+building.width/2-img:getWidth()/2,
+                      building.y+building.height/2-img:getHeight()/2)
+end
+
+
+function sortY(obj1, obj2)
+   return obj1.y < obj2.y
+end
+
 function love.draw()
    love.graphics.scale(scale,scale)
 
@@ -309,8 +338,23 @@ function love.draw()
          love.graphics.points(roads.list[i].points[j].x,roads.list[i].points[j].y)
       end
    end
+
+   local drawList = {}
+   for _,enemy in pairs(enemies.list) do
+      enemy.enemy = true
+      table.insert(drawList, enemy)
+   end
+
    for _,building in pairs(buildings.list) do
-      if not building.tower then
+      table.insert(drawList, building)
+   end
+
+   table.sort(drawList, sortY)
+
+   for _,building in pairs(drawList) do
+      if building.enemy then
+         draw_enemy(building)
+      elseif not building.tower then
          love.graphics.setColor(255,255,255,255)
          if building.score >= gameplayVariable.buildingTreshold then
             drawBuildings(imgBuildings.Goche, building)
@@ -333,9 +377,12 @@ function love.draw()
          draw_tower(building.tower)
       end
    end
-   for _,enemy in pairs(enemies.list) do
-      draw_enemy(enemy)
-   end
+
+   love.graphics.setColor(255,255,255,255)
+   drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[1]);
+   drawBuildingsMiddle(imgEnemyGQ.Defense, enemy_gq.list[2]);
+
+
    --for _,tower in pairs(towers.list) do
    --   draw_tower(tower)
    --end

@@ -18,6 +18,9 @@ function Tower (t)
 end
 
 function Enemy (e)
+   if e.img then
+      e.img = love.graphics.newImage(e.img)
+   end
    table.insert(enemy_types, e)
 end
 
@@ -95,7 +98,7 @@ function getNextPoint(roads,index)
 end
 
 function loadRoads(roads)
-    local road_index = 1   
+    local road_index = 1
    for y = 1, layerData:getHeight() - 1 do
       local x = 1
       local r,g,b,a = layerData:getPixel( x,y )
@@ -117,27 +120,46 @@ function loadRoads(roads)
    end
 end
 
-function loadBuildings(buildings)
-   for x = 1, layerData:getWidth() - 1 do   
+function loadSquare(cont, towers, R, G, B)
+   for x = 1, layerData:getWidth() - 1 do
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
-         if r == 255 and g == 0 and b == 0 then
-            local building = getAddedBuilding(x,y,buildings)
+         --print(x,y,r,g,b,a)
+         if r == R and g == G and b == B then
+            local building = getAddedBuilding(x,y,cont)
             if building == nil then
                local width, height = 0,0
-               while r == 255 and g == 0 and b == 0 do
+               while r == R and g == G and b == B do
                   width = width + 1
                   r,g,b,a = layerData:getPixel(x + width, y)
                end
                r,g,b,a = layerData:getPixel( x ,y + height )
-               while r == 255 and g == 0 and b == 0 do
+               while r == R and g == G and b == B do
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
                if x > 1700 then
-                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence})
+                  local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
+                  local concertTower = {
+                     name = "Concert",
+                     range = gameplayVariable.concertRange,
+                     dps = gameplayVariable.concertDps,
+                     score = gameplayVariable.initialConcertInfluence,
+                     influence_rate = gameplayVariable.concertInfluenceRate,
+                     color = {red = 255,green = 30,blue = 30},
+                     img = nil,
+                     x = concertBuilding.x,
+                     y = concertBuilding.y,
+                     width = concertBuilding.width,
+                     height = concertBuilding.height,
+                     enabled = true,
+                     building = concertBuilding
+                  }
+                  concertBuilding.tower = concertTower
+                  table.insert (cont.list, concertBuilding)
+                  table.insert(towers.list, concertTower)
                else
-                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
+                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0})
                end
             end
          end
@@ -145,7 +167,15 @@ function loadBuildings(buildings)
    end
 end
 
-function dataLoad(roads,buildings)
+function loadBuildings(B, T)
+   loadSquare(B, T, 255, 0, 0)
+end
+
+function loadBG(B, T)
+   loadSquare(B, T, 0, 0, 255)
+end
+
+function dataLoad(roads,buildings, towers, enemy_gq)
 	dofile("assets/config.txt")
 
    for i = 1, roads.count do
@@ -155,8 +185,10 @@ function dataLoad(roads,buildings)
    end
    layerData = love.image.newImageData("assets/layer.bmp")
    loadRoads(roads)
-   loadBuildings(buildings)
-   
+
+   loadBuildings(buildings,towers)
+   loadBG(enemy_gq, { list = {} })
+
 end
 
 function new_tower(idx)
@@ -191,6 +223,7 @@ function new_enemy(roads)
    enemy.color.red = enemy_type.color[1]
    enemy.color.green = enemy_type.color[2]
    enemy.color.blue = enemy_type.color[3]
+   enemy.img = enemy_type.img
    enemy.speed = enemy_type.speed
    enemy.dps = enemy_type.dps
    enemy.range = enemy_type.range
