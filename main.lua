@@ -6,6 +6,7 @@ local roads = {}
 roads.count = 3
 roads.list = {}
 
+local enemyCoolDown = 0
 local enemies = {}
 enemies.list = {}
 
@@ -219,7 +220,7 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-   voiceOn = audioUpdate()
+   voiceOn, tbs = audioUpdate()
 
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
@@ -238,8 +239,10 @@ function love.update (dt)
 
    compute_damage(dt)
 
-   if math.random(0,100) > 99 and voiceOn then
+   enemyCoolDown = enemyCoolDown + dt
+   if enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
       table.insert(enemies.list, new_enemy(roads.count))
+      enemyCoolDown = 0
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }

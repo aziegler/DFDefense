@@ -3,15 +3,15 @@ Video {
 }
 
 Audio {
-   start = 3,
+   start = 25,
    loops = {
-      { loop = 0, voice = true },
+      { loop = 0, voice = true, tbs = 1},
       { loop = 1, voice = false },
       { loop = 1, voice = false },
-      { loop = 1, voice = true },
+      { loop = 1, voice = true , tbs = 0.5},
       { loop = 2, voice = false },
-      { loop = 2, voice = true },
-      { loop = 2, voice = true },
+      { loop = 2, voice = true , tbs = 0.25},
+      { loop = 2, voice = true , tbs = 0.125},
       { loop = 3, voice = false },
       { loop = 3, voice = false }
    }

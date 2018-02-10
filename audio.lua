@@ -70,7 +70,8 @@ tracks = {}
 function audioLoad(audioConfig)
    audioGroups = loadAudio()
    for k,v in pairs(audioConfig.loops) do
-      table.insert(tracks, { start = start + v.loop*loop, voice = v.voice })
+      table.insert(tracks, { start = start + v.loop*loop,
+                             voice = v.voice, tbs = v.tbs })
    end
    setPosition(audioGroups, audioConfig.start)
 
@@ -115,7 +116,7 @@ function audioUpdate()
 
    end
 
-   return voiceOn
+   return voiceOn, tracks[i].tbs
 end
 
 function audioDraw()
