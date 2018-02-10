@@ -9,15 +9,10 @@ roads.list = {}
 
 local enemies = {}
 enemies.list = {}
-enemies.influence = 0
 
 local towers = {}
 towers.list = {}
 towers.current_tower = {}
-
-local tower_types = {}
-
-local enemy_types = {}
 
 local buildings = {}
 buildings.list = {}
@@ -127,7 +122,6 @@ function love.update (dt)
          enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
 
       end
-      enemies.influence = enemies.influence + enemy.dps * enemy.x * dt
    end
 
 
@@ -205,9 +199,7 @@ function love.draw()
 
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),20)
-   love.graphics.setColor(255,0,0)
-   love.graphics.rectangle("fill",0,0,love.graphics.getWidth() * enemies.influence/10000,20)
-
+   
    audioDraw()
 
 end

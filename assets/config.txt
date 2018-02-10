@@ -1,13 +1,15 @@
 Tower{
    range = 400,
    dps = 3,
-   color = {100,100,100}
+   color = {100,100,100},
+   influence = 100
 }
 
 Tower{
    range = 600,
    dps = 1,
-   color = {255,255,100}
+   color = {255,255,100},
+   influence = 200
 }
 
 Enemy{
