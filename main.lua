@@ -3,7 +3,7 @@ require "game_data"
 
 
 local roads = {}
-roads.count = 5
+roads.count = 3
 roads.list = {}
 
 local enemies = {}
@@ -30,7 +30,6 @@ mouseMode = mouseModes.pick
 function mouseGui(x,y,button,istouch)
    print(x,y)
    if button == 1 then
-
       local building = mouseModes.building
       towers.current_tower.x = building.x
       towers.current_tower.y = building.y
