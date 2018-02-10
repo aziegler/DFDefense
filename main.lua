@@ -66,7 +66,7 @@ function mousePick(x,y,button,istouch)
    if button == 2 then
       local idx,building = getBuilding(x, y)
 
-      if idx > -1 and building.score > 20 then
+      if idx > -1 and building.score > gameplayVariable.buildingTreshold then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
                                    y= building.y }
@@ -224,7 +224,7 @@ function love.update (dt)
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         table.remove(enemies.list,en_idx)
+         table.remove(enemies.list,idx)
       end
       if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
          enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
@@ -306,8 +306,7 @@ function love.draw()
    for _,building in pairs(buildings.list) do
       if not building.tower then
          love.graphics.setColor(255,255,255,255)
-         if building.score >= 100 then
-            --
+         if building.score >= gameplayVariable.buildingTreshold then
             drawBuildings(imgBuildings.Goche, building)
          elseif building.score >= -100 then
             --love.graphics.setColor(100,100,100,255)
@@ -324,17 +323,16 @@ function love.draw()
          love.graphics.setColor(120,255,120,255)
          love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50)
 
+      else
+         draw_tower(building.tower)
       end
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
    end
-   for _,tower in pairs(towers.list) do
-      draw_tower(tower)
-   end
-
-   -- we don't draw a tower on the mouse anymore, do we?
-   --   draw_tower(towers.current_tower)
+   --for _,tower in pairs(towers.list) do
+   --   draw_tower(tower)
+   --end
 
    if mouseMode == mouseModes.gui then
       drawMenu()
