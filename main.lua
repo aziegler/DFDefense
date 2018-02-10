@@ -24,12 +24,22 @@ function Audio (a)
    audioConfig = a
 end
 
-function love.mousepressed(x,y,button,istouch)
+local mouseModes = {
+   pick = 1,
+   gui = 2
+}
+mouseMode = mouseModes.pick
+
+function mousePick(x,y,button,istouch)
    if not (towers.current_tower.enabled) then
       return
    end
+
    for idx, building in pairs(buildings.list) do
       if collide(towers.current_tower,building) then
+         mouseMode = mouseModes.gui
+         print(building)
+         --[[
          towers.current_tower.x = building.x
          towers.current_tower.y = building.y
          towers.current_tower.width = building.width
@@ -37,8 +47,23 @@ function love.mousepressed(x,y,button,istouch)
          table.remove(buildings.list,idx)
          table.insert(towers.list,towers.current_tower)
          towers.current_tower = new_tower()
+         ]]--
+
          return
       end
+   end
+
+end
+
+function mouseGui(x, y,button, istouch)
+   print(x,y)
+end
+
+function love.mousepressed(x,y,button,istouch)
+   if mouseMode == mouseModes.pick then
+      mousePick(x,y,button,istouch)
+   else
+      mouseGui(x,y,button,istouch)
    end
 end
 
