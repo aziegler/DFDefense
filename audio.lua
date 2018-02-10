@@ -73,7 +73,7 @@ function audioLoad(audioConfig)
       table.insert(tracks, { start = start + v.loop*loop,
                              voice = v.voice, tbs = v.tbs })
    end
-   setPosition(audioGroups, audioConfig.start)
+--   setPosition(audioGroups, audioConfig.start)
 
    i = 1
    arialFont = love.graphics.newFont("assets/arial.ttf")
@@ -83,6 +83,7 @@ end
 
 function audioUpdate()
    local voiceOn = false
+   local tbs = 0
 
    if i > #tracks then
       return
@@ -106,21 +107,25 @@ function audioUpdate()
 
    if audioGroups.voice[1]:tell("seconds") < tracks[i].start then
       voiceOn = false
+      tbs = nil
+   else
+      tbs = tracks[i].tbs
    end
 
    if audioGroups.voice[1]:tell("seconds") >= tracks[i].start+loop then
       if not love.keyboard.isDown("space") then
          i = i + 1
-         --if i > #tracks then
-         --   i = 1
-         --end
+         if i > #tracks then
+            -- i = 1
+            return false, nil
+         end
          affTxt =  love.graphics.newText(arialFont, ""..i )
       end
       setPosition(audioGroups, tracks[i].start)
 
    end
 
-   return voiceOn, tracks[i].tbs
+   return voiceOn, tbs
 end
 
 function audioDraw()

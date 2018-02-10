@@ -46,7 +46,7 @@ GameplayVariable {
    friendlyName = "Habitat partagé"
 }
 
-Tower{
+Tower {
    name = "Jardin collectif",
    range = 175,
    dps = 4,
@@ -54,11 +54,12 @@ Tower{
    influence_rate = 10,
    color = {200,100,100},
    img = "assets/buildings/BtmG_Garden.png",
-   icon = "assets/UI/Icon_Garden.png"
+   icon = "assets/UI/Icon_Garden.png",
+   tooltip = "Faible portee, grosse puissance"
 }
 
 
-Tower{
+Tower {
    name = "Bibliothèque",
    range = 250,
    dps = 2,
@@ -66,6 +67,7 @@ Tower{
    influence_rate = 8,
    color = {200,30,30},
    img = "assets/buildings/BtmG_library.png",
+   tooltip = "Moeynne porte, moyenne puissance"
 }
 
 Tower {
@@ -76,7 +78,8 @@ Tower {
    influence_rate = 8,
    color = {0,100,200},
    img = "assets/buildings/BtmG_assos.png",
-   icon = "assets/UI/Icon_Assos.png"
+   icon = "assets/UI/Icon_Assos.png",
+   tooltip = "Longue portee, faible puissance"
 }
 
 Enemy {
