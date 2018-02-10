@@ -19,12 +19,12 @@ Audio {
 
 EnemyBuilding {
    range = 300,
-   dps = 30
+   dps = 2
 }
 
 GameplayVariable {
    buildingTreshold = 20,
-   initialConcertInfluence = 500
+   initialConcertInfluence = 200
 }
 
 Tower{
@@ -32,7 +32,7 @@ Tower{
    range = 150,
    dps = 10,
    influence = 50,
-   influence_rate = 10,
+   influence_rate = 5,
    color = {200,100,100}
 }
 
@@ -42,17 +42,17 @@ Tower{
    range = 250,
    dps = 3,
    influence = 100,
-   influence_rate = 5,
+   influence_rate = 2,
    color = {200,30,30},
    img = "assets/buildings/BtmD_Tower.png"
 }
 
 Tower {
-   name = "Neutre",
+   name = "Tour 3",
    range = 200,
    dps = 1,
    influence = 200,
-   influence_rate = 0,
+   influence_rate = 2,
    color = {0,100,200},
    img = "assets/buildings/BtmN_ruin.png"
 }
@@ -60,7 +60,7 @@ Tower {
 Enemy{
    life = 30,
    color={120,120,110},
-   speed = 10,
+   speed = 20,
    dps = 50,
    range = 150
 }
@@ -68,7 +68,7 @@ Enemy{
 Enemy{
    life = 50,
    color={120,120,210},
-   speed = 30,
+   speed = 60,
    dps = 20,
    range = 150
 }
