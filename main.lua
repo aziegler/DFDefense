@@ -242,7 +242,7 @@ function love.update (dt)
    compute_damage(dt)
 
    enemyCoolDown = enemyCoolDown + dt
-   if enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
+   if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
       table.insert(enemies.list, new_enemy(roads.count))
       enemyCoolDown = 0
    end
