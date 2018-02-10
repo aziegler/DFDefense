@@ -1,6 +1,6 @@
 require "audio"
 require "game_data"
-
+require "build_menu"
 
 local roads = {}
 roads.count = 3
@@ -20,35 +20,50 @@ function Audio (a)
    audioConfig = a
 end
 
-local mouseModes = {
+mouseModes = {
    pick = 1,
    gui = 2,
-   menuPos = {}
+   menuPos = {},
+   mousePos = { 0, 0 }
 }
 mouseMode = mouseModes.pick
 
 function mouseGui(x,y,button,istouch)
-   print(x,y)
-   if button == 1 then
-      local building = mouseModes.building
-      towers.current_tower.x = building.x
-      towers.current_tower.y = building.y
-      towers.current_tower.width = building.width
-      towers.current_tower.height = building.height
-      towers.current_tower.enabled = true
-      table.remove(buildings.list,mouseModes.buildingIdx)
-      table.insert(towers.list,towers.current_tower)
-      towers.current_tower = new_tower()
+   local idx = pickMenu(mouseModes.mousePos[1] ,mouseModes.mousePos[2])
+   if idx == 0 then
       mouseMode = mouseModes.pick
+      return
    end
+
+   local tower = new_tower(idx)
+
+   local building = mouseModes.building
+
+   tower.x = building.x
+   tower.y = building.y
+   tower.width = building.width
+   tower.height = building.height
+   tower.enabled = true
+   --table.remove(buildings.list,mouseModes.buildingIdx)
+   if building.tower then
+      for k,v in pairs(towers.list) do
+         if v == building.tower then
+            table.remove(towers.list,k)
+            break
+         end
+      end
+   end
+
+   building.tower = tower
+   table.insert(towers.list,tower)
+
+   mouseMode = mouseModes.pick
 end
 
 function mousePick(x,y,button,istouch)
    if button == 2 then
-      if not (towers.current_tower.enabled) then
-         return
-      end
-      local idx,building = getBuilding(towers.current_tower.x,towers.current_tower.y)
+      local idx,building = getBuilding(mouseModes.mousePos[1], mouseModes.mousePos[2])
+
       if idx > -1 then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
@@ -105,22 +120,17 @@ function love.load(arg)
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
       love.window.setMode(1920*scale,1080*scale)
-      else
+   else
       scale = 1
-      --love.window.setMode(1920*scale,1080*scale)
       love.window.setFullscreen(true)
    end
-
-   
-
-   towers.current_tower = new_tower()
 
 end
 
 function compute_damage(dt)
    for en_idx,enemy in pairs(enemies.list) do
       for _,tower in pairs(towers.list) do
-         local width, height = enemy.x-tower.x, enemy.y-tower.y
+         local width, height = enemy.x-(tower.x+tower.width/2), enemy.y-(tower.y+tower.height/2)
          local distance = (width*width + height*height)^0.5
          if distance  < tower.range then
             enemy.life = enemy.life - tower.dps * dt
@@ -162,17 +172,7 @@ function love.update (dt)
       table.insert(enemies.list, new_enemy(roads.count))
    end
 
-   towers.current_tower.x = love.mouse.getX()/scale
-   towers.current_tower.y = love.mouse.getY()/scale
-   towers.current_tower.enabled = true
-
-   local idx,building = getBuilding(towers.current_tower.x,towers.current_tower.y)
-   if idx > -1 then
-      towers.current_tower.enabled = true
-   else
-      towers.current_tower.enabled = false
-   end
-
+   mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
 end
 
 
@@ -210,30 +210,9 @@ function draw_tower(tower)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
    love.graphics.print("Friend "..math.floor(tower.friendlyinfluence/10).." Enemy"..math.floor(tower.enemyinfluence/10),tower.x + 10, tower.y + 20)
    love.graphics.setColor(180, 50, 50, 100)
-   love.graphics.circle("fill", tower.x, tower.y, tower.range)
-end
-
-function drawMenu()
-   local SIZE = 100
-   local width = #tower_types * SIZE
-
-   print(#tower_types)
-
-   love.graphics.setColor(255,255,255)
-   love.graphics.rectangle("fill",
-                           mouseModes.menuPos.x-width/2,
-                           mouseModes.menuPos.y-SIZE,
-                           width, SIZE)
-
-   for k,v in pairs(tower_types) do
-      print(k,v)
-      love.graphics.setColor(v.color[1], v.color[2], v.color[3])
-      love.graphics.rectangle("fill",
-                              5+mouseModes.menuPos.x-width/2 + (k-1)*SIZE,
-                              5+mouseModes.menuPos.y-SIZE,
-                              SIZE-10, SIZE-10)
-   end
-   print("")
+   love.graphics.circle("fill",
+                        tower.x+tower.width/2,
+                        tower.y+tower.height/2, tower.range)
 end
 
 function love.draw()
@@ -255,7 +234,9 @@ function love.draw()
    for _,tower in pairs(towers.list) do
       draw_tower(tower)
    end
-   draw_tower(towers.current_tower)
+
+   -- we don't draw a tower on the mouse anymore, do we?
+   --   draw_tower(towers.current_tower)
 
    if mouseMode == mouseModes.gui then
       drawMenu()

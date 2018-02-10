@@ -133,8 +133,14 @@ function dataLoad(roads,buildings)
    print ("Road Count "..roads.count)
 end
 
-function new_tower()
-   local tower_type = tower_types[math.random(1,#tower_types)]
+function new_tower(idx)
+   local tower_type = 0
+   if idx then
+      tower_type = tower_types[idx]
+   else
+      tower_type = tower_types[math.random(1,#tower_types)]
+   end
+
    local tower = {}
    tower.width = math.random(10,30)
    tower.height = math.random(10,30)
