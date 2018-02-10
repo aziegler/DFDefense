@@ -23,11 +23,20 @@ function getAddedBuilding(x,y,buildings)
    end
 end
 
+function getEndPoint(roads, index)
+   if roads.list[index] == nil then
+      return nil
+   end
+   return roads.list[index].points[roads.list[index].lastPoint - 1]
+end
+
 function dataLoad(roads,buildings)
 	dofile("assets/config.txt")
 
    for i = 1, roads.count do
       roads.list[i] = {}
+      roads.list[i].lastPoint = 1
+      roads.list[i].points = {}
    end
    layerData = love.image.newImageData("assets/layer.bmp")
    for x = 1, layerData:getWidth() - 1 do
@@ -35,15 +44,14 @@ function dataLoad(roads,buildings)
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
          if (r == 0 and g == 0 and b == 0) then
-            if not(roads.list[road_index][x] == nil) and math.abs(roads.list[road_index][x] - y) > 10 then
+            if not(getEndPoint(roads,road_index) == nil) and math.abs(getEndPoint(roads,road_index).y - y) > 5 then
                road_index = road_index + 1
             end
             local road = roads.list[road_index]
-            if (#road == 0 or x == 1 or math.abs(road[(x-1)] - y) < 10) then
-               road[x] = y
-            else
-               road[x] = road[x-1]
-            end
+            road.points[road.lastPoint] = {}
+            road.points[road.lastPoint].x = x
+            road.points[road.lastPoint].y = y
+            road.lastPoint = road.lastPoint + 1
          elseif r == 255 and g == 0 and b == 0 then
             local building = getAddedBuilding(x,y,buildings)
             if building == nil then
@@ -62,7 +70,7 @@ function dataLoad(roads,buildings)
          end
       end
    end
-   print ("Building Count "..#buildings.list)
+   print ("Road Count "..roads.count)
 end
 
 function new_tower()
@@ -97,6 +105,7 @@ function new_enemy(roads)
    enemy.road_index = math.random(1,roads)
    enemy.x = 5
    enemy.y = 5
+   enemy.roadStep = 1
    enemy.life = enemy_type.life
    return enemy
 end
