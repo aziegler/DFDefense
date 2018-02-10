@@ -28,41 +28,37 @@ mouseModes = {
 mouseMode = mouseModes.pick
 
 function mouseGui(x,y,button,istouch)
-   print(x,y)
-   if button == 1 then
+   local idx = pickMenu(x,y)
+   if idx == 0 then
+      mouseMode = mouseModes.pick
+      return
+   end
 
-      local idx = pickMenu(x,y)
-      if not idx then
-         mouseMode = mouseModes.pick
-         return
-      end
+   local tower = new_tower(idx)
 
-      local tower = new_tower(idx)
+   local building = mouseModes.building
 
-      local building = mouseModes.building
-
-      tower.x = building.x
-      tower.y = building.y
-      tower.width = building.width
-      tower.height = building.height
-      tower.enabled = true
-      --table.remove(buildings.list,mouseModes.buildingIdx)
-      if building.tower then
-         for k,v in pairs(towers.list) do
-            if v == building.tower then
-               table.remove(towers.list,k)
-               break
-            end
+   tower.x = building.x
+   tower.y = building.y
+   tower.width = building.width
+   tower.height = building.height
+   tower.enabled = true
+   --table.remove(buildings.list,mouseModes.buildingIdx)
+   if building.tower then
+      for k,v in pairs(towers.list) do
+         if v == building.tower then
+            table.remove(towers.list,k)
+            break
          end
       end
-
-      building.tower = tower
-      table.insert(towers.list,tower)
-      -- towers.current_tower = nil --new_tower()
-      towers.current_tower = new_tower()
-
-      mouseMode = mouseModes.pick
    end
+
+   building.tower = tower
+   table.insert(towers.list,tower)
+   -- towers.current_tower = nil --new_tower()
+   towers.current_tower = new_tower()
+
+   mouseMode = mouseModes.pick
 end
 
 function mousePick(x,y,button,istouch)
@@ -133,7 +129,7 @@ function love.load(arg)
       love.window.setFullscreen(true)
    end
 
-   
+
 
    towers.current_tower = new_tower()
 
