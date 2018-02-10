@@ -74,13 +74,13 @@ function mousePick(x,y,button,istouch)
    end
    if button == 1 then
       local clickedTower = getTower(x,y)
-      if not(clickedTower == nil) then         
+      if not(clickedTower == nil) then
          for _, tower in pairs(towers.list) do
             local infl = tower.score * 0.1
             tower.score = tower.score - infl
             clickedTower.score = clickedTower.score + infl
          end
-      else 
+      else
       local _, clickedBuilding = getBuilding(x,y)
       if not(clickedBuilding == nil) then
          for _, tower in pairs(towers.list) do
@@ -193,7 +193,8 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-   audioUpdate()
+   voiceOn = audioUpdate()
+
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
@@ -211,7 +212,7 @@ function love.update (dt)
 
    compute_damage(dt)
 
-   if math.random(0,100) > 99 then
+   if math.random(0,100) > 99 and voiceOn then
       table.insert(enemies.list, new_enemy(roads.count))
    end
 
