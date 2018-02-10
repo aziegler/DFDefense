@@ -3,7 +3,7 @@ require "game_data"
 require "build_menu"
 
 local roads = {}
-roads.count = 5
+roads.count = 3
 roads.list = {}
 
 local enemies = {}
