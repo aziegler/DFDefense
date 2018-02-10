@@ -1,4 +1,4 @@
-local SIZE = 110
+local SIZE = 128+10
 local border = 5
 
 function get_menu_bbox(width, k)
