@@ -156,8 +156,8 @@ function love.load(arg)
 
    audioLoad(audioConfig)
    fonts = {
-      large = love.graphics.newFont("assets/ArmWrestler.ttf",24),
-      small = love.graphics.newFont("assets/ArmWrestler.ttf",18)
+      large = love.graphics.newFont("assets/Arial.ttf",24),
+      small = love.graphics.newFont("assets/Arial.ttf",18)
    }
    love.graphics.setFont(fonts.large)
 
@@ -386,7 +386,7 @@ function drawBuildings(img, building)
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
     local influenceRatio = math.max(0,math.min((building.score + 200) / 400,1))
-    if building.hasGauge then
+    if building.hasGauge then 
       draw_gauge(influenceRatio, building.x+building.width/2-img:getWidth()/2, building.y+building.height-img:getHeight())
     end
 end
