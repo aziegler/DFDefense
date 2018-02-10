@@ -63,7 +63,7 @@ function mousePick(x,y,button,istouch)
    if button == 2 then
       local idx,building = getBuilding(mouseModes.mousePos[1], mouseModes.mousePos[2])
 
-      if idx > -1 then
+      if idx > -1 and building.score > 20 then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
                                    y= building.y }
@@ -87,6 +87,14 @@ function mousePick(x,y,button,istouch)
             tower.score = tower.score - infl
             clickedBuilding.score = clickedBuilding.score + infl
          end
+         for _, building in pairs(buildings.list) do
+            if building.score >= 100 then
+               local infl = math.min(building.score * 0.1, 100 - clickedBuilding.score)
+               building.score = building.score - infl
+               clickedBuilding.score = clickedBuilding.score + infl
+            end
+         end
+
       end
       end
    end
@@ -233,7 +241,7 @@ function draw_tower(tower)
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
-   local influenceRatio = math.min(tower.score + 100 / 300,1)
+   local influenceRatio = math.max(0,math.min((tower.score + 100) / 300,1))
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
