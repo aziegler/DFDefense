@@ -356,8 +356,9 @@ function draw_tower(tower)
    end
    local influenceRatio = math.max(0,math.min((tower.score) / 200,1))
 
-   
-   draw_gauge(influenceRatio, x, h)
+   if tower.hasGauge then
+      draw_gauge(influenceRatio, x, h)
+   end
    love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",

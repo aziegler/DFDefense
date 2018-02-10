@@ -158,6 +158,7 @@ function loadSquare(cont, towers, R, G, B)
                      center = true,
                      enabled = true,
                      building = concertBuilding,
+                     hasGauge = false,
                      name="DF"
                   }
                   concertBuilding.tower = concertTower
@@ -218,6 +219,7 @@ function new_tower(idx)
    tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
    tower.name = tower_type.name
+   tower.hasGauge = true
    return tower
 end
 
