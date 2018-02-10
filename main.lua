@@ -155,8 +155,11 @@ function love.load(arg)
    dataLoad(roads, buildings, towers, enemy_gq)
 
    audioLoad(audioConfig)
-
-   love.graphics.setFont(love.graphics.newFont("assets/ArmWrestler.ttf",24))
+   fonts = {
+      large = love.graphics.newFont("assets/ArmWrestler.ttf",24),
+      small = love.graphics.newFont("assets/ArmWrestler.ttf",18)
+   }
+   love.graphics.setFont(fonts.large)
 
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
@@ -394,13 +397,19 @@ function drawBuildingsMiddle(img, building)
                       building.y+building.height/2-img:getHeight()/2)
 end
 
-function drawHover(text,x,y)
+function drawHover(title,text,x,y)
+   local width = 300
+   local height = 200
    love.graphics.setColor(255,255,255,255)
-   love.graphics.draw(imgUI.Hover_up,x,y,0,300/imgUI.Hover_up:getWidth(),1)
-   love.graphics.draw(imgUI.Hover_down,x,y + 300 - imgUI.Hover_down:getHeight(),0,300/imgUI.Hover_down:getWidth(),1)
-   love.graphics.draw(imgUI.Hover_middle,x,y + imgUI.Hover_up:getHeight(),0,300/imgUI.Hover_middle:getWidth(),(300 - imgUI.Hover_up:getHeight() - imgUI.Hover_down:getHeight()) / imgUI.Hover_middle:getHeight())   
+   love.graphics.draw(imgUI.Hover_up,x,y,0,width/imgUI.Hover_up:getWidth(),1)
+   love.graphics.draw(imgUI.Hover_down,x,y + height - imgUI.Hover_down:getHeight(),0,width/imgUI.Hover_down:getWidth(),1)
+   love.graphics.draw(imgUI.Hover_middle,x,y + imgUI.Hover_up:getHeight(),0,width/imgUI.Hover_middle:getWidth(),(height - imgUI.Hover_up:getHeight() - imgUI.Hover_down:getHeight()) / imgUI.Hover_middle:getHeight())
    love.graphics.setColor(255,255,255,255)
-   love.graphics.printf(text,x + 10,y + 5,280,"center")
+   love.graphics.setFont(fonts.large)
+   love.graphics.printf(title,x + 10,y + 5,width - 20,"center")
+   love.graphics.setFont(fonts.small) 
+   love.graphics.printf(text,x + 10,y + 75,width - 20,"center")
+   
 end
 
 function sortY(obj1, obj2)
@@ -468,7 +477,16 @@ function love.draw()
    if mouseMode == mouseModes.gui then
       drawMenu()
    elseif not (hovered == nil) then
-      drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,hovered.x,hovered.y)
+      local x = hovered.x+hovered.width
+      local y = hovered.y-hovered.height/2
+      if hovered.name == "Daniel Féry" then
+         x = hovered.x - hovered.width/2
+         y = hovered.y + hovered.height
+      end
+      if hovered.text == nil then
+         hovered.text = "Lorem Ipsum"
+      end
+      drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,x,y)
    end
 
    audioDraw()
