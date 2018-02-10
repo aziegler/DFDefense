@@ -117,7 +117,7 @@ function loadRoads(roads)
    end
 end
 
-function loadBuildings(buildings)
+function loadBuildings(buildings, towers)
    for x = 1, layerData:getWidth() - 1 do   
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
@@ -135,7 +135,24 @@ function loadBuildings(buildings)
                   height = height + 1
                end
                if x > 1700 then
-                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence})
+                  local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
+                  local concertTower = Tower({
+                     name = "Concert",
+                     range = gameplayVariable.concertRange,
+                     dps = gameplayVariable.concertDps,
+                     influence = gameplayVariable.initialConcertInfluence,
+                     influence_rate = gameplayVariable.concertInfluenceRate,
+                     color = {255,30,30},
+                     img = nil,
+                     x = concertBuilding.x,
+                     y = concertBuilding.y,
+                     width = concertBuilding.width,
+                     height = concertBuilding.height,
+                     enabled = true,
+                     building = concertBuilding
+                  })
+                  concertBuilding.tower = concertTower
+                  table.insert(towers.list, concertTower)
                else
                   table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
                end
@@ -145,7 +162,7 @@ function loadBuildings(buildings)
    end
 end
 
-function dataLoad(roads,buildings)
+function dataLoad(roads,buildings,towers)
 	dofile("assets/config.txt")
 
    for i = 1, roads.count do
@@ -155,7 +172,7 @@ function dataLoad(roads,buildings)
    end
    layerData = love.image.newImageData("assets/layer.bmp")
    loadRoads(roads)
-   loadBuildings(buildings)
+   loadBuildings(buildings,towers)
    
 end
 

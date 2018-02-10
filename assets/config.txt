@@ -24,7 +24,10 @@ EnemyBuilding {
 
 GameplayVariable {
    buildingTreshold = 20,
-   initialConcertInfluence = 200
+   initialConcertInfluence = 200,
+   concertRange = 200,
+   concertDps = 10,
+   concertInfluenceRate = 5
 }
 
 Tower{

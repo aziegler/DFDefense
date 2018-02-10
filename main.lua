@@ -135,7 +135,7 @@ end
 
 function love.load(arg)
 
-   dataLoad(roads, buildings)
+   dataLoad(roads, buildings, towers)
    audioLoad(audioConfig)
 
    love.graphics.setFont(love.graphics.newFont("assets/ArmWrestler.ttf",24))
@@ -286,6 +286,7 @@ function draw_tower(tower)
                          tower.x - tower.img:getWidth()/2 + tower.width/2,
                          tower.y - tower.img:getHeight() + tower.height)
    else
+      print("Tower")
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
@@ -337,6 +338,7 @@ function love.draw()
          love.graphics.print("Score "..math.floor(building.score), building.x + 20, building.y - 30, 0)
 
       else
+         print("Has tower")
          draw_tower(building.tower)
       end
    end
