@@ -22,6 +22,11 @@ EnemyBuilding {
    dps = 30
 }
 
+GameplayVariable {
+   buildingTreshold = 20,
+   initialConcertInfluence = 500
+}
+
 Tower{
    name = "Tour 1",
    range = 150,
@@ -39,7 +44,7 @@ Tower{
    influence = 100,
    influence_rate = 5,
    color = {200,30,30},
-      img = "assets/buildings/BtmD_Tower.png"
+   img = "assets/buildings/BtmD_Tower.png"
 }
 
 Tower {

@@ -66,7 +66,7 @@ function mousePick(x,y,button,istouch)
    if button == 2 then
       local idx,building = getBuilding(x, y)
 
-      if idx > -1 and building.score > 20 then
+      if idx > -1 and building.score > gameplayVariable.buildingTreshold then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
                                    y= building.y }
@@ -293,7 +293,7 @@ function love.draw()
    end
    for _,building in pairs(buildings.list) do
       if not building.tower then
-         if building.score >= 100 then
+         if building.score >= gameplayVariable.buildingTreshold then
             love.graphics.setColor(255,0,0,255)
          elseif building.score >= -100 then
             love.graphics.setColor(100,100,100,255)
