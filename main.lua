@@ -11,7 +11,6 @@ enemies.list = {}
 
 local towers = {}
 towers.list = {}
-towers.current_tower = {}
 
 local buildings = {}
 buildings.list = {}
@@ -125,6 +124,13 @@ function love.load(arg)
    dataLoad(roads, buildings)
    audioLoad(audioConfig)
 
+   for k,v in pairs(buildings.list) do
+      for n,v2 in pairs(v) do
+         print(k, n,v2)
+      end
+      print(" ")
+   end
+
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
       love.window.setMode(1920*scale,1080*scale)
@@ -217,12 +223,15 @@ function draw_enemy(ennemy)
 end
 
 function draw_tower(tower)
-   if tower.enabled then
-      love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
+   if tower.img then
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.draw(tower.img,
+                         tower.x - tower.img:getWidth()/2 + tower.width/2,
+                         tower.y - tower.img:getHeight()/2 + tower.height/2)
    else
-      love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,20)
+      love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
+      love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
-   love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    local influenceRatio = math.min(tower.score + 100 / 300,1)
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
@@ -245,16 +254,18 @@ function love.draw()
       end
    end
    for _,building in pairs(buildings.list) do
-      if building.score >= 100 then
-         love.graphics.setColor(255,0,0,255)
-      elseif building.score >= -100 then
-         love.graphics.setColor(100,100,100,255)
-      else
-         love.graphics.setColor(0,0,255,255)
+      if not building.tower then
+         if building.score >= 100 then
+            love.graphics.setColor(255,0,0,255)
+         elseif building.score >= -100 then
+            love.graphics.setColor(100,100,100,255)
+         else
+            love.graphics.setColor(0,0,255,255)
+         end
+         love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
+         love.graphics.setColor(120,255,120,255)
+         love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50)
       end
-      love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
-      love.graphics.setColor(120,255,120,255)
-      love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50)
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
