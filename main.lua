@@ -260,7 +260,9 @@ function love.update (dt)
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         table.remove(enemies.list,idx)
+         concertTower.score = concertTower.score - enemy.dps
+         enemy.score = enemy.score - dt
+         --table.remove(enemies.list,idx)
       end
       if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
          enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
@@ -342,7 +344,7 @@ function draw_gauge(influenceRatio,x,y)
    love.graphics.draw(imgUI.Rouge,x + 17,y - imgUI.Jauge:getHeight() -5, 0, 72 * influenceRatio / imgUI.Rouge:getWidth(), 1)
    love.graphics.draw(imgUI.Bleu,
                       x + 17 + (72 * influenceRatio),
-                      y - imgUI.Jauge:getHeight() -5, 0, 
+                      y - imgUI.Jauge:getHeight() -5, 0,
                       72 * (1 - influenceRatio) / imgUI.Bleu:getWidth(), 1)
 end
 
