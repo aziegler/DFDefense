@@ -163,7 +163,7 @@ function loadSquare(cont, towers, R, G, B)
                      building = concertBuilding,
                      hasGauge = false,
                      name="Daniel Féry",
-                     text="Drôle de zef dans le relief \nentre la préf et la déf\n et le bénéf qui s'y greffe\n Défense DF Défense DF"
+                     text="Drôle de zef dans le relief \nentre la pref et la Def\n et le benef qui s'y greffe\n Defense DF Defense DF"
                   }
                   concertBuilding.tower = concertTower
                   table.insert (cont.list, concertBuilding)
