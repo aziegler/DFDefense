@@ -123,7 +123,11 @@ function loadBuildings(buildings)
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
-               table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
+               if x > 1700 then
+                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 500})
+               else
+                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
+               end
             end
          end
       end
