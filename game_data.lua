@@ -138,7 +138,7 @@ function loadSquare(cont, towers, R, G, B)
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
-               if x > 1700 then
+               if x > 1500 then
                   local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
                   local concertTower = {
                      name = "Concert",
