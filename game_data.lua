@@ -117,7 +117,7 @@ function loadRoads(roads)
    end
 end
 
-function loadSquare(cont, R, G, B)
+function loadSquare(cont, towers, R, G, B)
    for x = 1, layerData:getWidth() - 1 do
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
@@ -136,7 +136,25 @@ function loadSquare(cont, R, G, B)
                   height = height + 1
                end
                if x > 1700 then
-                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence})
+                  local concertBuilding = {x = x,y = y,width = width,height = height,score = gameplayVariable.initialConcertInfluence}
+                  local concertTower = {
+                     name = "Concert",
+                     range = gameplayVariable.concertRange,
+                     dps = gameplayVariable.concertDps,
+                     score = gameplayVariable.initialConcertInfluence,
+                     influence_rate = gameplayVariable.concertInfluenceRate,
+                     color = {red = 255,green = 30,blue = 30},
+                     img = nil,
+                     x = concertBuilding.x,
+                     y = concertBuilding.y,
+                     width = concertBuilding.width,
+                     height = concertBuilding.height,
+                     enabled = true,
+                     building = concertBuilding
+                  }
+                  concertBuilding.tower = concertTower
+                  table.insert (cont.list, concertBuilding)
+                  table.insert(towers.list, concertTower)
                else
                   table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0})
                end
@@ -146,16 +164,16 @@ function loadSquare(cont, R, G, B)
    end
 end
 
-function loadBuildings(B)
-   loadSquare(B, 255, 0, 0)
+function loadBuildings(B, T)
+   loadSquare(B, T, 255, 0, 0)
 end
 
-function loadBG(B)
-   loadSquare(B, 0, 0, 255)
+function loadBG(B, T)
+   loadSquare(B, T, 0, 0, 255)
 end
 
-function dataLoad(roads, buildings, enemy_gq)
-   dofile("assets/config.txt")
+function dataLoad(roads,buildings, towers, enemy_gq)
+	dofile("assets/config.txt")
 
    for i = 1, roads.count do
       roads.list[i] = {}
@@ -164,9 +182,9 @@ function dataLoad(roads, buildings, enemy_gq)
    end
    layerData = love.image.newImageData("assets/layer.bmp")
    loadRoads(roads)
-   loadBuildings(buildings)
 
-   loadBG(enemy_gq)
+   loadBuildings(buildings,towers)
+   loadBG(enemy_gq, { list = {} })
 
 end
 
