@@ -16,15 +16,16 @@ Tower{
    range = 400,
    dps = 3,
    influence = 100,
-   color = {255,0,0}
+   influence_rate = 100,
+   color = {200,100,100}
 }
 
 Tower{
    range = 600,
    dps = 1,
    influence = 200,
-   influence_rate = 10,
-   color = {0,0,255}
+   influence_rate = 100,
+   color = {0,100,200}
 }
 
 Enemy{

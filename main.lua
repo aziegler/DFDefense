@@ -22,19 +22,48 @@ function Audio (a)
 end
 
 function love.mousepressed(x,y,button,istouch)
-   if not (towers.current_tower.enabled) then
-      return
-   end
-   for idx, building in pairs(buildings.list) do
-      if collide(towers.current_tower,building) then
-         towers.current_tower.x = building.x
-         towers.current_tower.y = building.y
-         towers.current_tower.width = building.width
-         towers.current_tower.height = building.height
-         table.remove(buildings.list,idx)
-         table.insert(towers.list,towers.current_tower)
-         towers.current_tower = new_tower()
+   if button == 1 then
+      if not (towers.current_tower.enabled) then
          return
+      end
+      for idx, building in pairs(buildings.list) do
+         if collide(towers.current_tower,building) then
+            towers.current_tower.x = building.x
+            towers.current_tower.y = building.y
+            towers.current_tower.width = building.width
+            towers.current_tower.height = building.height
+            table.remove(buildings.list,idx)
+            table.insert(towers.list,towers.current_tower)
+            towers.current_tower = new_tower()
+            return
+         end
+      end
+   end
+   if button == 2 then
+      local clickedTower = getTower(x,y)
+      if clickedTower == nil then
+         return
+      end
+      for _, tower in pairs(towers.list) do
+         local infl = tower.friendlyinfluence * 0.1
+         tower.friendlyinfluence = tower.friendlyinfluence - infl
+         clickedTower.friendlyinfluence = clickedTower.friendlyinfluence + infl
+      end
+   end
+end
+
+function getBuilding(x,y)
+   for _,building in pairs(buildings.list) do
+      if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
+         return building
+      end
+   end
+end
+
+function getTower(x,y)
+   for _,tower in pairs(towers.list) do
+      if x >= tower.x and x <= tower.x + tower.width and y >= tower.y and y <= tower.y + tower.height then
+         return tower
       end
    end
 end
@@ -68,13 +97,8 @@ function love.load()
                road[x] = road[x-1]
             end
          elseif r == 255 and g == 0 and b == 0 then
-            local already_added = false
-            for _,building in pairs(buildings.list) do
-               if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
-                  already_added = true
-               end
-            end
-            if not already_added then
+            local building = getBuilding(x,y)
+            if building == nil then
                local width, height = 0,0
                while r == 255 and g == 0 and b == 0 do
                   width = width + 1
@@ -112,7 +136,6 @@ function compute_damage(dt)
          end
          if distance < enemy.range then
             tower.enemyinfluence = tower.enemyinfluence + enemy.dps * dt
-            print ("Enemy "..tower.enemyinfluence.." Friendly "..tower.friendlyinfluence)
          end
       end
    end
@@ -133,6 +156,10 @@ function love.update (dt)
          enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
 
       end
+   end
+
+   for _,tower in pairs(towers.list) do
+      tower.friendlyinfluence = tower.friendlyinfluence + tower.influence_rate * dt
    end
 
    compute_damage(dt)
