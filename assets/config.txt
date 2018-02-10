@@ -10,8 +10,9 @@ Audio {
       { loop = 1, voice = false },
       { loop = 1, voice = true , tbs = 1.5},
       { loop = 2, voice = false },
+      { loop = 2, voice = true , tbs = 1.25},
+	  { loop = 2, voice = false },
       { loop = 2, voice = true , tbs = 1},
-      { loop = 2, voice = true , tbs = 0.75},
       { loop = 3, voice = false },
       { loop = 3, voice = false }
    }
