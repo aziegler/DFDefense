@@ -138,7 +138,7 @@ end
 function compute_damage(dt)
    for en_idx,enemy in pairs(enemies.list) do
       for _,tower in pairs(towers.list) do
-         local width, height = enemy.x-tower.x, enemy.y-tower.y
+         local width, height = enemy.x-(tower.x+tower.width/2), enemy.y-(tower.y+tower.height/2)
          local distance = (width*width + height*height)^0.5
          if distance  < tower.range then
             enemy.life = enemy.life - tower.dps * dt
@@ -229,7 +229,9 @@ function draw_tower(tower)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
    love.graphics.print("Friend "..math.floor(tower.friendlyinfluence/10).." Enemy"..math.floor(tower.enemyinfluence/10),tower.x + 10, tower.y + 20)
    love.graphics.setColor(180, 50, 50, 100)
-   love.graphics.circle("fill", tower.x, tower.y, tower.range)
+   love.graphics.circle("fill",
+                        tower.x+tower.width/2,
+                        tower.y+tower.height/2, tower.range)
 end
 
 function love.draw()
