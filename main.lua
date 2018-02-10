@@ -1,7 +1,6 @@
 require "audio"
 require "game_data"
 
-local layerData
 
 local roads = {}
 roads.count = 3
@@ -23,20 +22,15 @@ end
 
 function love.mousepressed(x,y,button,istouch)
    if button == 1 then
-      if not (towers.current_tower.enabled) then
-         return
-      end
-      for idx, building in pairs(buildings.list) do
-         if collide(towers.current_tower,building) then
-            towers.current_tower.x = building.x
-            towers.current_tower.y = building.y
-            towers.current_tower.width = building.width
-            towers.current_tower.height = building.height
-            table.remove(buildings.list,idx)
-            table.insert(towers.list,towers.current_tower)
-            towers.current_tower = new_tower()
-            return
-         end
+      local idx,building = getBuilding(x,y)
+      if idx > -1 then
+         towers.current_tower.x = building.x
+         towers.current_tower.y = building.y
+         towers.current_tower.width = building.width
+         towers.current_tower.height = building.height
+         table.remove(buildings.list,idx)
+         table.insert(towers.list,towers.current_tower)
+         towers.current_tower = new_tower()
       end
    end
    if button == 2 then
@@ -53,11 +47,14 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function getBuilding(x,y)
-   for _,building in pairs(buildings.list) do
+   for idx,building in pairs(buildings.list) do
+      print ("building "..building.x.." "..building.y.." "..x.. " "..y)
       if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
-         return building
+         return idx,building
       end
    end
+   print("Not found")
+   return -1,nil
 end
 
 function getTower(x,y)
@@ -69,57 +66,21 @@ function getTower(x,y)
 end
 
 function love.load()
-   dofile("assets/config.txt")
-
+   dataLoad(roads, buildings)
    audioLoad(audioConfig)
-   dataLoad()
-
+  
    scale = 1
    --love.window.setMode(1920*scale,1080*scale)
    love.window.setFullscreen(true)
 
-   for i = 1, roads.count do
-      roads.list[i] = {}
-   end
-   layerData = love.image.newImageData("assets/layer.bmp")
-   for x = 1, layerData:getWidth() - 1 do
-      local road_index = 1
-      for y = 1, layerData:getHeight() - 1 do
-         local r,g,b,a = layerData:getPixel( x,y )
-         if (r == 0 and g == 0 and b == 0) then
-            if not(roads.list[road_index][x] == nil) and math.abs(roads.list[road_index][x] - y) > 10 then
-               road_index = road_index + 1
-            end
-            local road = roads.list[road_index]
-            if (#road == 0 or x == 1 or math.abs(road[(x-1)] - y) < 10) then
-               road[x] = y
-            else
-               road[x] = road[x-1]
-            end
-         elseif r == 255 and g == 0 and b == 0 then
-            local building = getBuilding(x,y)
-            if building == nil then
-               local width, height = 0,0
-               while r == 255 and g == 0 and b == 0 do
-                  width = width + 1
-                  r,g,b,a = layerData:getPixel(x + width, y)
-               end
-               r,g,b,a = layerData:getPixel( x ,y + height )
-               while r == 255 and g == 0 and b == 0 do
-                  r,g,b,a = layerData:getPixel(x, y + height)
-                  height = height + 1
-               end
-               table.insert(buildings.list,{x = x,y = y,width = width,height = height})
-            end
-         end
-      end
-   end
    for i,road in pairs(roads.list) do
       if(#road < 20) then
          table.remove(roads.list,i)
       end
    end
+
    towers.current_tower = new_tower()
+
 end
 
 function compute_damage(dt)
@@ -172,15 +133,11 @@ function love.update (dt)
    towers.current_tower.y = love.mouse.getY()/scale
    towers.current_tower.enabled = false
 
-   local r,g,b,a = layerData:getPixel(towers.current_tower.x,towers.current_tower.y)
-   if r == 255 and g == 0 and b == 0 then
-      towers.current_tower.enabled = true
-      for _,tower in pairs(towers.list) do
-         if collide(tower,towers.current_tower) then
-            towers.current_tower.enabled = false
-         end
-      end
+   local idx,building = getBuilding(towers.current_tower.x,towers.current_tower.y)
+   if idx > -1 then
+      towers.current_tower.tower_enabled = true
    end
+ 
 end
 
 
@@ -198,7 +155,7 @@ end
 function draw_enemy(ennemy)
    love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
    love.graphics.rectangle("fill",ennemy.x - 10,ennemy.y - 10,20,20)
-   love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue, 50)
+   love.graphics.setColor(50, 50, 180, 100)
    love.graphics.circle("fill", ennemy.x, ennemy.y, ennemy.range)
    love.graphics.setColor(0,0,0)
    love.graphics.print(math.floor(ennemy.life),ennemy.x - 7 ,ennemy.y - 5,0)
@@ -217,7 +174,8 @@ function draw_tower(tower)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
    love.graphics.print("Friend "..math.floor(tower.friendlyinfluence/10).." Enemy"..math.floor(tower.enemyinfluence/10),tower.x + 10, tower.y + 20)
-
+   love.graphics.setColor(180, 50, 50, 100)
+   love.graphics.circle("fill", tower.x, tower.y, tower.range)
 end
 
 function love.draw()
