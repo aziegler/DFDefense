@@ -325,6 +325,10 @@ function drawBuildingsMiddle(img, building)
 end
 
 
+function sortY(obj1, obj2)
+   return obj1.y < obj2.y
+end
+
 function love.draw()
    love.graphics.scale(scale,scale)
 
@@ -335,12 +339,22 @@ function love.draw()
       end
    end
 
+   local drawList = {}
    for _,enemy in pairs(enemies.list) do
-      draw_enemy(enemy)
+      enemy.enemy = true
+      table.insert(drawList, enemy)
    end
 
    for _,building in pairs(buildings.list) do
-      if not building.tower then
+      table.insert(drawList, building)
+   end
+
+   table.sort(drawList, sortY)
+
+   for _,building in pairs(drawList) do
+      if building.enemy then
+         draw_enemy(building)
+      elseif not building.tower then
          love.graphics.setColor(255,255,255,255)
          if building.score >= gameplayVariable.buildingTreshold then
             drawBuildings(imgBuildings.Goche, building)
