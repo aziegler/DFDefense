@@ -125,7 +125,13 @@ function getBuilding(x,y)
       return -1,nil
    end
    for idx,building in pairs(buildings.list) do
-      if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
+
+      local X = building.x + building.width/2 - imgBuildings.Neutre:getWidth()/2
+      local Y = building.y + building.height - imgBuildings.Neutre:getHeight()
+      local W = imgBuildings.Neutre:getWidth()
+      local H = imgBuildings.Neutre:getHeight()
+
+      if x >= X and x <= X + W and y >= Y and y <= Y + H then
          return idx,building
       end
    end
