@@ -98,18 +98,18 @@ function getTower(x,y)
 
 end
 
-function love.load()
+function love.load(arg)
 
    dataLoad(roads, buildings)
    audioLoad(audioConfig)
 
-   if videoSettings.fullscreen == true then
+   if videoSettings.fullscreen == false or arg[2] == "-w" then
+      scale = 0.5
+      love.window.setMode(1920*scale,1080*scale)
+      else
       scale = 1
       --love.window.setMode(1920*scale,1080*scale)
       love.window.setFullscreen(true)
-   else
-      scale = 0.5
-      love.window.setMode(1920*scale,1080*scale)
    end
 
    
@@ -166,14 +166,14 @@ function love.update (dt)
    towers.current_tower.x = love.mouse.getX()/scale
    towers.current_tower.y = love.mouse.getY()/scale
    towers.current_tower.enabled = true
-   
+
    local idx,building = getBuilding(towers.current_tower.x,towers.current_tower.y)
    if idx > -1 then
       towers.current_tower.enabled = true
-   else 
+   else
       towers.current_tower.enabled = false
    end
- 
+
 end
 
 

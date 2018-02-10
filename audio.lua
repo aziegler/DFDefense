@@ -1,4 +1,4 @@
-
+MAIN_VOLUME = 1
 function mute(group)
    for _,track in pairs(group) do
       track:setVolume(0.0)
@@ -7,7 +7,7 @@ end
 
 function unmute(group)
    for k,track in pairs(group) do
-      track:setVolume(1)
+      track:setVolume(MAIN_VOLUME)
    end
 end
 
@@ -39,6 +39,7 @@ function loadAudio()
       local t = love.audio.newSource(track)
       tracks[track] = t
       t:play()
+      t:setVolume(MAIN_VOLUME)
    end
 
    local groups = {
