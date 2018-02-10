@@ -56,18 +56,14 @@ function mouseGui(x,y,button,istouch)
 
    building.tower = tower
    table.insert(towers.list,tower)
-   -- towers.current_tower = nil --new_tower()
-   towers.current_tower = new_tower()
 
    mouseMode = mouseModes.pick
 end
 
 function mousePick(x,y,button,istouch)
    if button == 2 then
-      --if not (towers.current_tower.enabled) then
-      --   return
-      --end
-      local idx,building = getBuilding(towers.current_tower.x,towers.current_tower.y)
+      local idx,building = getBuilding(mouseModes.mousePos[1], mouseModes.mousePos[2])
+
       if idx > -1 then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
@@ -124,15 +120,10 @@ function love.load(arg)
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
       love.window.setMode(1920*scale,1080*scale)
-      else
+   else
       scale = 1
-      --love.window.setMode(1920*scale,1080*scale)
       love.window.setFullscreen(true)
    end
-
-
-
-   towers.current_tower = new_tower()
 
 end
 
@@ -182,17 +173,6 @@ function love.update (dt)
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
-   towers.current_tower.x = love.mouse.getX()/scale
-   towers.current_tower.y = love.mouse.getY()/scale
-   towers.current_tower.enabled = true
-
-   local idx,building = getBuilding(towers.current_tower.x,towers.current_tower.y)
-   if idx > -1 then
-      towers.current_tower.enabled = true
-   else
-      towers.current_tower.enabled = false
-   end
-
 end
 
 
