@@ -110,6 +110,10 @@ function compute_damage(dt)
                break
             end
          end
+         if distance < enemy.range then
+            tower.enemyinfluence = tower.enemyinfluence + enemy.dps * dt
+            print ("Enemy "..tower.enemyinfluence.." Friendly "..tower.friendlyinfluence)
+         end
       end
    end
 end
@@ -131,17 +135,14 @@ function love.update (dt)
       end
    end
 
-
    compute_damage(dt)
 
    if math.random(0,100) > 99 then
       table.insert(enemies.list, new_enemy(#roads.list))
    end
 
-
    towers.current_tower.x = love.mouse.getX()/scale
    towers.current_tower.y = love.mouse.getY()/scale
-
    towers.current_tower.enabled = false
 
    local r,g,b,a = layerData:getPixel(towers.current_tower.x,towers.current_tower.y)
@@ -186,7 +187,7 @@ function draw_tower(tower)
    local influenceRatio = tower.friendlyinfluence / (tower.friendlyinfluence + tower.enemyinfluence)
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
-   love.graphics.setColor(0,0,255)
+   love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
 
 end
