@@ -147,11 +147,12 @@ function loadSquare(cont, towers, R, G, B)
                      score = gameplayVariable.initialConcertInfluence,
                      influence_rate = gameplayVariable.concertInfluenceRate,
                      color = {red = 255,green = 30,blue = 30},
-                     img = nil,
+                     img = love.graphics.newImage("assets/buildings/BtmG_DanielFeryr.png"),
                      x = concertBuilding.x,
                      y = concertBuilding.y,
                      width = concertBuilding.width,
                      height = concertBuilding.height,
+                     center = true,
                      enabled = true,
                      building = concertBuilding
                   }
