@@ -12,9 +12,16 @@ Audio {
       { loop = 2, voice = false },
       { loop = 2, voice = true , tbs = 1.25},
 	  { loop = 2, voice = false },
-      { loop = 2, voice = true , tbs = 1},
+      { loop = 2, voice = true , tbs = 1.1},
       { loop = 3, voice = false },
-      { loop = 3, voice = false }
+      { loop = 3, voice = false },
+	  
+	  { loop = 4, voice = true , tbs = 1.25},
+	  { loop = 4, voice = false },
+	  
+	  { loop = 5, voice = true , tbs = 1.25},
+	  { loop = 5, voice = false },
+	  
    }
 }
 
@@ -31,10 +38,10 @@ EndGame {
 
 GameplayVariable {
    buildingTreshold = 20,
-   initialConcertInfluence = 300,
+   initialConcertInfluence = 600,
    concertRange = 450,
    concertDps = 2,
-   concertInfluenceRate = 12,
+   concertInfluenceRate = 16,
    neutralName = "Habitations",
    friendlyName = "Habitat partagé"
 }
@@ -44,10 +51,8 @@ Tower{
    range = 175,
    dps = 4,
    influence = 50,
-   influence_rate = 5,
-   color = {200,100,100},
-   img = "assets/buildings/BtmG_Garden.png",
-   icon = "assets/UI/Icon_Garden.png"
+   influence_rate = 10,
+   color = {200,100,100}
 }
 
 
@@ -56,7 +61,7 @@ Tower{
    range = 250,
    dps = 2,
    influence = 100,
-   influence_rate = 4,
+   influence_rate = 8,
    color = {200,30,30},
    img = "assets/buildings/BtmD_Tower.png"
 }
@@ -66,26 +71,25 @@ Tower {
    range = 600,
    dps = 1,
    influence = 200,
-   influence_rate = 4,
+   influence_rate = 8,
    color = {0,100,200},
-   img = "assets/buildings/BtmG_assos.png",
-   icon = "assets/UI/Icon_Assos.png"
+   img = "assets/buildings/BtmG_assos.png"
 }
 
 Enemy {
-   life = 140,
+   life = 130,
    color = {120,120,110},
    speed = 30,
-   dps = 15,
+   dps = 13,
    range = 200,
    img = "assets/enemies/costard.png"
 }
 
 Enemy {
-   life = 100,
+   life = 90,
    color = {120,120,210},
    speed = 60,
-   dps = 10,
+   dps = 8,
    range = 150,
       img = "assets/enemies/costard.png"
 }
