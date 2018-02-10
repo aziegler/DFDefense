@@ -61,8 +61,10 @@ function mouseGui(x,y,button,istouch)
 end
 
 function mousePick(x,y,button,istouch)
+   x = mouseModes.mousePos[1]
+   y = mouseModes.mousePos[2]
    if button == 2 then
-      local idx,building = getBuilding(mouseModes.mousePos[1], mouseModes.mousePos[2])
+      local idx,building = getBuilding(x, y)
 
       if idx > -1 and building.score > 20 then
          mouseMode = mouseModes.gui
