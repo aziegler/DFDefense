@@ -10,7 +10,7 @@ local enemyCoolDown = 0
 local enemies = {}
 enemies.list = {}
 
-local hoveredName = ""
+local hovered = nil
 
 local towers = {}
 towers.list = {}
@@ -170,7 +170,10 @@ function love.load(arg)
    imgUI = {
       Jauge = love.graphics.newImage("assets/UI/Jauge.png"),
       Rouge = love.graphics.newImage("assets/UI/Barre_rouge.png"),
-      Bleu = love.graphics.newImage("assets/UI/Barre_bleue.png")
+      Bleu = love.graphics.newImage("assets/UI/Barre_bleue.png"),
+      Hover_up = love.graphics.newImage("assets/UI/haut_texte.png"),
+      Hover_down = love.graphics.newImage("assets/UI/bas_texte.png"),
+      Hover_middle = love.graphics.newImage("assets/UI/milieu_texte.png")
    }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
@@ -294,18 +297,18 @@ function love.update (dt)
 
    local idx, tower = getTower(mouseModes.mousePos[1], mouseModes.mousePos[2])
    local b_idx, building = getBuilding(mouseModes.mousePos[1], mouseModes.mousePos[2])
-   hoveredName = nil
+   hovered = nil
    if idx > -1 then
-      print("Tower hovered")
-      hoveredName = tower.name
+      hovered = tower
    elseif b_idx > -1 then
       if building.score >= gameplayVariable.buildingTreshold then
-            hoveredName = gameplayVariable.friendlyName
-         elseif building.score >= -100 then
-            hoveredName = gameplayVariable.neutralName
-         else
-            hoveredName = enemyBuilding.name
-         end
+         building.name = gameplayVariable.friendlyName
+      elseif building.score >= -100 then
+         building.name = gameplayVariable.neutralName
+      else
+         building.name = enemyBuilding.name
+      end
+      hovered = building
    end
 end
 
@@ -369,7 +372,6 @@ function draw_tower(tower)
    if tower.hasGauge then
       draw_gauge(influenceRatio, x, h)
    end
-   love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
                         tower.x+tower.width/2,
@@ -392,11 +394,13 @@ function drawBuildingsMiddle(img, building)
                       building.y+building.height/2-img:getHeight()/2)
 end
 
-function drawHover(text)
+function drawHover(text,x,y)
    love.graphics.setColor(255,255,255,255)
-   love.graphics.rectangle("fill",mouseModes.mousePos[1],mouseModes.mousePos[2],200,100)
-   love.graphics.setColor(0,0,0,255)
-   love.graphics.printf(text,mouseModes.mousePos[1] + 10,mouseModes.mousePos[2] + 5,180,"center")
+   love.graphics.draw(imgUI.Hover_up,x,y,0,300/imgUI.Hover_up:getWidth(),1)
+   love.graphics.draw(imgUI.Hover_down,x,y + 300 - imgUI.Hover_down:getHeight(),0,300/imgUI.Hover_down:getWidth(),1)
+   love.graphics.draw(imgUI.Hover_middle,x,y + imgUI.Hover_up:getHeight(),0,300/imgUI.Hover_middle:getWidth(),(300 - imgUI.Hover_up:getHeight() - imgUI.Hover_down:getHeight()) / imgUI.Hover_middle:getHeight())   
+   love.graphics.setColor(255,255,255,255)
+   love.graphics.printf(text,x + 10,y + 5,280,"center")
 end
 
 function sortY(obj1, obj2)
@@ -450,7 +454,6 @@ function love.draw()
          end
          --love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
          love.graphics.setColor(50,50,50,255)
-         love.graphics.print("Score "..math.floor(building.score), building.x + 20, building.y - 30, 0)
 
       else
          draw_tower(building.tower)
@@ -464,8 +467,8 @@ function love.draw()
 
    if mouseMode == mouseModes.gui then
       drawMenu()
-   elseif not (hoveredName == nil) then
-      drawHover(hoveredName)
+   elseif not (hovered == nil) then
+      drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.x,hovered.y)
    end
 
    audioDraw()
