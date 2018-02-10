@@ -398,7 +398,7 @@ function drawHover(text,x,y)
    love.graphics.setColor(255,255,255,255)
    love.graphics.draw(imgUI.Hover_up,x,y,0,300/imgUI.Hover_up:getWidth(),1)
    love.graphics.draw(imgUI.Hover_down,x,y + 300 - imgUI.Hover_down:getHeight(),0,300/imgUI.Hover_down:getWidth(),1)
-   love.graphics.draw(imgUI.Hover_middle,x,y + imgUI.Hover_up:getHeight(),0,300/imgUI.Hover_middle:getWidth(),(300 - imgUI.Hover_up:getHeight() - imgUI.Hover_down:getHeight()) / imgUI.Hover_middle:getHeight())   
+   love.graphics.draw(imgUI.Hover_middle,x,y + imgUI.Hover_up:getHeight(),0,300/imgUI.Hover_middle:getWidth(),(300 - imgUI.Hover_up:getHeight() - imgUI.Hover_down:getHeight()) / imgUI.Hover_middle:getHeight())
    love.graphics.setColor(255,255,255,255)
    love.graphics.printf(text,x + 10,y + 5,280,"center")
 end
@@ -468,7 +468,15 @@ function love.draw()
    if mouseMode == mouseModes.gui then
       drawMenu()
    elseif not (hovered == nil) then
-      drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.x,hovered.y)
+      local x = hovered.x+hovered.width
+      local y = hovered.y-hovered.height/2
+      if hovered.name == "DF" then
+         x = hovered.x - hovered.width/2
+         y = hovered.y+hovered.height
+      end
+
+      drawHover(hovered.name.."\n"..math.floor(hovered.score),x,y)
+
    end
 
    audioDraw()
