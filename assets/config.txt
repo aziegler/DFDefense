@@ -1,0 +1,21 @@
+Tower{
+	range = 400,
+	dps = 3,
+	color = {100,100,100}
+}
+
+Tower{
+	range = 600,
+	dps = 1,
+	color = {255,255,100}
+}
+
+Ennemy{
+	life = 30,
+	color={120,120,110}
+}
+
+Ennemy{
+	life = 50,
+	color={120,120,210}
+}
