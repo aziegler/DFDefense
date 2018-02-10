@@ -118,6 +118,12 @@ function compute_damage(dt)
    end
 end
 
+function love.keypressed(key)
+   if key == "escape" then
+      love.event.quit()
+   end
+end
+
 function love.update (dt)
    audioUpdate()
 
