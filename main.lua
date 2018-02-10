@@ -25,6 +25,8 @@ function Audio (a)
    audioConfig = a
 end
 
+totalScore = 1000
+
 mouseModes = {
    pick = 1,
    gui = 2,
@@ -156,8 +158,8 @@ function love.load(arg)
 
    audioLoad(audioConfig)
    fonts = {
-      large = love.graphics.newFont("assets/Arial.ttf",24),
-      small = love.graphics.newFont("assets/Arial.ttf",18)
+      large = love.graphics.newFont("assets/arial.ttf",24),
+      small = love.graphics.newFont("assets/arial.ttf",18)
    }
    love.graphics.setFont(fonts.large)
 
@@ -261,6 +263,18 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
+
+   if totalScore <= 0 then
+      print("GAME OVER!!!")
+      love.graphics.setColor(255, 255, 255, 255)
+      love.graphics.printf("GAME OVER",
+                           500,500,
+                           300,"center")
+
+      return
+   end
+
+
    voiceOn, tbs = audioUpdate()
 
    for idx,enemy in pairs(enemies.list) do
@@ -280,10 +294,6 @@ function love.update (dt)
       if tower.score > 0 then
          totalScore = totalScore + tower.score
       end
-   end
-
-   if totalScore <= 0 then
-      print("GAME OVER!!!")
    end
 
    compute_damage(dt)
@@ -384,7 +394,7 @@ function drawBuildings(img, building)
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
     local influenceRatio = math.max(0,math.min((building.score + 200) / 400,1))
-    if building.hasGauge then 
+    if building.hasGauge then
       draw_gauge(influenceRatio, building.x+building.width/2-img:getWidth()/2, building.y+building.height-img:getHeight())
     end
 end
@@ -487,6 +497,6 @@ function love.draw()
       drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,x,y)
    end
 
-   audioDraw()
+   -- audioDraw()
 
 end
