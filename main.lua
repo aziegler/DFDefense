@@ -95,7 +95,7 @@ function mousePick(x,y,button,istouch)
          end
          for _, building in pairs(buildings.list) do
             if building.score >= 100 then
-               local infl = math.min(building.score * 0.1, 100 - clickedBuilding.score)
+               local infl = math.max(math.min(building.score * 0.1, 100 - clickedBuilding.score),0)
                building.score = building.score - infl
                clickedBuilding.score = clickedBuilding.score + infl
             end
@@ -193,6 +193,7 @@ function compute_damage(dt)
          end
       end
    end
+
    for _,building1 in pairs(buildings.list) do
       for _,building2 in pairs(buildings.list) do
          local width, height = building2.x-(building1.x+building1.width/2), building2.y-(building1.y+building1.height/2)
@@ -202,6 +203,7 @@ function compute_damage(dt)
          end
       end
    end
+
    for _,building1 in pairs(buildings.list) do
       for _,tower in pairs(towers.list) do
          local width, height = tower.x-(building1.x+building1.width/2), tower.y-(building1.y+building1.height/2)
@@ -284,7 +286,7 @@ function draw_tower(tower)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
-   love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20)
+   love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0,2,2)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
                         tower.x+tower.width/2,
@@ -323,8 +325,8 @@ function love.draw()
             drawBuildings(imgBuildings.Drouate, building)
          end
          --love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
-         love.graphics.setColor(120,255,120,255)
-         love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50)
+         love.graphics.setColor(50,50,50,255)
+         love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y - 30, 0, 2, 2)
 
       else
          draw_tower(building.tower)

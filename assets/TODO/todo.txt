@@ -1,0 +1,3 @@
+- Caper les neutres à -100
+- Feedback sur le seuil de construction
+- Pas de score négatif
