@@ -60,18 +60,20 @@ Tower {
    img = "assets/buildings/BtmN_ruin.png"
 }
 
-Enemy{
+Enemy {
    life = 30,
-   color={120,120,110},
+   color = {120,120,110},
    speed = 20,
    dps = 50,
-   range = 150
+   range = 150,
+   img = "assets/enemies/costard.png"
 }
 
-Enemy{
+Enemy {
    life = 50,
-   color={120,120,210},
+   color = {120,120,210},
    speed = 60,
    dps = 20,
-   range = 150
+   range = 150,
+      img = "assets/enemies/costard.png"
 }

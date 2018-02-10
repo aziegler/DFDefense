@@ -271,13 +271,22 @@ function collide(tower1,tower2)
    return false
 end
 
-function draw_enemy(ennemy)
-   love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
-   love.graphics.rectangle("fill",ennemy.x - 20,ennemy.y - 20,40,40)
+function draw_enemy(enemy)
+   if enemy.img then
+      love.graphics.setColor(255, 255, 255, 255)
+      love.graphics.draw(enemy.img,
+                         enemy.x-enemy.img:getWidth()/2,
+                         enemy.y-enemy.img:getHeight())
+   else
+      love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
+      love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
+   end
+
    love.graphics.setColor(50, 50, 180, 255)
-   love.graphics.circle("line", ennemy.x, ennemy.y, ennemy.range)
-   love.graphics.setColor(0,0,0)
-   love.graphics.print(math.floor(ennemy.life),ennemy.x - 7 ,ennemy.y - 5,0)
+   love.graphics.circle("line", enemy.x, enemy.y, enemy.range)
+   love.graphics.setColor(255,0,0)
+   love.graphics.print(math.floor(enemy.life),enemy.x - 7 ,enemy.y - 5,0)
+
 end
 
 function draw_tower(tower)
@@ -351,7 +360,6 @@ function love.draw()
          love.graphics.print("Score "..math.floor(building.score), building.x + 20, building.y - 30, 0)
 
       else
-         print("Has tower")
          draw_tower(building.tower)
       end
    end

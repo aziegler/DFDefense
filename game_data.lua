@@ -18,6 +18,9 @@ function Tower (t)
 end
 
 function Enemy (e)
+   if e.img then
+      e.img = love.graphics.newImage(e.img)
+   end
    table.insert(enemy_types, e)
 end
 
@@ -220,6 +223,7 @@ function new_enemy(roads)
    enemy.color.red = enemy_type.color[1]
    enemy.color.green = enemy_type.color[2]
    enemy.color.blue = enemy_type.color[3]
+   enemy.img = enemy_type.img
    enemy.speed = enemy_type.speed
    enemy.dps = enemy_type.dps
    enemy.range = enemy_type.range
