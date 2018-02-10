@@ -265,7 +265,7 @@ end
 
 function draw_enemy(ennemy)
    love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
-   love.graphics.rectangle("fill",ennemy.x - 10,ennemy.y - 10,20,20)
+   love.graphics.rectangle("fill",ennemy.x - 20,ennemy.y - 20,40,40)
    love.graphics.setColor(50, 50, 180, 255)
    love.graphics.circle("line", ennemy.x, ennemy.y, ennemy.range)
    love.graphics.setColor(0,0,0)
