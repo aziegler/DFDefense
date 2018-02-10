@@ -27,11 +27,13 @@ Tower{
 Enemy{
    life = 30,
    color={120,120,110},
-   speed = 10
+   speed = 10,
+   dps = 5
 }
 
 Enemy{
    life = 50,
    color={120,120,210},
-   speed = 30
+   speed = 30,
+   dps = 1
 }

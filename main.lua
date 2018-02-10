@@ -1,4 +1,5 @@
 require "audio"
+require "game_data"
 
 local layerData
 
@@ -8,74 +9,44 @@ roads.list = {}
 
 local enemies = {}
 enemies.list = {}
+enemies.influence = 0
 
 local towers = {}
 towers.list = {}
 towers.current_tower = {}
-
-local tower_types = {}
 
 local enemy_types = {}
 
 local buildings = {}
 buildings.list = {}
 
-function new_tower()
-   local tower_type = tower_types[math.random(1,#tower_types)]
-   local tower = {}
-   tower.width = math.random(10,30)
-   tower.height = math.random(10,30)
-   tower.enabled = false
-   tower.color = {}
-   tower.color.red = tower_type.color[1]
-   tower.color.green = tower_type.color[2]
-   tower.color.blue = tower_type.color[3]
-   tower.range = tower_type.range
-   tower.dps = tower_type.dps
-   towers.current_tower = tower
-end
-
-function Tower (t)
-   print("here", t)
-   table.insert(tower_types, t)
-end
-
-function Enemy (e)
-   table.insert(enemy_types, e)
-end
-
 function Audio (a)
    audioConfig = a
-end
-
-function new_enemy()
-   local enemy_type = enemy_types[math.random(1,#enemy_types)]
-   local enemy = {}
-   enemy.color = {}
-   enemy.color.red = enemy_type.color[1]
-   enemy.color.blue = enemy_type.color[2]
-   enemy.color.green = enemy_type.color[3]
-   enemy.speed = enemy_type.speed
-   enemy.road_index = math.random(1,#roads.list)
-   enemy.x = 5
-   enemy.y = 5
-   enemy.life = enemy_type.life
-   table.insert(enemies.list, enemy)
 end
 
 function love.mousepressed(x,y,button,istouch)
    if not (towers.current_tower.enabled) then
       return
    end
-   table.insert(towers.list,towers.current_tower)
-   new_tower()
+   for idx, building in pairs(buildings.list) do
+      if collide(towers.current_tower,building) then
+         towers.current_tower.x = building.x
+         towers.current_tower.y = building.y
+         towers.current_tower.width = building.width
+         towers.current_tower.height = building.height
+         table.remove(buildings.list,idx)
+         table.insert(towers.list,towers.current_tower)
+         towers.current_tower = new_tower()
+         return
+      end
+   end
 end
 
 function love.load()
-
    dofile("assets/config.txt")
 
    audioLoad(audioConfig)
+   dataLoad()
 
    scale = 1
    --love.window.setMode(1920*scale,1080*scale)
@@ -100,7 +71,25 @@ function love.load()
                road[x] = road[x-1]
             end
          elseif r == 255 and g == 0 and b == 0 then
-            table.insert(buildings.list,{x,y})
+            local already_added = false
+            for _,building in pairs(buildings.list) do
+               if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
+                  already_added = true
+               end
+            end
+            if not already_added then
+               local width, height = 0,0
+               while r == 255 and g == 0 and b == 0 do
+                  width = width + 1
+                  r,g,b,a = layerData:getPixel(x + width, y)
+               end
+               r,g,b,a = layerData:getPixel( x ,y + height )
+               while r == 255 and g == 0 and b == 0 do
+                  r,g,b,a = layerData:getPixel(x, y + height)
+                  height = height + 1
+               end
+               table.insert(buildings.list,{x = x,y = y,width = width,height = height})
+            end
          end
       end
    end
@@ -109,8 +98,7 @@ function love.load()
          table.remove(roads.list,i)
       end
    end
-   new_enemy()
-   new_tower()
+   towers.current_tower = new_tower()
 end
 
 function compute_damage(dt)
@@ -122,6 +110,7 @@ function compute_damage(dt)
             enemy.life = enemy.life - tower.dps * dt
             if enemy.life < 0 then
                table.remove(enemies.list,en_idx)
+               break
             end
          end
       end
@@ -143,12 +132,14 @@ function love.update (dt)
          enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
 
       end
+      enemies.influence = enemies.influence + enemy.dps * enemy.x * dt
    end
+
 
    compute_damage(dt)
 
    if math.random(0,100) > 99 then
-      new_enemy()
+      table.insert(enemies.list, new_enemy(#roads.list))
    end
 
 
@@ -193,8 +184,8 @@ function draw_tower(tower)
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,100)
    end
-   love.graphics.rectangle("fill",tower.x - (tower.width / 2),tower.y - (tower.height / 2),tower.width,tower.height)
-   love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,50)
+   love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
+   love.graphics.setColor(tower.color.red, tower.color.green, tower.color.blue, 50)
    love.graphics.circle("fill", tower.x, tower.y, tower.range)
 end
 
@@ -207,9 +198,9 @@ function love.draw()
          love.graphics.points(j,roads.list[i][j])
       end
    end
-   love.graphics.setColor(200, 100, 100, 30)
+   love.graphics.setColor(255, 0, 0, 255)
    for _,building in pairs(buildings.list) do
-      love.graphics.points(building[1],building[2])
+      love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
@@ -219,5 +210,11 @@ function love.draw()
    end
    draw_tower(towers.current_tower)
 
+   love.graphics.setColor(0,0,255)
+   love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),20)
+   love.graphics.setColor(255,0,0)
+   love.graphics.rectangle("fill",0,0,love.graphics.getWidth() * enemies.influence/10000,20)
+
    audioDraw()
+
 end
