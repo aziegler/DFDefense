@@ -80,10 +80,10 @@ function mousePick(x,y,button,istouch)
             clickedTower.score = clickedTower.score + infl
          end
       else 
-      local clickedBuilding = getBuilding(x,y)
+      local _, clickedBuilding = getBuilding(x,y)
       if not(clickedBuilding == nil) then
          for _, tower in pairs(towers.list) do
-            local infl = tower.score * 0.1
+            local infl = math.min(tower.score * 0.1, 100 - clickedBuilding.score)
             tower.score = tower.score - infl
             clickedBuilding.score = clickedBuilding.score + infl
          end
