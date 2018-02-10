@@ -95,7 +95,7 @@ function getNextPoint(roads,index)
 end
 
 function loadRoads(roads)
-    local road_index = 1   
+    local road_index = 1
    for y = 1, layerData:getHeight() - 1 do
       local x = 1
       local r,g,b,a = layerData:getPixel( x,y )
@@ -117,20 +117,21 @@ function loadRoads(roads)
    end
 end
 
-function loadBuildings(buildings, towers)
-   for x = 1, layerData:getWidth() - 1 do   
+function loadSquare(cont, towers, R, G, B)
+   for x = 1, layerData:getWidth() - 1 do
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
-         if r == 255 and g == 0 and b == 0 then
-            local building = getAddedBuilding(x,y,buildings)
+         --print(x,y,r,g,b,a)
+         if r == R and g == G and b == B then
+            local building = getAddedBuilding(x,y,cont)
             if building == nil then
                local width, height = 0,0
-               while r == 255 and g == 0 and b == 0 do
+               while r == R and g == G and b == B do
                   width = width + 1
                   r,g,b,a = layerData:getPixel(x + width, y)
                end
                r,g,b,a = layerData:getPixel( x ,y + height )
-               while r == 255 and g == 0 and b == 0 do
+               while r == R and g == G and b == B do
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
@@ -152,10 +153,10 @@ function loadBuildings(buildings, towers)
                      building = concertBuilding
                   }
                   concertBuilding.tower = concertTower
-                  table.insert (buildings.list,concertBuilding)
+                  table.insert (cont.list, concertBuilding)
                   table.insert(towers.list, concertTower)
                else
-                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
+                  table.insert(cont.list,{x = x,y = y,width = width,height = height,score = 0})
                end
             end
          end
@@ -163,7 +164,15 @@ function loadBuildings(buildings, towers)
    end
 end
 
-function dataLoad(roads,buildings,towers)
+function loadBuildings(B, T)
+   loadSquare(B, T, 255, 0, 0)
+end
+
+function loadBG(B, T)
+   loadSquare(B, T, 0, 0, 255)
+end
+
+function dataLoad(roads,buildings, towers, enemy_gq)
 	dofile("assets/config.txt")
 
    for i = 1, roads.count do
@@ -173,8 +182,10 @@ function dataLoad(roads,buildings,towers)
    end
    layerData = love.image.newImageData("assets/layer.bmp")
    loadRoads(roads)
+
    loadBuildings(buildings,towers)
-   
+   loadBG(enemy_gq, { list = {} })
+
 end
 
 function new_tower(idx)
