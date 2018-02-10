@@ -8,6 +8,9 @@ function Video (v)
 end
 
 function Tower (t)
+   if t.img then
+      t.img = love.graphics.newImage(t.img)
+   end
    table.insert(tower_types, t)
 end
 
@@ -46,7 +49,7 @@ function addPoint(roads,index,x,y)
    end
    roads.list[index].points[roads.list[index].lastPoint] = {}
    roads.list[index].points[roads.list[index].lastPoint].x = x
-   roads.list[index].points[roads.list[index].lastPoint].y = y 
+   roads.list[index].points[roads.list[index].lastPoint].y = y
    roads.list[index].lastPoint = roads.list[index].lastPoint + 1
 end
 
@@ -66,9 +69,9 @@ function getNextPoint(roads,index)
    local endPoint = getEndPoint(roads,index)
    local previousPoint = getPoint(roads,index,roads.list[index].lastPoint - 2)
    for xStep = -1, 1 do
-      for yStep = -1, 1 do   
+      for yStep = -1, 1 do
          local nextX = math.max(math.min(endPoint.x + xStep,layerData:getWidth()),1)
-         local nextY = math.max(math.min(endPoint.y + yStep,layerData:getHeight()),1)      
+         local nextY = math.max(math.min(endPoint.y + yStep,layerData:getHeight()),1)
          local r,g,b,a = layerData:getPixel(nextX, nextY)
          if (r < 10 and g < 10 and b < 10) then
             if not(contains(roads,index,nextX,nextY)) then
@@ -89,7 +92,7 @@ function dataLoad(roads,buildings)
       roads.list[i].points = {}
    end
    layerData = love.image.newImageData("assets/layer.bmp")
-   local road_index = 1   
+   local road_index = 1
    for y = 1, layerData:getHeight() - 1 do
       local x = 1
       local r,g,b,a = layerData:getPixel( x,y )
@@ -109,7 +112,7 @@ function dataLoad(roads,buildings)
          addPoint(roads,j,x,y)
       end
    end
-   for x = 1, layerData:getWidth() - 1 do   
+   for x = 1, layerData:getWidth() - 1 do
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
          if r == 255 and g == 0 and b == 0 then
@@ -149,6 +152,7 @@ function new_tower(idx)
    tower.color.red = tower_type.color[1]
    tower.color.green = tower_type.color[2]
    tower.color.blue = tower_type.color[3]
+   tower.img = tower_type.img
    tower.range = tower_type.range
    tower.dps = tower_type.dps
    tower.enemyinfluence = 0

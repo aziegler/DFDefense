@@ -203,12 +203,16 @@ function draw_enemy(ennemy)
 end
 
 function draw_tower(tower)
-   if tower.enabled then
-      love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
+   if tower.img then
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.draw(tower.img,
+                         tower.x - tower.img:getWidth()/2 + tower.width/2,
+                         tower.y - tower.img:getHeight()/2 + tower.height/2)
    else
-      love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,20)
+      love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
+      love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
-   love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
+
    local influenceRatio = tower.friendlyinfluence / (tower.friendlyinfluence + tower.enemyinfluence)
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
@@ -232,7 +236,9 @@ function love.draw()
    end
    love.graphics.setColor(255, 0, 0, 255)
    for _,building in pairs(buildings.list) do
-      love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
+      if not building.tower then
+         love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
+      end
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
