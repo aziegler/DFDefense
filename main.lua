@@ -3,7 +3,7 @@ require "game_data"
 require "build_menu"
 
 local roads = {}
-roads.count = 3
+roads.count = 5
 roads.list = {}
 
 local enemies = {}
@@ -133,11 +133,7 @@ function love.load(arg)
       love.window.setFullscreen(true)
    end
 
-   for i,road in pairs(roads.list) do
-      if(#road < 20) then
-         table.remove(roads.list,i)
-      end
-   end
+   
 
    towers.current_tower = new_tower()
 
@@ -170,12 +166,11 @@ end
 
 function love.update (dt)
    audioUpdate()
-
    for _,enemy in pairs(enemies.list) do
-      enemy.x = (enemy.x + (enemy.speed * dt))
-      if not (roads.list[enemy.road_index][math.floor(enemy.x)] == nil) then
-         enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
-
+      enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
+      if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
+         enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
+         enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
       end
    end
 
@@ -186,7 +181,7 @@ function love.update (dt)
    compute_damage(dt)
 
    if math.random(0,100) > 99 then
-      table.insert(enemies.list, new_enemy(#roads.list))
+      table.insert(enemies.list, new_enemy(roads.count))
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
@@ -244,10 +239,10 @@ end
 function love.draw()
    love.graphics.scale(scale,scale)
 
-   for i = 1, #roads.list do
+   for i = 1, roads.count do
       love.graphics.setColor(100,100,100)
-      for j = 1, #roads.list[i] do
-         love.graphics.points(j,roads.list[i][j])
+      for j = 1, roads.list[i].lastPoint - 1 do
+         love.graphics.points(roads.list[i].points[j].x,roads.list[i].points[j].y)
       end
    end
    love.graphics.setColor(255, 0, 0, 255)
