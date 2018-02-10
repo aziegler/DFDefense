@@ -167,6 +167,11 @@ function love.load(arg)
       Police = love.graphics.newImage("assets/buildings/BtmD_police.png"),
       Defense = love.graphics.newImage("assets/buildings/BtmD_BigTower.png"),
    }
+   imgUI = {
+      Jauge = love.graphics.newImage("assets/UI/Jauge.png"),
+      Rouge = love.graphics.newImage("assets/UI/Barre_rouge.png"),
+      Bleu = love.graphics.newImage("assets/UI/Barre_bleue.png")
+   }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
    enemy_gq.list[1].img = imgEnemyGQ.Defense
@@ -330,26 +335,36 @@ function draw_enemy(enemy)
 
 end
 
+function draw_gauge(influenceRatio,x,y)
+   love.graphics.draw(imgUI.Jauge,x + 15,y - imgUI.Jauge:getHeight() - 10)
+   love.graphics.draw(imgUI.Rouge,x + 17,y - imgUI.Jauge:getHeight() -5, 0, 72 * influenceRatio / imgUI.Rouge:getWidth(), 1)
+   love.graphics.draw(imgUI.Bleu,
+                      x + 17 + (72 * influenceRatio),
+                      y - imgUI.Jauge:getHeight() -5, 0, 
+                      72 * (1 - influenceRatio) / imgUI.Bleu:getWidth(), 1)
+end
+
 function draw_tower(tower)
+   local h = tower.y
+   local x = tower.x
    if tower.img then
       love.graphics.setColor(255, 255, 255)
-      local h  = tower.y - tower.img:getHeight() + tower.height
+      h  = tower.y - tower.img:getHeight() + tower.height
       if tower.center == true then
          h = tower.y - tower.img:getHeight()/2 + tower.height/2
       end
-      love.graphics.draw(tower.img,
-                         tower.x - tower.img:getWidth()/2 + tower.width/2, h)
+      x = tower.x - tower.img:getWidth()/2 + tower.width/2
+      love.graphics.draw(tower.img, x , h)
 
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    end
-   local influenceRatio = math.max(0,math.min((tower.score + 100) / 300,1))
-   love.graphics.setColor(0,0,255)
-   love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
-   love.graphics.setColor(255,0,0)
-   love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
-   love.graphics.setColor(255,255,255)
+   local influenceRatio = math.max(0,math.min((tower.score) / 200,1))
+
+   if tower.hasGauge then
+      draw_gauge(influenceRatio, x, h)
+   end
    love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20,0)
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
