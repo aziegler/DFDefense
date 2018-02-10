@@ -186,6 +186,24 @@ function compute_damage(dt)
          end
       end
    end
+   for _,building1 in pairs(buildings.list) do
+      for _,building2 in pairs(buildings.list) do
+         local width, height = building2.x-(building1.x+building1.width/2), building2.y-(building1.y+building1.height/2)
+         local distance = (width*width + height*height)^0.5
+         if building1.score < -100 and distance < enemyBuilding.range then
+            building2.score = building2.score - enemyBuilding.dps * dt
+         end
+      end
+   end
+   for _,building1 in pairs(buildings.list) do
+      for _,tower in pairs(towers.list) do
+         local width, height = tower.x-(building1.x+building1.width/2), tower.y-(building1.y+building1.height/2)
+         local distance = (width*width + height*height)^0.5
+         if building1.score < -100 and distance < enemyBuilding.range then
+            tower.score = tower.score - enemyBuilding.dps * dt
+         end
+      end
+   end
 end
 
 function love.keypressed(key)
@@ -281,10 +299,15 @@ function love.draw()
             love.graphics.setColor(100,100,100,255)
          else
             love.graphics.setColor(0,0,255,255)
+            love.graphics.setColor(50, 50, 180, 255)
+            love.graphics.circle("line",
+                        building.x+building.width/2,
+                        building.y+building.height/2, enemyBuilding.range)
          end
          love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
          love.graphics.setColor(120,255,120,255)
          love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50)
+         
       end
    end
    for _,enemy in pairs(enemies.list) do

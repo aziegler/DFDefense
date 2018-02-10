@@ -1,8 +1,10 @@
 tower_types = {}
+enemyBuilding = {}
 
 local enemy_types = {}
 
 local layerData
+
 function Video (v)
    videoSettings = v
 end
@@ -16,6 +18,10 @@ end
 
 function Enemy (e)
    table.insert(enemy_types, e)
+end
+
+function EnemyBuilding(b)
+   enemyBuilding = b
 end
 
 function getAddedBuilding(x,y,buildings)
