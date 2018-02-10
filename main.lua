@@ -325,6 +325,11 @@ function love.draw()
          love.graphics.points(roads.list[i].points[j].x,roads.list[i].points[j].y)
       end
    end
+
+   for _,enemy in pairs(enemies.list) do
+      draw_enemy(enemy)
+   end
+
    for _,building in pairs(buildings.list) do
       if not building.tower then
          love.graphics.setColor(255,255,255,255)
@@ -355,9 +360,7 @@ function love.draw()
    drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[1]);
    drawBuildingsMiddle(imgEnemyGQ.Defense, enemy_gq.list[2]);
 
-   for _,enemy in pairs(enemies.list) do
-      draw_enemy(enemy)
-   end
+
    --for _,tower in pairs(towers.list) do
    --   draw_tower(tower)
    --end
