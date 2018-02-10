@@ -28,8 +28,18 @@ function love.mousepressed(x,y,button,istouch)
    if not (towers.current_tower.enabled) then
       return
    end
-   table.insert(towers.list,towers.current_tower)
-   towers.current_tower = new_tower()
+   for idx, building in pairs(buildings.list) do
+      if collide(towers.current_tower,building) then
+         towers.current_tower.x = building.x
+         towers.current_tower.y = building.y
+         towers.current_tower.width = building.width
+         towers.current_tower.height = building.height
+         table.remove(buildings.list,idx)
+         table.insert(towers.list,towers.current_tower)
+         towers.current_tower = new_tower()
+         return
+      end
+   end
 end
 
 function love.load()
@@ -56,7 +66,25 @@ function love.load()
                road[x] = road[x-1]
             end
          elseif r == 255 and g == 0 and b == 0 then
-            table.insert(buildings.list,{x,y})
+            local already_added = false
+            for _,building in pairs(buildings.list) do
+               if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
+                  already_added = true
+               end
+            end
+            if not already_added then
+               local width, height = 0,0
+               while r == 255 and g == 0 and b == 0 do
+                  width = width + 1
+                  r,g,b,a = layerData:getPixel(x + width, y)
+               end
+               r,g,b,a = layerData:getPixel( x ,y + height )
+               while r == 255 and g == 0 and b == 0 do
+                  r,g,b,a = layerData:getPixel(x, y + height)
+                  height = height + 1
+               end
+               table.insert(buildings.list,{x = x,y = y,width = width,height = height})
+            end
          end
       end
    end
@@ -151,8 +179,8 @@ function draw_tower(tower)
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,100)
    end
-   love.graphics.rectangle("fill",tower.x - (tower.width / 2),tower.y - (tower.height / 2),tower.width,tower.height)
-   love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,50)
+   love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
+   love.graphics.setColor(tower.color.red, tower.color.green, tower.color.blue, 50)
    love.graphics.circle("fill", tower.x, tower.y, tower.range)
 end
 
@@ -163,9 +191,9 @@ function love.draw()
          love.graphics.points(j,roads.list[i][j])
       end
    end
-   love.graphics.setColor(200, 100, 100, 30)
+   love.graphics.setColor(255, 0, 0, 255)
    for _,building in pairs(buildings.list) do
-      love.graphics.points(building[1],building[2])
+      love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
