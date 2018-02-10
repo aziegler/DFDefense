@@ -83,9 +83,11 @@ function mousePick(x,y,button,istouch)
       local _, clickedBuilding = getBuilding(x,y)
       if not(clickedBuilding == nil) then
          for _, tower in pairs(towers.list) do
-            local infl = math.min(tower.score * 0.1, 100 - clickedBuilding.score)
-            tower.score = tower.score - infl
-            clickedBuilding.score = clickedBuilding.score + infl
+            if tower.score >= 100 then
+               local infl = math.min(tower.score * 0.1, 100 - clickedBuilding.score)
+               tower.score = tower.score - infl
+               clickedBuilding.score = clickedBuilding.score + infl
+            end
          end
          for _, building in pairs(buildings.list) do
             if building.score >= 100 then
@@ -151,7 +153,7 @@ end
 
 function compute_damage(dt)
    for en_idx,enemy in pairs(enemies.list) do
-      for _,tower in pairs(towers.list) do
+      for tw_idx,tower in pairs(towers.list) do
          local width, height = enemy.x-(tower.x+tower.width/2), enemy.y-(tower.y+tower.height/2)
          local distance = (width*width + height*height)^0.5
          if distance  < tower.range then
@@ -163,6 +165,10 @@ function compute_damage(dt)
          end
          if distance < enemy.range then
             tower.score = tower.score - enemy.dps * dt
+            if tower.score < 0 then
+               table.remove(towers.list,tw_idx)
+               break
+            end
          end
       end
    end
@@ -225,8 +231,8 @@ end
 function draw_enemy(ennemy)
    love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
    love.graphics.rectangle("fill",ennemy.x - 10,ennemy.y - 10,20,20)
-   love.graphics.setColor(50, 50, 180, 100)
-   love.graphics.circle("fill", ennemy.x, ennemy.y, ennemy.range)
+   love.graphics.setColor(50, 50, 180, 255)
+   love.graphics.circle("line", ennemy.x, ennemy.y, ennemy.range)
    love.graphics.setColor(0,0,0)
    love.graphics.print(math.floor(ennemy.life),ennemy.x - 7 ,ennemy.y - 5,0)
 end
@@ -247,8 +253,8 @@ function draw_tower(tower)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
    love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20)
-   love.graphics.setColor(180, 50, 50, 100)
-   love.graphics.circle("fill",
+   love.graphics.setColor(180, 50, 50, 255)
+   love.graphics.circle("line",
                         tower.x+tower.width/2,
                         tower.y+tower.height/2, tower.range)
 end
