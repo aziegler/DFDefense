@@ -43,6 +43,7 @@ function mouseGui(x,y,button,istouch)
    tower.width = building.width
    tower.height = building.height
    tower.enabled = true
+   tower.building = building
    --table.remove(buildings.list,mouseModes.buildingIdx)
    if building.tower then
       for k,v in pairs(towers.list) do
@@ -167,6 +168,8 @@ function compute_damage(dt)
             tower.score = tower.score - enemy.dps * dt
             if tower.score < 0 then
                table.remove(towers.list,tw_idx)
+               tower.building.tower = nil
+               tower.building.score = tower.score
                break
             end
          end
