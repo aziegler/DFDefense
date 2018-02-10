@@ -1,4 +1,5 @@
 require "audio"
+require "game_data"
 
 local layerData
 
@@ -21,58 +22,20 @@ local enemy_types = {}
 local buildings = {}
 buildings.list = {}
 
-function new_tower()
-   local tower_type = tower_types[math.random(1,#tower_types)]
-   local tower = {}
-   tower.width = math.random(10,30)
-   tower.height = math.random(10,30)
-   tower.enabled = false
-   tower.color = {}
-   tower.color.red = tower_type.color[1]
-   tower.color.blue = tower_type.color[2]
-   tower.color.green = tower_type.color[3]
-   tower.range = tower_type.range
-   tower.dps = tower_type.dps
-   towers.current_tower = tower
-end
 
-function Tower (t)
-   table.insert(tower_types, t)
-end
-
-function Enemy (e)
-   table.insert(enemy_types, e)
-end
-
-function new_enemy()
-   local enemy_type = enemy_types[math.random(1,#enemy_types)]
-   local enemy = {}
-   enemy.color = {}
-   enemy.color.red = enemy_type.color[1]
-   enemy.color.blue = enemy_type.color[2]
-   enemy.color.green = enemy_type.color[3]
-   enemy.speed = enemy_type.speed
-   enemy.dps = enemy_type.dps
-   enemy.range = enemy_type.range
-   enemy.road_index = math.random(1,#roads.list)
-   enemy.x = 5
-   enemy.y = 5
-   enemy.life = enemy_type.life
-   table.insert(enemies.list, enemy)
-end
 
 function love.mousepressed(x,y,button,istouch)
    if not (towers.current_tower.enabled) then
       return
    end
    table.insert(towers.list,towers.current_tower)
-   new_tower()
+   towers.current_tower = new_tower()
 end
 
 function love.load()
    audioLoad()
+   dataLoad()
 
-   dofile("assets/config.txt")
    love.window.setFullscreen(true)
    for i = 1, roads.count do
       roads.list[i] = {}
@@ -102,8 +65,7 @@ function love.load()
          table.remove(roads.list,i)
       end
    end
-   new_enemy()
-   new_tower()
+   towers.current_tower = new_tower()
 end
 
 function compute_damage(dt)
@@ -115,6 +77,7 @@ function compute_damage(dt)
             enemy.life = enemy.life - tower.dps * dt
             if enemy.life < 0 then
                table.remove(enemies.list,en_idx)
+               break
             end
          end
       end
@@ -143,7 +106,7 @@ function love.update (dt)
    compute_damage(dt)
 
    if math.random(0,100) > 99 then
-      new_enemy()
+      table.insert(enemies.list, new_enemy(#roads.list))
    end
 
 
