@@ -23,6 +23,7 @@ Tower{
    range = 600,
    dps = 1,
    influence = 200,
+   influence_rate = 10,
    color = {0,0,255}
 }
 

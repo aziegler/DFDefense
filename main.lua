@@ -183,6 +183,12 @@ function draw_tower(tower)
    love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    love.graphics.setColor(tower.color.red, tower.color.green, tower.color.blue, 50)
    love.graphics.circle("fill", tower.x, tower.y, tower.range)
+   local influenceRatio = tower.friendlyinfluence / (tower.friendlyinfluence + tower.enemyinfluence)
+   love.graphics.setColor(0,0,255)
+   love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
+   love.graphics.setColor(0,0,255)
+   love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
+
 end
 
 function love.draw()
@@ -205,9 +211,6 @@ function love.draw()
       draw_tower(tower)
    end
    draw_tower(towers.current_tower)
-
-   love.graphics.setColor(0,0,255)
-   love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),20)
    
    audioDraw()
 

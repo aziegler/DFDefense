@@ -26,6 +26,9 @@ function new_tower()
    tower.color.green = tower_type.color[3]
    tower.range = tower_type.range
    tower.dps = tower_type.dps
+   tower.enemyinfluence = 0
+   tower.friendlyinfluence = tower_type.influence
+   tower.influence_rate = tower_type.influence_rate
    return tower
 end
 
