@@ -81,19 +81,26 @@ function audioLoad(audioConfig)
 end
 
 function audioUpdate()
+   local voiceOn = false
 
    if tracks[i].voice then
       if love.keyboard.isDown("1") then
          mute(audioGroups.voice)
       else
          unmute(audioGroups.voice)
+         voiceOn = true
       end
    else
       if love.keyboard.isDown("1") then
          unmute(audioGroups.voice)
+         voiceOn = true
       else
          mute(audioGroups.voice)
       end
+   end
+
+   if audioGroups.voice[1]:tell("seconds") < tracks[i].start then
+      voiceOn = false
    end
 
    if audioGroups.voice[1]:tell("seconds") >= tracks[i].start+loop then
@@ -108,6 +115,7 @@ function audioUpdate()
 
    end
 
+   return voiceOn
 end
 
 function audioDraw()
