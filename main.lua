@@ -13,33 +13,47 @@ local towers = {}
 towers.list = {}
 towers.current_tower = {}
 
+local tower_types = {}
+
+local enemy_types = {}
+
 local buildings = {}
 buildings.list = {}
 
 function new_tower()
+	local tower_type = tower_types[math.random(1,#tower_types)]
 	local tower = {}
 	tower.width = math.random(10,30)
 	tower.height = math.random(10,30)
 	tower.enabled = false
 	tower.color = {}
-	tower.color.red = math.random(0,255)
-	tower.color.blue = math.random(0,255)
-	tower.color.green = math.random(0,255)
-	tower.range = math.random(300,600)
-	tower.dps = 3
+	tower.color.red = tower_type.color[1]
+	tower.color.blue = tower_type.color[2]
+	tower.color.green = tower_type.color[3]
+	tower.range = tower_type.range
+	tower.dps = tower_type.dps
 	towers.current_tower = tower
 end
 
+function Tower (t)
+	table.insert(tower_types, t)
+end
+
+function Ennemy (e)
+	table.insert(enemy_types, e)
+end
+
 function new_ennemy() 
+	local enemy_type = enemy_types[math.random(1,#enemy_types)]
 	local ennemy = {}
 	ennemy.color = {}
-	ennemy.color.red = math.random(0,255)
-	ennemy.color.blue = math.random(0,255)
-	ennemy.color.green = math.random(0,255)
+	ennemy.color.red = enemy_type.color[1]
+	ennemy.color.blue = enemy_type.color[2]
+	ennemy.color.green = enemy_type.color[3]
 	ennemy.road_index = math.random(1,#roads.list)
 	ennemy.x = 5
 	ennemy.y = 5
-	ennemy.life = math.random(0,30)
+	ennemy.life = enemy_type.life
 	table.insert(ennemies.list, ennemy)
 end
 
@@ -52,6 +66,7 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function love.load()
+	dofile("assets/config.txt")
 	love.window.setFullscreen(true)
 	for i = 1, roads.count do
 		roads.list[i] = {}
