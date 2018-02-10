@@ -17,7 +17,9 @@ towers.current_tower = {}
 local buildings = {}
 buildings.list = {}
 
-
+function Audio (a)
+   audioConfig = a
+end
 
 function love.mousepressed(x,y,button,istouch)
    if not (towers.current_tower.enabled) then
@@ -38,10 +40,15 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function love.load()
-   audioLoad()
+   dofile("assets/config.txt")
+
+   audioLoad(audioConfig)
    dataLoad()
 
+   scale = 1
+   --love.window.setMode(1920*scale,1080*scale)
    love.window.setFullscreen(true)
+
    for i = 1, roads.count do
       roads.list[i] = {}
    end
@@ -132,8 +139,8 @@ function love.update (dt)
    end
 
 
-   towers.current_tower.x = love.mouse.getX()
-   towers.current_tower.y = love.mouse.getY()
+   towers.current_tower.x = love.mouse.getX()/scale
+   towers.current_tower.y = love.mouse.getY()/scale
 
    towers.current_tower.enabled = false
 
@@ -179,6 +186,8 @@ function draw_tower(tower)
 end
 
 function love.draw()
+   love.graphics.scale(scale,scale)
+
    for i = 1, #roads.list do
       love.graphics.setColor(100,100,100)
       for j = 1, #roads.list[i] do

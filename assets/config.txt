@@ -1,15 +1,29 @@
+Audio {
+   start = 3,
+   loops = {
+      { loop = 0, voice = true },
+      { loop = 0, voice = true },
+      { loop = 1, voice = false },
+      { loop = 1, voice = true },
+      { loop = 2, voice = false },
+      { loop = 2, voice = true },
+      { loop = 3, voice = false },
+      { loop = 3, voice = false }
+   }
+}
+
 Tower{
    range = 400,
    dps = 3,
-   color = {100,100,100},
-   influence = 100
+   influence = 100,
+   color = {255,0,0}
 }
 
 Tower{
    range = 600,
    dps = 1,
-   color = {255,255,100},
-   influence = 200
+   influence = 200,
+   color = {0,0,255}
 }
 
 Enemy{
@@ -21,7 +35,7 @@ Enemy{
 
 Enemy{
    life = 50,
-   color={120,120,210}, 
-   speed = 30, 
+   color={120,120,210},
+   speed = 30,
    dps = 1
 }
