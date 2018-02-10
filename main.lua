@@ -6,9 +6,8 @@ local roads = {}
 roads.count = 3
 roads.list = {}
 
-local ennemies = {}
-ennemies.list = {}
-ennemies.speed = 10
+local enemies = {}
+enemies.list = {}
 
 local towers = {}
 towers.list = {}
@@ -40,22 +39,23 @@ function Tower (t)
    table.insert(tower_types, t)
 end
 
-function Ennemy (e)
+function Enemy (e)
    table.insert(enemy_types, e)
 end
 
-function new_ennemy()
+function new_enemy()
    local enemy_type = enemy_types[math.random(1,#enemy_types)]
-   local ennemy = {}
-   ennemy.color = {}
-   ennemy.color.red = enemy_type.color[1]
-   ennemy.color.blue = enemy_type.color[2]
-   ennemy.color.green = enemy_type.color[3]
-   ennemy.road_index = math.random(1,#roads.list)
-   ennemy.x = 5
-   ennemy.y = 5
-   ennemy.life = enemy_type.life
-   table.insert(ennemies.list, ennemy)
+   local enemy = {}
+   enemy.color = {}
+   enemy.color.red = enemy_type.color[1]
+   enemy.color.blue = enemy_type.color[2]
+   enemy.color.green = enemy_type.color[3]
+   enemy.speed = enemy_type.speed
+   enemy.road_index = math.random(1,#roads.list)
+   enemy.x = 5
+   enemy.y = 5
+   enemy.life = enemy_type.life
+   table.insert(enemies.list, enemy)
 end
 
 function love.mousepressed(x,y,button,istouch)
@@ -99,19 +99,19 @@ function love.load()
          table.remove(roads.list,i)
       end
    end
-   new_ennemy()
+   new_enemy()
    new_tower()
 end
 
 function compute_damage(dt)
-   for en_idx,ennemy in pairs(ennemies.list) do
+   for en_idx,enemy in pairs(enemies.list) do
       for _,tower in pairs(towers.list) do
-         local width, height = ennemy.x-tower.x, ennemy.y-tower.y
+         local width, height = enemy.x-tower.x, enemy.y-tower.y
          local distance = (width*width + height*height)^0.5
          if distance  < tower.range then
-            ennemy.life = ennemy.life - tower.dps * dt
-            if ennemy.life < 0 then
-               table.remove(ennemies.list,en_idx)
+            enemy.life = enemy.life - tower.dps * dt
+            if enemy.life < 0 then
+               table.remove(enemies.list,en_idx)
             end
          end
       end
@@ -121,17 +121,18 @@ end
 function love.update (dt)
    audioUpdate()
 
-   for _,ennemy in pairs(ennemies.list) do
-      ennemy.x = (ennemy.x + (ennemies.speed * dt))
-      if not (roads.list[ennemy.road_index][math.floor(ennemy.x)] == nil) then
-         ennemy.y = roads.list[ennemy.road_index][math.floor(ennemy.x)]
+   for _,enemy in pairs(enemies.list) do
+      enemy.x = (enemy.x + (enemy.speed * dt))
+      if not (roads.list[enemy.road_index][math.floor(enemy.x)] == nil) then
+         enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
+
       end
    end
 
    compute_damage(dt)
 
    if math.random(0,100) > 99 then
-      new_ennemy()
+      new_enemy()
    end
 
 
@@ -163,7 +164,7 @@ function collide(tower1,tower2)
    return false
 end
 
-function draw_ennemy(ennemy)
+function draw_enemy(ennemy)
    love.graphics.setColor(ennemy.color.red, ennemy.color.green, ennemy.color.blue)
    love.graphics.rectangle("fill",ennemy.x - 10,ennemy.y - 10,20,20)
    love.graphics.setColor(0,0,0)
@@ -192,8 +193,8 @@ function love.draw()
    for _,building in pairs(buildings.list) do
       love.graphics.points(building[1],building[2])
    end
-   for _,ennemy in pairs(ennemies.list) do
-      draw_ennemy(ennemy)
+   for _,enemy in pairs(enemies.list) do
+      draw_enemy(enemy)
    end
    for _,tower in pairs(towers.list) do
       draw_tower(tower)

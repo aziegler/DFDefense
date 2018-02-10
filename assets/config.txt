@@ -10,12 +10,14 @@ Tower{
    color = {255,255,100}
 }
 
-Ennemy{
+Enemy{
    life = 30,
-   color={120,120,110}
+   color={120,120,110},
+   speed = 10
 }
 
-Ennemy{
+Enemy{
    life = 50,
-   color={120,120,210}
+   color={120,120,210}, 
+   speed = 30
 }
