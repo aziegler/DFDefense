@@ -218,7 +218,7 @@ function love.update (dt)
    for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         table.remove(enemies.list,en_idx)
+         table.remove(enemies.list,idx)
       end
       if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
          enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
