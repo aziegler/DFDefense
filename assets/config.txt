@@ -21,8 +21,9 @@ Audio {
 EnemyBuilding {
    range = 325,
    dps = 2,
-   name = "Horrible tour moche"
+   name = "Station Défense 3000"
 }
+
 
 EndGame {
        lost = { "Tu as perdu", "le quartier est entièrement gentrifié" }
@@ -31,8 +32,8 @@ EndGame {
 GameplayVariable {
    buildingTreshold = 20,
    initialConcertInfluence = 250,
-   concertRange = 500,
-   concertDps = 5,
+   concertRange = 450,
+   concertDps = 2,
    concertInfluenceRate = 10,
    neutralName = "Habitations",
    friendlyName = "Habitat partagé"
@@ -54,17 +55,17 @@ Tower{
    range = 250,
    dps = 3,
    influence = 100,
-   influence_rate = 2,
+   influence_rate = 3,
    color = {200,30,30},
    img = "assets/buildings/BtmD_Tower.png"
 }
 
 Tower {
    name = "Local associatif",
-   range = 200,
+   range = 500,
    dps = 1,
    influence = 200,
-   influence_rate = 2,
+   influence_rate = 3,
    color = {0,100,200},
    img = "assets/buildings/BtmN_ruin.png"
 }
