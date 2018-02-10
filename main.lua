@@ -468,7 +468,7 @@ function love.draw()
    if mouseMode == mouseModes.gui then
       drawMenu()
    elseif not (hovered == nil) then
-      drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.x,hovered.y)
+      drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,hovered.x,hovered.y)
    end
 
    audioDraw()
