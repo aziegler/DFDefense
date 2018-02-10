@@ -55,7 +55,7 @@ Tower {
    color = {200,100,100},
    img = "assets/buildings/BtmG_Garden.png",
    icon = "assets/UI/Icon_Garden.png",
-   tooltip = "Faible portée, grosse puissance"
+   tooltip = "Faible portée, grande puissance"
 }
 
 
@@ -67,7 +67,8 @@ Tower {
    influence_rate = 8,
    color = {200,30,30},
    img = "assets/buildings/BtmG_library.png",
-   tooltip = "Moyenne porte, moyenne puissance"
+   icon = "assets/UI/Icon_Bibli.png",
+   tooltip = "Moyenne portée, moyenne puissance"
 }
 
 Tower {
