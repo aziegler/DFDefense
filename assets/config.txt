@@ -17,6 +17,11 @@ Audio {
    }
 }
 
+EnemyBuilding {
+   range = 300,
+   dps = 30
+}
+
 Tower{
    range = 100,
    dps = 10,
