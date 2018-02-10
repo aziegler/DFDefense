@@ -270,9 +270,9 @@ function drawMenu()
       print(k,v)
       love.graphics.setColor(v.color[1], v.color[2], v.color[3])
       love.graphics.rectangle("fill",
-                              mouseModes.menuPos.x-width/2 + (k-1)*SIZE,
-                              mouseModes.menuPos.y-SIZE,
-                              width, SIZE)
+                              5+mouseModes.menuPos.x-width/2 + (k-1)*SIZE,
+                              5+mouseModes.menuPos.y-SIZE,
+                              SIZE-10, SIZE-10)
    end
    print("")
 end

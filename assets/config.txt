@@ -17,6 +17,15 @@ Audio {
 }
 
 Tower{
+   range = 100,
+   dps = 10,
+   influence = 50,
+   influence_rate = 100,
+   color = {200,100,200}
+}
+
+
+Tower{
    range = 400,
    dps = 3,
    influence = 100,
