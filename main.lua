@@ -16,6 +16,9 @@ towers.list = {}
 local buildings = {}
 buildings.list = {}
 
+local enemy_gq = {}
+enemy_gq.list = {}
+
 function Audio (a)
    audioConfig = a
 end
@@ -135,7 +138,7 @@ end
 
 function love.load(arg)
 
-   dataLoad(roads, buildings)
+   dataLoad(roads, buildings, enemy_gq)
    audioLoad(audioConfig)
 
    love.graphics.setFont(love.graphics.newFont("assets/ArmWrestler.ttf",24))
@@ -144,6 +147,10 @@ function love.load(arg)
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
       Goche = love.graphics.newImage("assets/buildings/BtmG_Tower.png"),
       Neutre = love.graphics.newImage("assets/buildings/BtmN_Tower.png")
+   }
+   imgEnemyGQ = {
+      Police = love.graphics.newImage("assets/buildings/BtmD_police.png"),
+      Defense = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
    }
 
    if videoSettings.fullscreen == false or arg[2] == "-w" then
@@ -300,6 +307,13 @@ function drawBuildings(img, building)
                       building.y+building.height-img:getHeight())
 end
 
+function drawBuildingsMiddle(img, building)
+   love.graphics.draw(img,
+                      building.x+building.width/2-img:getWidth()/2,
+                      building.y+building.height/2-img:getHeight()/2)
+end
+
+
 function love.draw()
    love.graphics.scale(scale,scale)
 
@@ -333,6 +347,11 @@ function love.draw()
          draw_tower(building.tower)
       end
    end
+
+   love.graphics.setColor(255,255,255,255)
+   drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[1]);
+   drawBuildingsMiddle(imgEnemyGQ.Defense, enemy_gq.list[2]);
+
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)
    end
