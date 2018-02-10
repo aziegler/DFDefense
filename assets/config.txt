@@ -67,7 +67,7 @@ Tower {
    influence = 200,
    influence_rate = 3,
    color = {0,100,200},
-   img = "assets/buildings/BtmN_ruin.png"
+   img = "assets/buildings/BtmG_assos.png"
 }
 
 Enemy {
