@@ -35,21 +35,24 @@ function drawMenu()
 
    picked = pickMenu(mouseModes.mousePos[1], mouseModes.mousePos[2])
 
+   local fromX = mouseModes.menuPos.x-width/2
+   local fromY = mouseModes.menuPos.y-SIZE-20
    love.graphics.setColor(255,255,255)
    love.graphics.rectangle("fill",
-                           mouseModes.menuPos.x-width/2,
-                           mouseModes.menuPos.y-SIZE,
-                           width, SIZE)
+                           fromX,fromY,
+                           width, SIZE+20)
    for k,v in pairs(tower_types) do
       local bbox = get_menu_bbox(width, k)
       if picked == k then
+         local txt = love.graphics.newText(arialFont, v.tooltip)
+         love.graphics.setColor(0,0,0,255)
+         love.graphics.draw(txt, fromX+2, fromY+2);
          love.graphics.setColor(255,255,255,155)
       else
          love.graphics.setColor(255,255,255,255)
       end
 
       if v.icon then
-
          love.graphics.draw(v.icon,bbox[1],bbox[2])
       else
          if picked == k then

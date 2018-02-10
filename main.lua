@@ -497,6 +497,6 @@ function love.draw()
       drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,x,y)
    end
 
-   -- audioDraw()
+   audioDraw()
 
 end
