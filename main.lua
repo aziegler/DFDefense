@@ -227,7 +227,7 @@ function draw_tower(tower)
       love.graphics.setColor(255, 255, 255)
       love.graphics.draw(tower.img,
                          tower.x - tower.img:getWidth()/2 + tower.width/2,
-                         tower.y - tower.img:getHeight()/2 + tower.height/2)
+                         tower.y - tower.img:getHeight() + tower.height)
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
