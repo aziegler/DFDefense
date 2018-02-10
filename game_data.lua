@@ -1,6 +1,10 @@
-local tower_types = {}
+tower_types = {}
 
 local enemy_types = {}
+
+function Video (v)
+   videoSettings = v
+end
 
 function Tower (t)
    table.insert(tower_types, t)

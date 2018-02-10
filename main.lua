@@ -23,29 +23,43 @@ end
 
 local mouseModes = {
    pick = 1,
-   gui = 2
+   gui = 2,
+   menuPos = {}
 }
 mouseMode = mouseModes.pick
 
-function love.mousepressed(x,y,button,istouch)
+function mouseGui(x,y,button,istouch)
+   print(x,y)
    if button == 1 then
+      local building = mouseModes.building
+      towers.current_tower.x = building.x
+      towers.current_tower.y = building.y
+      towers.current_tower.width = building.width
+      towers.current_tower.height = building.height
+      table.remove(buildings.list,mouseModes.buildingIdx)
+      table.insert(towers.list,towers.current_tower)
+      towers.current_tower = new_tower()
+      mouseMode = mouseModes.pick
+   end
+end
+
+function mousePick(x,y,button,istouch)
+   if button == 2 then
       if not (towers.current_tower.enabled) then
          return
       end
       for idx, building in pairs(buildings.list) do
          if collide(towers.current_tower,building) then
-            towers.current_tower.x = building.x
-            towers.current_tower.y = building.y
-            towers.current_tower.width = building.width
-            towers.current_tower.height = building.height
-            table.remove(buildings.list,idx)
-            table.insert(towers.list,towers.current_tower)
-            towers.current_tower = new_tower()
+            mouseMode = mouseModes.gui
+            mouseModes.menuPos = { x= building.x + building.width/2,
+                                   y= building.y }
+            mouseModes.building = building
+            mouseModes.buildingIdx = idx
             return
          end
       end
    end
-   if button == 2 then
+   if button == 1 then
       local clickedTower = getTower(x,y)
       if clickedTower == nil then
          return
@@ -56,6 +70,15 @@ function love.mousepressed(x,y,button,istouch)
          clickedTower.friendlyinfluence = clickedTower.friendlyinfluence + infl
       end
    end
+end
+
+function love.mousepressed(x,y,button,istouch)
+   if mouseMode == mouseModes.pick then
+      mousePick(x,y,button,istouch)
+   else
+      mouseGui(x,y,button,istouch)
+   end
+
 end
 
 function getBuilding(x,y)
@@ -76,14 +99,18 @@ function getTower(x,y)
 end
 
 function love.load()
-   dofile("assets/config.txt")
 
-   audioLoad(audioConfig)
    dataLoad()
+   audioLoad(audioConfig)
 
-   scale = 1
-   --love.window.setMode(1920*scale,1080*scale)
-   love.window.setFullscreen(true)
+   if videoSettings.fullscreen == true then
+      scale = 1
+      --love.window.setMode(1920*scale,1080*scale)
+      love.window.setFullscreen(true)
+   else
+      scale = 0.5
+      love.window.setMode(1920*scale,1080*scale)
+   end
 
    for i = 1, roads.count do
       roads.list[i] = {}
@@ -227,6 +254,29 @@ function draw_tower(tower)
 
 end
 
+function drawMenu()
+   local SIZE = 100
+   local width = #tower_types * SIZE
+
+   print(#tower_types)
+
+   love.graphics.setColor(255,255,255)
+   love.graphics.rectangle("fill",
+                           mouseModes.menuPos.x-width/2,
+                           mouseModes.menuPos.y-SIZE,
+                           width, SIZE)
+
+   for k,v in pairs(tower_types) do
+      print(k,v)
+      love.graphics.setColor(v.color[1], v.color[2], v.color[3])
+      love.graphics.rectangle("fill",
+                              mouseModes.menuPos.x-width/2 + (k-1)*SIZE,
+                              mouseModes.menuPos.y-SIZE,
+                              width, SIZE)
+   end
+   print("")
+end
+
 function love.draw()
    love.graphics.scale(scale,scale)
 
@@ -247,6 +297,10 @@ function love.draw()
       draw_tower(tower)
    end
    draw_tower(towers.current_tower)
+
+   if mouseMode == mouseModes.gui then
+      drawMenu()
+   end
 
    audioDraw()
 

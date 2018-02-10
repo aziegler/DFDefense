@@ -1,3 +1,7 @@
+Video {
+      fullscreen = true
+}
+
 Audio {
    start = 3,
    loops = {
