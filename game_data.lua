@@ -14,6 +14,9 @@ function Tower (t)
    if t.img then
       t.img = love.graphics.newImage(t.img)
    end
+   if t.icon then
+      t.icon = love.graphics.newImage(t.icon)
+   end
    table.insert(tower_types, t)
 end
 

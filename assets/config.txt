@@ -45,7 +45,9 @@ Tower{
    dps = 4,
    influence = 50,
    influence_rate = 5,
-   color = {200,100,100}
+   color = {200,100,100},
+   img = "assets/buildings/BtmG_Garden.png",
+   icon = "assets/UI/Icon_Garden.png"
 }
 
 
@@ -66,7 +68,8 @@ Tower {
    influence = 200,
    influence_rate = 3,
    color = {0,100,200},
-   img = "assets/buildings/BtmG_assos.png"
+   img = "assets/buildings/BtmG_assos.png",
+   icon = "assets/UI/Icon_Assos.png"
 }
 
 Enemy {

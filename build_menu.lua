@@ -1,4 +1,4 @@
-local SIZE = 100
+local SIZE = 110
 local border = 5
 
 function get_menu_bbox(width, k)
@@ -41,12 +41,23 @@ function drawMenu()
                            mouseModes.menuPos.y-SIZE,
                            width, SIZE)
    for k,v in pairs(tower_types) do
-      if picked == k then
-         love.graphics.setColor(v.color[1]/2, v.color[2]/2, v.color[3]/2)
-      else
-         love.graphics.setColor(v.color[1], v.color[2], v.color[3])
-      end
       local bbox = get_menu_bbox(width, k)
-      love.graphics.rectangle("fill", bbox[1], bbox[2], bbox[3], bbox[4])
+      if picked == k then
+         love.graphics.setColor(255,255,255,155)
+      else
+         love.graphics.setColor(255,255,255,255)
+      end
+
+      if v.icon then
+
+         love.graphics.draw(v.icon,bbox[1],bbox[2])
+      else
+         if picked == k then
+            love.graphics.setColor(v.color[1]/2, v.color[2]/2, v.color[3]/2)
+         else
+            love.graphics.setColor(v.color[1], v.color[2], v.color[3])
+         end
+         love.graphics.rectangle("fill", bbox[1], bbox[2], bbox[3], bbox[4])
+      end
    end
 end
