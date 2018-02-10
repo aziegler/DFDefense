@@ -30,15 +30,17 @@ Tower{
    dps = 3,
    influence = 100,
    influence_rate = 50,
-   color = {200,100,100}
+   color = {200,100,100},
+      img = "assets/buildings/BtmD_Tower.png"
 }
 
-Tower{
+Tower {
    range = 300,
    dps = 1,
    influence = 200,
    influence_rate = 50,
-   color = {0,100,200}
+   color = {0,100,200},
+   img = "assets/buildings/BtmN_ruin.png"
 }
 
 Enemy{
@@ -46,7 +48,7 @@ Enemy{
    color={120,120,110},
    speed = 10,
    dps = 50,
-   range = 100
+   range = 300
 }
 
 Enemy{
@@ -54,5 +56,5 @@ Enemy{
    color={120,120,210},
    speed = 30,
    dps = 20,
-   range = 100
+   range = 400
 }

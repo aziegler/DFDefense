@@ -8,6 +8,9 @@ function Video (v)
 end
 
 function Tower (t)
+   if t.img then
+      t.img = love.graphics.newImage(t.img)
+   end
    table.insert(tower_types, t)
 end
 
@@ -27,32 +30,87 @@ function getEndPoint(roads, index)
    if roads.list[index] == nil then
       return nil
    end
-   return roads.list[index].points[roads.list[index].lastPoint - 1]
+   return getPoint(roads,index,roads.list[index].lastPoint - 1)
 end
 
-function dataLoad(roads,buildings)
-	dofile("assets/config.txt")
-
-   for i = 1, roads.count do
-      roads.list[i] = {}
-      roads.list[i].lastPoint = 1
-      roads.list[i].points = {}
+function getPoint(roads,roadIndex, pointIndex)
+   if roads.list[roadIndex] == nil or pointIndex < 1 then
+      return nil
    end
-   layerData = love.image.newImageData("assets/layer.bmp")
-   for x = 1, layerData:getWidth() - 1 do
-      local road_index = 1
+   return roads.list[roadIndex].points[pointIndex]
+end
+
+function addPoint(roads,index,x,y)
+   if roads.list[index] == nil then
+      return nil
+   end
+   if x < 1 or y < 1 then
+      return
+   end
+   roads.list[index].points[roads.list[index].lastPoint] = {}
+   roads.list[index].points[roads.list[index].lastPoint].x = x
+   roads.list[index].points[roads.list[index].lastPoint].y = y
+   roads.list[index].lastPoint = roads.list[index].lastPoint + 1
+end
+
+function contains(roads,index,x,y)
+   if roads.list[index] == nil then
+      return nil
+   end
+   for _,point in pairs(roads.list[index].points) do
+      if point.x == x and point.y == y then
+         return true
+      end
+   end
+   return false
+end
+
+function getNextPoint(roads,index)
+   local endPoint = getEndPoint(roads,index)
+   local previousPoint = getPoint(roads,index,roads.list[index].lastPoint - 2)
+   for xStep = -1, 1 do
+      for yStep = -1, 1 do
+         local nextX = math.max(math.min(endPoint.x + xStep,layerData:getWidth()),1)
+         local nextY = math.max(math.min(endPoint.y + yStep,layerData:getHeight()),1)
+         local r,g,b,a = layerData:getPixel(nextX, nextY)
+         if (r < 10 and g < 10 and b < 10) then
+            if not(contains(roads,index,nextX,nextY)) then
+               return nextX, nextY
+            end
+         end
+      end
+   end
+   return -1,-1
+end
+
+function loadRoads(roads)
+    local road_index = 1   
+   for y = 1, layerData:getHeight() - 1 do
+      local x = 1
+      local r,g,b,a = layerData:getPixel( x,y )
+      if (r < 10 and g < 10 and b < 10) then
+         local road = roads.list[road_index]
+         road.points[road.lastPoint] = {}
+         road.points[road.lastPoint].x = x
+         road.points[road.lastPoint].y = y
+         road.lastPoint = road.lastPoint + 1
+         road_index = road_index + 1
+      end
+   end
+   for j = 1, roads.count do
+      x,y = 0,0
+      while x > -1 do
+         x,y = getNextPoint(roads,j)
+         addPoint(roads,j,x,y)
+      end
+   end
+end
+
+function loadBuildings(buildings)
+   for x = 1, layerData:getWidth() - 1 do   
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
-         if (r == 0 and g == 0 and b == 0) then
-            if not(getEndPoint(roads,road_index) == nil) and math.abs(getEndPoint(roads,road_index).y - y) > 5 then
-               road_index = road_index + 1
-            end
-            local road = roads.list[road_index]
-            road.points[road.lastPoint] = {}
-            road.points[road.lastPoint].x = x
-            road.points[road.lastPoint].y = y
-            road.lastPoint = road.lastPoint + 1
-         elseif r == 255 and g == 0 and b == 0 then
+         if r == 255 and g == 0 and b == 0 then
             local building = getAddedBuilding(x,y,buildings)
             if building == nil then
                local width, height = 0,0
@@ -65,12 +123,29 @@ function dataLoad(roads,buildings)
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
-               table.insert(buildings.list,{x = x,y = y,width = width,height = height})
+               if x > 1700 then
+                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 500})
+               else
+                  table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
+               end
             end
          end
       end
    end
-   print ("Road Count "..roads.count)
+end
+
+function dataLoad(roads,buildings)
+	dofile("assets/config.txt")
+
+   for i = 1, roads.count do
+      roads.list[i] = {}
+      roads.list[i].lastPoint = 1
+      roads.list[i].points = {}
+   end
+   layerData = love.image.newImageData("assets/layer.bmp")
+   loadRoads(roads)
+   loadBuildings(buildings)
+   
 end
 
 function new_tower(idx)
@@ -89,10 +164,10 @@ function new_tower(idx)
    tower.color.red = tower_type.color[1]
    tower.color.green = tower_type.color[2]
    tower.color.blue = tower_type.color[3]
+   tower.img = tower_type.img
    tower.range = tower_type.range
    tower.dps = tower_type.dps
-   tower.enemyinfluence = 0
-   tower.friendlyinfluence = tower_type.influence
+   tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
    return tower
 end
