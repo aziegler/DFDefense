@@ -23,12 +23,13 @@ end
 mouseModes = {
    pick = 1,
    gui = 2,
-   menuPos = {}
+   menuPos = {},
+   mousePos = { 0, 0 }
 }
 mouseMode = mouseModes.pick
 
 function mouseGui(x,y,button,istouch)
-   local idx = pickMenu(x,y)
+   local idx = pickMenu(mouseModes.mousePos[1] ,mouseModes.mousePos[2])
    if idx == 0 then
       mouseMode = mouseModes.pick
       return
