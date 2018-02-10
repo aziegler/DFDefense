@@ -28,19 +28,24 @@ function new_tower()
    tower.enabled = false
    tower.color = {}
    tower.color.red = tower_type.color[1]
-   tower.color.blue = tower_type.color[2]
-   tower.color.green = tower_type.color[3]
+   tower.color.green = tower_type.color[2]
+   tower.color.blue = tower_type.color[3]
    tower.range = tower_type.range
    tower.dps = tower_type.dps
    towers.current_tower = tower
 end
 
 function Tower (t)
+   print("here", t)
    table.insert(tower_types, t)
 end
 
 function Enemy (e)
    table.insert(enemy_types, e)
+end
+
+function Audio (a)
+   audioConfig = a
 end
 
 function new_enemy()
@@ -67,10 +72,15 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function love.load()
-   audioLoad()
 
    dofile("assets/config.txt")
+
+   audioLoad(audioConfig)
+
+   scale = 1
+   --love.window.setMode(1920*scale,1080*scale)
    love.window.setFullscreen(true)
+
    for i = 1, roads.count do
       roads.list[i] = {}
    end
@@ -142,8 +152,8 @@ function love.update (dt)
    end
 
 
-   towers.current_tower.x = love.mouse.getX()
-   towers.current_tower.y = love.mouse.getY()
+   towers.current_tower.x = love.mouse.getX()/scale
+   towers.current_tower.y = love.mouse.getY()/scale
 
    towers.current_tower.enabled = false
 
@@ -189,6 +199,8 @@ function draw_tower(tower)
 end
 
 function love.draw()
+   love.graphics.scale(scale,scale)
+
    for i = 1, #roads.list do
       love.graphics.setColor(100,100,100)
       for j = 1, #roads.list[i] do

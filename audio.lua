@@ -64,21 +64,14 @@ end
 
 loop = 12
 start = 27
+tracks = {}
 
-tracks = {
-   { start = start, voice = true },
-   { start = start, voice = true },
-   { start = start+loop, voice = false },
-   { start = start+loop, voice = true },
-   { start = start+loop+loop, voice = false },
-   { start = start+loop+loop, voice = true },
-   { start = start+loop+loop+loop, voice = false },
-   { start = start+loop+loop+loop, voice = false },
-}
-
-function audioLoad()
+function audioLoad(audioConfig)
    audioGroups = loadAudio()
-   --setPosition(audioGroups, start)
+   for k,v in pairs(audioConfig.loops) do
+      table.insert(tracks, { start = start + v.loop*loop, voice = v.voice })
+   end
+   setPosition(audioGroups, audioConfig.start)
 
    i = 1
    arialFont = love.graphics.newFont("assets/arial.ttf")
