@@ -27,7 +27,7 @@ Audio {
 
 EnemyBuilding {
    range = 325,
-   dps = 1,
+   dps = 1.5,
    name = "Station Défense 3000"
 }
 
