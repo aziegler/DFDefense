@@ -80,16 +80,8 @@ function getNextPoint(roads,index)
    return -1,-1
 end
 
-function dataLoad(roads,buildings)
-	dofile("assets/config.txt")
-
-   for i = 1, roads.count do
-      roads.list[i] = {}
-      roads.list[i].lastPoint = 1
-      roads.list[i].points = {}
-   end
-   layerData = love.image.newImageData("assets/layer.bmp")
-   local road_index = 1   
+function loadRoads(roads)
+    local road_index = 1   
    for y = 1, layerData:getHeight() - 1 do
       local x = 1
       local r,g,b,a = layerData:getPixel( x,y )
@@ -109,6 +101,9 @@ function dataLoad(roads,buildings)
          addPoint(roads,j,x,y)
       end
    end
+end
+
+function loadBuildings(buildings)
    for x = 1, layerData:getWidth() - 1 do   
       for y = 1, layerData:getHeight() - 1 do
          local r,g,b,a = layerData:getPixel( x,y )
@@ -125,12 +120,25 @@ function dataLoad(roads,buildings)
                   r,g,b,a = layerData:getPixel(x, y + height)
                   height = height + 1
                end
-               table.insert(buildings.list,{x = x,y = y,width = width,height = height})
+               table.insert(buildings.list,{x = x,y = y,width = width,height = height,score = 0})
             end
          end
       end
    end
-   print ("Road Count "..roads.count)
+end
+
+function dataLoad(roads,buildings)
+	dofile("assets/config.txt")
+
+   for i = 1, roads.count do
+      roads.list[i] = {}
+      roads.list[i].lastPoint = 1
+      roads.list[i].points = {}
+   end
+   layerData = love.image.newImageData("assets/layer.bmp")
+   loadRoads(roads)
+   loadBuildings(buildings)
+   
 end
 
 function new_tower(idx)
@@ -151,8 +159,7 @@ function new_tower(idx)
    tower.color.blue = tower_type.color[3]
    tower.range = tower_type.range
    tower.dps = tower_type.dps
-   tower.enemyinfluence = 0
-   tower.friendlyinfluence = tower_type.influence
+   tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
    return tower
 end

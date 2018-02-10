@@ -74,13 +74,21 @@ function mousePick(x,y,button,istouch)
    end
    if button == 1 then
       local clickedTower = getTower(x,y)
-      if clickedTower == nil then
-         return
+      if not(clickedTower == nil) then         
+         for _, tower in pairs(towers.list) do
+            local infl = tower.score * 0.1
+            tower.score = tower.score - infl
+            clickedTower.score = clickedTower.score + infl
+         end
+      else 
+      local clickedBuilding = getBuilding(x,y)
+      if not(clickedBuilding == nil) then
+         for _, tower in pairs(towers.list) do
+            local infl = tower.score * 0.1
+            tower.score = tower.score - infl
+            clickedBuilding.score = clickedBuilding.score + infl
+         end
       end
-      for _, tower in pairs(towers.list) do
-         local infl = tower.friendlyinfluence * 0.1
-         tower.friendlyinfluence = tower.friendlyinfluence - infl
-         clickedTower.friendlyinfluence = clickedTower.friendlyinfluence + infl
       end
    end
 end
@@ -140,7 +148,16 @@ function compute_damage(dt)
             end
          end
          if distance < enemy.range then
-            tower.enemyinfluence = tower.enemyinfluence + enemy.dps * dt
+            tower.score = tower.score - enemy.dps * dt
+         end
+      end
+   end
+   for en_idx,enemy in pairs(enemies.list) do
+      for _,building in pairs(buildings.list) do
+         local width, height = enemy.x-(building.x+building.width/2), enemy.y-(building.y+building.height/2)
+         local distance = (width*width + height*height)^0.5
+         if distance < enemy.range then
+            building.score = building.score - enemy.dps * dt
          end
       end
    end
@@ -154,8 +171,11 @@ end
 
 function love.update (dt)
    audioUpdate()
-   for _,enemy in pairs(enemies.list) do
+   for idx,enemy in pairs(enemies.list) do
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
+      if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
+         table.remove(enemies.list,en_idx)
+      end
       if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
          enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
          enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
@@ -163,7 +183,7 @@ function love.update (dt)
    end
 
    for _,tower in pairs(towers.list) do
-      tower.friendlyinfluence = tower.friendlyinfluence + tower.influence_rate * dt
+      tower.score = tower.score + tower.influence_rate * dt
    end
 
    compute_damage(dt)
@@ -203,12 +223,12 @@ function draw_tower(tower)
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue,20)
    end
    love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
-   local influenceRatio = tower.friendlyinfluence / (tower.friendlyinfluence + tower.enemyinfluence)
+   local influenceRatio = math.min(tower.score + 100 / 300,1)
    love.graphics.setColor(0,0,255)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
    love.graphics.setColor(255,0,0)
    love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
-   love.graphics.print("Friend "..math.floor(tower.friendlyinfluence/10).." Enemy"..math.floor(tower.enemyinfluence/10),tower.x + 10, tower.y + 20)
+   love.graphics.print("Score "..math.floor(tower.score),tower.x + 10, tower.y + 20)
    love.graphics.setColor(180, 50, 50, 100)
    love.graphics.circle("fill",
                         tower.x+tower.width/2,
@@ -224,9 +244,17 @@ function love.draw()
          love.graphics.points(roads.list[i].points[j].x,roads.list[i].points[j].y)
       end
    end
-   love.graphics.setColor(255, 0, 0, 255)
    for _,building in pairs(buildings.list) do
+      if building.score >= 100 then
+         love.graphics.setColor(255,0,0,255)
+      elseif building.score >= -100 then
+         love.graphics.setColor(100,100,100,255)
+      else
+         love.graphics.setColor(0,0,255,255)
+      end
       love.graphics.rectangle("fill",building.x,building.y,building.width,building.height)
+      love.graphics.setColor(120,255,120,255)
+      love.graphics.print("Score "..math.floor(building.score), building.x + 10, building.y + 50)
    end
    for _,enemy in pairs(enemies.list) do
       draw_enemy(enemy)

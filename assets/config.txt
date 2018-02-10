@@ -46,7 +46,7 @@ Enemy{
    color={120,120,110},
    speed = 10,
    dps = 50,
-   range = 100
+   range = 300
 }
 
 Enemy{
@@ -54,5 +54,5 @@ Enemy{
    color={120,120,210},
    speed = 30,
    dps = 20,
-   range = 100
+   range = 400
 }
