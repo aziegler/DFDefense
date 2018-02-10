@@ -207,11 +207,17 @@ function compute_damage(dt)
    end
 
    for _,building1 in pairs(buildings.list) do
-      for _,tower in pairs(towers.list) do
+      for tw_idx,tower in pairs(towers.list) do
          local width, height = tower.x-(building1.x+building1.width/2), tower.y-(building1.y+building1.height/2)
          local distance = (width*width + height*height)^0.5
          if building1.score < -100 and distance < enemyBuilding.range then
             tower.score = tower.score - enemyBuilding.dps * dt
+            if tower.score < 0 then
+               table.remove(towers.list,tw_idx)
+               tower.building.tower = nil
+               tower.building.score = tower.score
+               break
+            end
          end
       end
    end
