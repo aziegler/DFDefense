@@ -32,6 +32,9 @@ function GameplayVariable(g)
    gameplayVariable = g
 end
 
+function EndGame(eg)
+end
+
 function getAddedBuilding(x,y,buildings)
    for idx,building in pairs(buildings.list) do
       if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then

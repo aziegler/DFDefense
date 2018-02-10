@@ -121,7 +121,7 @@ function love.mousepressed(x,y,button,istouch)
 end
 
 function getBuilding(x,y)
-   if x == nil or y == nil then 
+   if x == nil or y == nil then
       return -1,nil
    end
    for idx,building in pairs(buildings.list) do
@@ -159,8 +159,11 @@ function love.load(arg)
    }
    imgEnemyGQ = {
       Police = love.graphics.newImage("assets/buildings/BtmD_police.png"),
-      Defense = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
+      Defense = love.graphics.newImage("assets/buildings/BtmD_BigTower.png"),
    }
+
+   enemy_gq.list[2].img = imgEnemyGQ.Police
+   enemy_gq.list[1].img = imgEnemyGQ.Defense
 
    if videoSettings.fullscreen == false or arg[2] == "-w" then
       scale = 0.5
@@ -252,8 +255,16 @@ function love.update (dt)
       end
    end
 
+   totalScore = 0
    for _,tower in pairs(towers.list) do
       tower.score = tower.score + tower.influence_rate * dt
+      if tower.score > 0 then
+         totalScore = totalScore + tower.score
+      end
+   end
+
+   if totalScore <= 0 then
+      print("GAME OVER!!!")
    end
 
    compute_damage(dt)
@@ -382,12 +393,17 @@ function love.draw()
    for _,building in pairs(buildings.list) do
       table.insert(drawList, building)
    end
+   table.insert(drawList, enemy_gq.list[1])
+   table.insert(drawList, enemy_gq.list[2])
 
    table.sort(drawList, sortY)
 
    for _,building in pairs(drawList) do
+      love.graphics.setColor(255,255,255,255)
       if building.enemy then
          draw_enemy(building)
+      elseif building.img then
+         drawBuildings(building.img, building)
       elseif not building.tower then
          love.graphics.setColor(255,255,255,255)
          if building.score >= gameplayVariable.buildingTreshold then
@@ -412,14 +428,10 @@ function love.draw()
       end
    end
 
-   love.graphics.setColor(255,255,255,255)
-   drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[1]);
-   drawBuildingsMiddle(imgEnemyGQ.Defense, enemy_gq.list[2]);
+   --love.graphics.setColor(255,255,255,255)
+   --drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[2]);
+   --drawBuildings(imgEnemyGQ.Defense, enemy_gq.list[1]);
 
-
-   --for _,tower in pairs(towers.list) do
-   --   draw_tower(tower)
-   --end
 
    if mouseMode == mouseModes.gui then
       drawMenu()

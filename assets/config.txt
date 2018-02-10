@@ -23,6 +23,10 @@ EnemyBuilding {
    name = "Horrible tour moche"
 }
 
+EndGame {
+       lost = { "Tu as perdu", "le quartier est entièrement gentrifié" }
+}
+
 GameplayVariable {
    buildingTreshold = 20,
    initialConcertInfluence = 200,
