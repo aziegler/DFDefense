@@ -15,25 +15,31 @@ Audio {
 Tower{
    range = 400,
    dps = 3,
-   color = {255,0,0}
+   influence = 100,
+   influence_rate = 100,
+   color = {200,100,100}
 }
 
 Tower{
    range = 600,
    dps = 1,
-   color = {0,0,255}
+   influence = 200,
+   influence_rate = 100,
+   color = {0,100,200}
 }
 
 Enemy{
    life = 30,
    color={120,120,110},
    speed = 10,
-   dps = 5
+   dps = 50,
+   range = 300
 }
 
 Enemy{
    life = 50,
    color={120,120,210},
    speed = 30,
-   dps = 1
+   dps = 20,
+   range = 700
 }

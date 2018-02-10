@@ -9,13 +9,10 @@ roads.list = {}
 
 local enemies = {}
 enemies.list = {}
-enemies.influence = 0
 
 local towers = {}
 towers.list = {}
 towers.current_tower = {}
-
-local enemy_types = {}
 
 local buildings = {}
 buildings.list = {}
@@ -30,41 +27,52 @@ local mouseModes = {
 }
 mouseMode = mouseModes.pick
 
-function mousePick(x,y,button,istouch)
-   if not (towers.current_tower.enabled) then
-      return
-   end
-
-   for idx, building in pairs(buildings.list) do
-      if collide(towers.current_tower,building) then
-         mouseMode = mouseModes.gui
-         print(building)
-         --[[
-         towers.current_tower.x = building.x
-         towers.current_tower.y = building.y
-         towers.current_tower.width = building.width
-         towers.current_tower.height = building.height
-         table.remove(buildings.list,idx)
-         table.insert(towers.list,towers.current_tower)
-         towers.current_tower = new_tower()
-         ]]--
-
+function love.mousepressed(x,y,button,istouch)
+   if button == 1 then
+      if not (towers.current_tower.enabled) then
          return
+      end
+      for idx, building in pairs(buildings.list) do
+         if collide(towers.current_tower,building) then
+            towers.current_tower.x = building.x
+            towers.current_tower.y = building.y
+            towers.current_tower.width = building.width
+            towers.current_tower.height = building.height
+            table.remove(buildings.list,idx)
+            table.insert(towers.list,towers.current_tower)
+            towers.current_tower = new_tower()
+            return
+         end
+      end
+   end
+   if button == 2 then
+      local clickedTower = getTower(x,y)
+      if clickedTower == nil then
+         return
+      end
+      for _, tower in pairs(towers.list) do
+         local infl = tower.friendlyinfluence * 0.1
+         tower.friendlyinfluence = tower.friendlyinfluence - infl
+         clickedTower.friendlyinfluence = clickedTower.friendlyinfluence + infl
+      end
+   end
+end
+
+function getBuilding(x,y)
+   for _,building in pairs(buildings.list) do
+      if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
+         return building
+      end
+   end
+end
+
+function getTower(x,y)
+   for _,tower in pairs(towers.list) do
+      if x >= tower.x and x <= tower.x + tower.width and y >= tower.y and y <= tower.y + tower.height then
+         return tower
       end
    end
 
-end
-
-function mouseGui(x, y,button, istouch)
-   print(x,y)
-end
-
-function love.mousepressed(x,y,button,istouch)
-   if mouseMode == mouseModes.pick then
-      mousePick(x,y,button,istouch)
-   else
-      mouseGui(x,y,button,istouch)
-   end
 end
 
 function love.load()
@@ -96,13 +104,8 @@ function love.load()
                road[x] = road[x-1]
             end
          elseif r == 255 and g == 0 and b == 0 then
-            local already_added = false
-            for _,building in pairs(buildings.list) do
-               if x >= building.x and x <= building.x + building.width and y >= building.y and y <= building.y + building.height then
-                  already_added = true
-               end
-            end
-            if not already_added then
+            local building = getBuilding(x,y)
+            if building == nil then
                local width, height = 0,0
                while r == 255 and g == 0 and b == 0 do
                   width = width + 1
@@ -138,6 +141,9 @@ function compute_damage(dt)
                break
             end
          end
+         if distance < enemy.range then
+            tower.enemyinfluence = tower.enemyinfluence + enemy.dps * dt
+         end
       end
    end
 end
@@ -157,9 +163,11 @@ function love.update (dt)
          enemy.y = roads.list[enemy.road_index][math.floor(enemy.x)]
 
       end
-      enemies.influence = enemies.influence + enemy.dps * enemy.x * dt
    end
 
+   for _,tower in pairs(towers.list) do
+      tower.friendlyinfluence = tower.friendlyinfluence + tower.influence_rate * dt
+   end
 
    compute_damage(dt)
 
@@ -167,10 +175,8 @@ function love.update (dt)
       table.insert(enemies.list, new_enemy(#roads.list))
    end
 
-
    towers.current_tower.x = love.mouse.getX()/scale
    towers.current_tower.y = love.mouse.getY()/scale
-
    towers.current_tower.enabled = false
 
    local r,g,b,a = layerData:getPixel(towers.current_tower.x,towers.current_tower.y)
@@ -212,6 +218,12 @@ function draw_tower(tower)
    love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
    love.graphics.setColor(tower.color.red, tower.color.green, tower.color.blue, 50)
    love.graphics.circle("fill", tower.x, tower.y, tower.range)
+   local influenceRatio = tower.friendlyinfluence / (tower.friendlyinfluence + tower.enemyinfluence)
+   love.graphics.setColor(0,0,255)
+   love.graphics.rectangle("fill",tower.x,tower.y,tower.width,10)
+   love.graphics.setColor(255,0,0)
+   love.graphics.rectangle("fill",tower.x,tower.y,tower.width * influenceRatio ,10)
+
 end
 
 function love.draw()
@@ -234,11 +246,6 @@ function love.draw()
       draw_tower(tower)
    end
    draw_tower(towers.current_tower)
-
-   love.graphics.setColor(0,0,255)
-   love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),20)
-   love.graphics.setColor(255,0,0)
-   love.graphics.rectangle("fill",0,0,love.graphics.getWidth() * enemies.influence/10000,20)
 
    audioDraw()
 
