@@ -84,6 +84,10 @@ end
 function audioUpdate()
    local voiceOn = false
 
+   if i > #tracks then
+      return
+   end
+
    if tracks[i].voice then
       if love.keyboard.isDown("1") then
          mute(audioGroups.voice)
@@ -107,9 +111,9 @@ function audioUpdate()
    if audioGroups.voice[1]:tell("seconds") >= tracks[i].start+loop then
       if not love.keyboard.isDown("space") then
          i = i + 1
-         if i > #tracks then
-            i = 1
-         end
+         --if i > #tracks then
+         --   i = 1
+         --end
          affTxt =  love.graphics.newText(arialFont, ""..i )
       end
       setPosition(audioGroups, tracks[i].start)
