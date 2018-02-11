@@ -77,12 +77,12 @@ Enfin pour terminer, on dirait un détail, et pourtant... Daniel Féry était un
 11 février 2018, la police tue, encore et toujours.",
 
    textCredits ="Billie Brelok : Lyriciste\
-   Gwendal Evrard : Graphisme\
-   Judicaëlle Live-Lun : Graphisme\
-   Jeremiaah : Beatmaker\
-   Marc Planard : Programmation\
-   Thomas Planques : Game design\
-   Axelle Ziegler : Programmation"
+Gwendal Evrard : Graphisme\
+Judicaëlle Live-Lun : Graphisme\
+Jeremiaah : Beatmaker\
+Marc Planard : Programmation\
+Thomas Planques : Game design\
+Axelle Ziegler : Programmation"
    
 }
 
@@ -146,9 +146,9 @@ Fabe"
 }
 
 Enemy {
-   life = 160,
+   life = 16000,
    color = {120,120,110},
-   speed = 25,
+   speed = 2500,
    dps = 13,
    range = 200,
    img = { "assets/enemies/Chara_CRS01.png",
@@ -156,9 +156,9 @@ Enemy {
 }
 
 Enemy {
-   life = 110,
+   life = 11000,
    color = {120,120,210},
-   speed = 45,
+   speed = 4500,
    dps = 8,
    range = 175,
       img = {
@@ -169,9 +169,9 @@ Enemy {
 }
 
 Enemy {
-   life = 60,
+   life = 60000,
    color = {120,120,210},
-   speed = 75,
+   speed = 7500,
    dps = 4,
    range = 200,
       img = {
