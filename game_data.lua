@@ -223,6 +223,7 @@ function new_tower(idx)
    tower.dps = tower_type.dps
    tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
+   tower.infList = {}
    if tower_type.extraName then
       tower.name = tower_type.name.." "..tower_type.extraName[math.random(1,#tower_type.extraName)]
    else

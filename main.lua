@@ -1,6 +1,7 @@
 require "audio"
 require "game_data"
 require "build_menu"
+require "particles"
 
 local roads = {}
 roads.count = 3
@@ -20,6 +21,8 @@ buildings.list = {}
 
 local enemy_gq = {}
 enemy_gq.list = {}
+
+local partList = {}
 
 function Audio (a)
    audioConfig = a
@@ -89,6 +92,15 @@ function mousePick(x,y,button,istouch)
             local infl = tower.score * 0.1
             tower.score = tower.score - infl
             clickedTower.score = clickedTower.score + infl
+            table.insert(partList, { ttl = 0.5,
+                                     from = {
+                                        x = tower.x + tower.width/2,
+                                        y = tower.y + tower.height/2  },
+                                     to = {
+                                        x = clickedTower.x + clickedTower.width/2,
+                                        y = clickedTower.y + clickedTower.height/2}})
+
+
          end
       else
       local _, clickedBuilding = getBuilding(x,y)
@@ -98,6 +110,14 @@ function mousePick(x,y,button,istouch)
                local infl = math.min(tower.score * 0.1, 100 - clickedBuilding.score)
                tower.score = tower.score - infl
                clickedBuilding.score = clickedBuilding.score + infl
+               table.insert(partList, { ttl = 0.5,
+                                        from = {
+                                           x = tower.x + tower.width/2,
+                                           y = tower.y + tower.height/2  },
+                                        to = {
+                                           x = clickedBuilding.x + clickedBuilding.width/2,
+                                           y = clickedBuilding.y + clickedBuilding.height/2}})
+
             end
          end
          for _, building in pairs(buildings.list) do
@@ -105,6 +125,14 @@ function mousePick(x,y,button,istouch)
                local infl = math.max(math.min(building.score * 0.1, 100 - clickedBuilding.score),0)
                building.score = building.score - infl
                clickedBuilding.score = clickedBuilding.score + infl
+               table.insert(partList, { ttl = 0.5,
+                                        from = {
+                                           x = building.x + building.width/2,
+                                           y = building.y + building.height/2 },
+                                        to = {
+                                           x = clickedBuilding.x + clickedBuilding.width/2,
+                                           y = clickedBuilding.y + clickedBuilding.height/2}})
+
             end
          end
 
@@ -274,7 +302,7 @@ function love.update (dt)
       return
    end
 
-
+   partUpdate(dt, partList)
    voiceOn, tbs = audioUpdate()
 
    for idx,enemy in pairs(enemies.list) do
@@ -497,6 +525,7 @@ function love.draw()
       drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,x,y)
    end
 
+   partDraw(partList)
    audioDraw()
 
 end
