@@ -152,13 +152,14 @@ function love.mousepressed(x,y,button,istouch)
       local x_mouse = mouseModes.mousePos[1]
       local y_mouse = mouseModes.mousePos[2]
       if gameState.info then
-         if 700 < x_mouse and 1300 > x_mouse and 400 < y_mouse and 1000 > y_mouse then   
+         if 700 < x_mouse and 1300 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
             gameState.info = false
             gameState.title = false
          end
       else
          if 300 < x_mouse and 900 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
             gameState.title = false
+            audioStart()
          elseif 800 < x_mouse and 1500 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
             gameState.info = true
          end
@@ -369,9 +370,10 @@ end
 
 function love.update (dt)
 
-   voiceOn, tbs = audioUpdate()
-
    if not gameState.gameOver and not gameState.title then
+
+      voiceOn, tbs = audioUpdate()
+
       for idx,enemy in pairs(enemies.list) do
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
@@ -561,7 +563,7 @@ function love.draw()
       local height = love.graphics.getHeight()
       love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
 
-      if not gameState.info then 
+      if not gameState.info then
          love.graphics.setColor(255, 255, 255, 255)
          love.graphics.draw(imgUI.Logo,40, 300)
          love.graphics.draw(imgUI.Button_play,400,700)
