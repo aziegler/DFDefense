@@ -3,28 +3,29 @@ Video {
 }
 
 Audio {
-   start = 0,
+   start = 27,
    loops = {
-      { loop = 0, voice = true, tbs = 2},
+      { loop = 1, voice = false },
+      { loop = 1, voice = true, tbs = 2},
       { loop = 1, voice = false },
       { loop = 1, voice = false },
       { loop = 1, voice = true , tbs = 1.5},
-      { loop = 2, voice = false },
-      { loop = 2, voice = true , tbs = 1.25},
-	  { loop = 2, voice = false },
-      { loop = 2, voice = true , tbs = 1.1},
-      { loop = 3, voice = false },
-      { loop = 3, voice = false },
+      { loop = 1, voice = false },
+      { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = false },
+      { loop = 1, voice = true , tbs = 1.1},
+      { loop = 1, voice = false },
+      { loop = 1, voice = false },
 
-	  { loop = 4, voice = true , tbs = 1.25},
-	  { loop = 4, voice = false },
+	  { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = false },
 
-	  { loop = 5, voice = true , tbs = 1.25},
-	  { loop = 5, voice = false },
-	  
-	  { loop = 6, voice = false },
-	  { loop = 6, voice = true , tbs = 1},
-	  { loop = 6, voice = false }
+	  { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = false },
+
+	  { loop = 1, voice = false },
+	  { loop = 1, voice = true , tbs = 1},
+	  { loop = 1, voice = false }
 
    }
 }
