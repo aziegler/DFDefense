@@ -44,7 +44,7 @@ function drawMenu()
    for k,v in pairs(tower_types) do
       local bbox = get_menu_bbox(width, k)
       if picked == k then
-         local txt = love.graphics.newText(arialFont, v.tooltip)
+         local txt = love.graphics.newText(fonts.small, v.tooltip)
          love.graphics.setColor(0,0,0,255)
          love.graphics.draw(txt, fromX+2, fromY+2);
          love.graphics.setColor(255,255,255,155)

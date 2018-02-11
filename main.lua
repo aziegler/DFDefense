@@ -153,15 +153,16 @@ function getTower(x,y)
 end
 
 function love.load(arg)
-
-   dataLoad(roads, buildings, towers, enemy_gq)
-
-   audioLoad(audioConfig)
    fonts = {
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
    love.graphics.setFont(fonts.large)
+
+   dataLoad(roads, buildings, towers, enemy_gq)
+
+   audioLoad(audioConfig)
+   
 
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
