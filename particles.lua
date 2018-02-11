@@ -71,8 +71,8 @@ function persoLoad(w, h, roads)
       local r = roads.list[math.random(1,#roads.list)]
       local p = r.points[math.random(1, #r.points)]
 
-      local perso = { x =  p.x,
-                      y = p.y,
+      local perso = { x =  p.x + math.random(-25,25),
+                      y = p.y + math.random(-25,25),
                       time = 0,
                       img = persoChars[math.random(1,#persoChars)] }
       table.insert(persos, perso)
