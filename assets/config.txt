@@ -6,26 +6,38 @@ Audio {
    start = 27,
    loops = {
       { loop = 0, voice = false },
-      { loop = 0, voice = true, tbs = 3},
+      { loop = 0, voice = true, tbs = 2},
       { loop = 1, voice = false },
       { loop = 1, voice = false },
-      { loop = 1, voice = true , tbs = 2},
+      { loop = 1, voice = true , tbs = 1.75},
       { loop = 2, voice = false },
-      { loop = 2, voice = true , tbs = 1.75},
+      { loop = 2, voice = true , tbs = 1.5},
 	  { loop = 3, voice = false },
-      { loop = 3, voice = true , tbs = 1.5},
+      { loop = 3, voice = true , tbs = 1.25},
       { loop = 3, voice = false },
       { loop = 3, voice = false },
 
-	  { loop = 4, voice = true , tbs = 1.5},
+	  { loop = 4, voice = true , tbs = 1},
 	  { loop = 4, voice = false },
 
-	  { loop = 5, voice = true , tbs = 1.5},
+	  { loop = 5, voice = true , tbs = 1.25},
 	  { loop = 5, voice = false },
 
 	  { loop = 6, voice = false },
 	  { loop = 6, voice = true , tbs = 1},
-	  { loop = 6, voice = false }
+	  { loop = 6, voice = false },
+	  
+	  { loop = 7, voice = false },
+	  { loop = 7, voice = true , tbs = 1},
+	  { loop = 7, voice = false },
+	  
+	  { loop = 8, voice = false },
+	  { loop = 8, voice = false },
+	  { loop = 8, voice = true , tbs = 0.8},
+	  { loop = 8, voice = false }
+	  
+	  { loop = 9, voice = true , tbs = 0.6},
+	  { loop = 9, voice = false }
    }
 }
 
@@ -57,7 +69,7 @@ Tower {
    range = 200,
    dps = 4,
    influence = 50,
-   influence_rate = 2,
+   influence_rate = 5,
    color = {200,100,100},
    img = "assets/buildings/BtmG_Garden.png",
    icon = "assets/UI/Icon_Garden.png",
@@ -73,12 +85,12 @@ Fabe"
 
 
 Tower {
-   name = "Bibliothèque",
+   name = "Bibliothèque 2.0",
    extraName = {""},
    range = 250,
    dps = 2,
    influence = 100,
-   influence_rate = 2,
+   influence_rate = 5,
    color = {200,30,30},
    img = "assets/buildings/BtmG_library.png",
    icon = "assets/UI/Icon_Bibli.png",
@@ -98,7 +110,7 @@ Tower {
    range = 600,
    dps = 1,
    influence = 200,
-   influence_rate = 2,
+   influence_rate = 5,
    color = {0,100,200},
    img = "assets/buildings/BtmG_assos.png",
    icon = "assets/UI/Icon_Assos.png",
@@ -110,9 +122,9 @@ Ramène moi prima primo ce qui ne passera pas aux infos"
 }
 
 Enemy {
-   life = 130,
+   life = 150,
    color = {120,120,110},
-   speed = 30,
+   speed = 25,
    dps = 13,
    range = 200,
    img = { "assets/enemies/Chara_CRS01.png",
@@ -120,9 +132,9 @@ Enemy {
 }
 
 Enemy {
-   life = 90,
+   life = 100,
    color = {120,120,210},
-   speed = 50,
+   speed = 45,
    dps = 8,
    range = 175,
       img = {
@@ -135,7 +147,7 @@ Enemy {
 Enemy {
    life = 50,
    color = {120,120,210},
-   speed = 80,
+   speed = 75,
    dps = 4,
    range = 200,
       img = {

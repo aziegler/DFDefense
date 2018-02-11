@@ -240,7 +240,6 @@ function love.load(arg)
 
    audioLoad(audioConfig)
 
-
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
       Goche = love.graphics.newImage("assets/buildings/BtmG_Tower.png"),
@@ -263,7 +262,7 @@ function love.load(arg)
       Logo = love.graphics.newImage("assets/UI/Logogentryfight.png"),
       Button_play = love.graphics.newImage("assets/UI/btn_Jouer.png"),
       Button_info = love.graphics.newImage("assets/UI/btn_Info.png"),
-
+      Menu_BG = love.graphics.newImage("assets/UI/SupportIcon.png")
    }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
@@ -510,7 +509,7 @@ function draw_tower(tower)
 end
 
 function drawBuildings(img, building)
- 
+
    love.graphics.draw(img,
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
