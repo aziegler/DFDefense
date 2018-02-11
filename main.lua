@@ -22,7 +22,12 @@ buildings.list = {}
 local enemy_gq = {}
 enemy_gq.list = {}
 
-local gameOver = false
+local gameState = {
+   title = true,
+   gameOver = false,
+   info = false
+}
+
 local partList = {}
 
 
@@ -143,12 +148,28 @@ function mousePick(x,y,button,istouch)
 end
 
 function love.mousepressed(x,y,button,istouch)
-   if mouseMode == mouseModes.pick then
-      mousePick(x,y,button,istouch)
+   if gameState.title then
+      local x_mouse = mouseModes.mousePos[1]
+      local y_mouse = mouseModes.mousePos[2]
+      if gameState.info then
+         if 700 < x_mouse and 1300 > x_mouse and 400 < y_mouse and 1000 > y_mouse then   
+            gameState.info = false
+            gameState.title = false
+         end
+      else
+         if 300 < x_mouse and 900 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
+            gameState.title = false
+         elseif 800 < x_mouse and 1500 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
+            gameState.info = true
+         end
+      end
    else
-      mouseGui(x,y,button,istouch)
+      if mouseMode == mouseModes.pick then
+         mousePick(x,y,button,istouch)
+      else
+         mouseGui(x,y,button,istouch)
+      end
    end
-
 end
 
 function getBuilding(x,y)
@@ -201,7 +222,7 @@ function init()
    enemy_gq = {}
    enemy_gq.list = {}
 
-   gameOver = false
+   gameState.gameOver = false
    partList = {}
 end
 
@@ -238,7 +259,11 @@ function love.load(arg)
       BigBleu = love.graphics.newImage("assets/UI/Barre_bleue_large.png"),
       Hover_up = love.graphics.newImage("assets/UI/haut_texte.png"),
       Hover_down = love.graphics.newImage("assets/UI/bas_texte.png"),
-      Hover_middle = love.graphics.newImage("assets/UI/milieu_texte.png")
+      Hover_middle = love.graphics.newImage("assets/UI/milieu_texte.png"),
+      Logo = love.graphics.newImage("assets/UI/Logogentryfight.png"),
+      Button_play = love.graphics.newImage("assets/UI/btn_Jouer.png"),
+      Button_info = love.graphics.newImage("assets/UI/btn_Info.png"),
+
    }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
@@ -274,7 +299,7 @@ function compute_damage(dt)
             tower.score = tower.score - enemy.dps * dt
             if tower.score < 0 then
                if tower.isBase then
-                  gameOver = true
+                  gameState.gameOver = true
                   tower.score = 0
                else
                   table.remove(towers.list,tw_idx)
@@ -315,7 +340,7 @@ function compute_damage(dt)
             tower.score = tower.score - enemyBuilding.dps * dt
             if tower.score < 0 then
                if tower.isBase then
-                  gameOver = true
+                  gameState.gameOver = true
                   tower.score = 0
                else
                   table.remove(towers.list,tw_idx)
@@ -336,8 +361,8 @@ function love.keypressed(key)
    if key == "escape" then
       love.event.quit()
    end
-   if key == "space" and gameOver then
-      gameOver = false
+   if key == "space" and gameState.gameOver then
+      gameState.gameOver = false
       init()
       love.load()
    end
@@ -347,7 +372,7 @@ function love.update (dt)
 
    voiceOn, tbs = audioUpdate()
 
-   if not gameOver then
+   if not gameState.gameOver and not gameState.title then
       for idx,enemy in pairs(enemies.list) do
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
@@ -531,9 +556,30 @@ function love.draw()
 
    love.graphics.draw(map,0,0)
 
+   if gameState.title then
+      love.graphics.setColor(130, 130, 130, 150)
+      local width = love.graphics.getWidth()
+      local height = love.graphics.getHeight()
+      love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
+
+      if not gameState.info then 
+         love.graphics.setColor(255, 255, 255, 255)
+         love.graphics.draw(imgUI.Logo,40, 300)
+         love.graphics.draw(imgUI.Button_play,400,700)
+         love.graphics.draw(imgUI.Button_info,width - 800,700)
+      else
+         love.graphics.setFont(fonts.large)
+         love.graphics.setColor(255, 255, 255, 255)
+         love.graphics.printf("Texte d'info",40,200,400)
+         love.graphics.draw(imgUI.Button_play,width/2 - 100, 700)
+      end
+
+      return
+   end
+
 
    local drawList = {}
-   if not gameOver then
+   if not gameState.gameOver then
       for _,enemy in pairs(enemies.list) do
          enemy.enemy = true
          table.insert(drawList, enemy)
@@ -573,7 +619,7 @@ function love.draw()
       end
    end
 
-   if gameOver then
+   if gameState.gameOver then
       love.graphics.setFont(fonts.title_large)
       love.graphics.setColor(0,0,0,255)
       love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 - 10,800)
