@@ -22,13 +22,12 @@ buildings.list = {}
 local enemy_gq = {}
 enemy_gq.list = {}
 
+local gameOver = false
 local partList = {}
 
 function Audio (a)
    audioConfig = a
 end
-
-totalScore = 1000
 
 mouseModes = {
    pick = 1,
@@ -183,6 +182,7 @@ end
 
 function love.load(arg)
    fonts = {
+      title = love.graphics.newFont("assets/arial.ttf",60),
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
@@ -245,10 +245,15 @@ function compute_damage(dt)
          if distance < enemy.range then
             tower.score = tower.score - enemy.dps * dt
             if tower.score < 0 then
-               table.remove(towers.list,tw_idx)
-               tower.building.tower = nil
-               tower.building.score = tower.score
-               break
+               if tower.isBase then
+                  gameOver = true
+                  tower.score = 0
+               else
+                  table.remove(towers.list,tw_idx)
+                  tower.building.tower = nil
+                  tower.building.score = tower.score
+                  break
+               end
             end
          end
       end
@@ -280,10 +285,15 @@ function compute_damage(dt)
          if building1.score < -100 and distance < enemyBuilding.range then
             tower.score = tower.score - enemyBuilding.dps * dt
             if tower.score < 0 then
-               table.remove(towers.list,tw_idx)
-               tower.building.tower = nil
-               tower.building.score = tower.score
-               break
+               if tower.isBase then
+                  gameOver = true
+                  tower.score = 0
+               else
+                  table.remove(towers.list,tw_idx)
+                  tower.building.tower = nil
+                  tower.building.score = tower.score
+                  break
+               end
             end
          end
       end
@@ -297,46 +307,46 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
+   
+   
+   
 
-   if totalScore <= 0 then
-      print("GAME OVER!!!")
-      love.graphics.setColor(255, 255, 255, 255)
-      love.graphics.printf("GAME OVER",
-                           500,500,
-                           300,"center")
-
-      return
-   end
-
-   partUpdate(dt, partList)
    voiceOn, tbs = audioUpdate()
 
-   for idx,enemy in pairs(enemies.list) do
-      enemy.time = enemy.time + dt
-      enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
-      if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
+   if not gameOver then 
+      for idx,enemy in pairs(enemies.list) do
+         enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
+         if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
+            --table.remove(enemies.list,idx)
+         end
+         if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
+            enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
+            enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
+         end
+      end     
+
+      compute_damage(dt)
+
+      for _,tower in pairs(towers.list) do
+         tower.score = tower.score + tower.influence_rate * dt
+      end
+
+      partUpdate(dt, partList)
+      voiceOn, tbs = audioUpdate()
+
+      for idx,enemy in pairs(enemies.list) do
+         enemy.time = enemy.time + dt
+         enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
+         if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
          --table.remove(enemies.list,idx)
-      end
-      if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
-         enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
-         enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
-      end
-   end
+         end
 
-   totalScore = 0
-   for _,tower in pairs(towers.list) do
-      tower.score = tower.score + tower.influence_rate * dt
-      if tower.score > 0 then
-         totalScore = totalScore + tower.score
+         enemyCoolDown = enemyCoolDown + dt
+         if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
+            table.insert(enemies.list, new_enemy(roads.count))
+            enemyCoolDown = 0
+         end
       end
-   end
-
-   compute_damage(dt)
-
-   enemyCoolDown = enemyCoolDown + dt
-   if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
-      table.insert(enemies.list, new_enemy(roads.count))
-      enemyCoolDown = 0
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
@@ -478,17 +488,15 @@ end
 function love.draw()
    love.graphics.scale(scale,scale)
 
-   for i = 1, roads.count do
-      love.graphics.setColor(100,100,100)
-      for j = 1, roads.list[i].lastPoint - 1 do
-         love.graphics.points(roads.list[i].points[j].x,roads.list[i].points[j].y)
-      end
-   end
+   love.graphics.draw(map,0,0)
+
 
    local drawList = {}
-   for _,enemy in pairs(enemies.list) do
-      enemy.enemy = true
-      table.insert(drawList, enemy)
+   if not gameOver then
+      for _,enemy in pairs(enemies.list) do
+         enemy.enemy = true
+         table.insert(drawList, enemy)
+      end
    end
 
    for _,building in pairs(buildings.list) do
@@ -527,6 +535,13 @@ function love.draw()
          draw_tower(building.tower)
       end
    end
+
+   if gameOver then
+      print"Game si Over"
+      love.graphics.setFont(fonts.title)
+      love.graphics.setColor(255,255,255,255)
+      love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 50,love.graphics.getHeight()/2 - 10,500)
+   end    
 
    --love.graphics.setColor(255,255,255,255)
    --drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[2]);

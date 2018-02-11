@@ -8,7 +8,7 @@ end
 function partUpdate(dt, partList)
    for i,p in pairs(partList) do
       if not p.t then
-         p.t = 0
+         p.t = 0.0001
          p.ttl = math.random(0.25,0.5)
          p.to.x = p.to.x + math.random(-20,20)
          p.to.y = p.to.y + math.random(-20,20)
