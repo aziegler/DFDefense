@@ -224,6 +224,7 @@ function init()
 
    gameState.gameOver = false
    partList = {}
+   gameState.title = true
 end
 
 function love.load(arg)
@@ -372,17 +373,7 @@ function love.update (dt)
    voiceOn, tbs = audioUpdate()
 
    if not gameState.gameOver and not gameState.title then
-      for idx,enemy in pairs(enemies.list) do
-         enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
-         if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-            --table.remove(enemies.list,idx)
-         end
-         if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
-            enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
-            enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
-         end
-      end
-
+      
       compute_damage(dt)
 
       local baseTower = {}
@@ -393,18 +384,30 @@ function love.update (dt)
          end
       end
 
-      partUpdate(dt, partList)
-      voiceOn, tbs = audioUpdate()
-
       for idx,enemy in pairs(enemies.list) do
-         enemy.time = enemy.time + dt
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
+            --table.remove(enemies.list,idx)
+         end
+         if not (roads.list[enemy.road_index].points[math.floor(enemy.roadStep)] == nil) then
+            enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
+            enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
+         end
+          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
             baseTower.score = baseTower.score - enemy.life
+            if baseTower.score < 0 then
+               gameState.gameOver = true
+               baseTower.score = 0
+            end
             table.remove(enemies.list,idx)
          end
       end
 
+
+      partUpdate(dt, partList)
+      voiceOn, tbs = audioUpdate()
+
+      
       enemyCoolDown = enemyCoolDown + dt
       if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
          table.insert(enemies.list, new_enemy(roads.count))
