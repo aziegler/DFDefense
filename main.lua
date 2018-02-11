@@ -461,8 +461,6 @@ function draw_enemy(enemy)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
    end
 
-   love.graphics.setColor(255,0,0)
-   love.graphics.print(math.floor(enemy.life),enemy.x - 7 ,enemy.y - 5,0)
 
 end
 
@@ -557,6 +555,7 @@ function love.draw()
    love.graphics.scale(scale,scale)
 
    love.graphics.draw(map,0,0)
+   love.graphics.setColor(255,255,255)
 
    if gameState.title then
       love.graphics.setColor(130, 130, 130, 150)
@@ -647,6 +646,6 @@ function love.draw()
    end
 
    partDraw(partList)
-   audioDraw()
+   love.graphics.setColor(255,255,255)
 
 end
