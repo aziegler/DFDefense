@@ -1,7 +1,8 @@
 function partLoad()
    partImgs = {
-      love.graphics.newImage("assets/particule01.png"),
-      love.graphics.newImage("assets/particule02.png"),
+      love.graphics.newImage("assets/Prtcl_ampoule.png"),
+      love.graphics.newImage("assets/Prtcl_attack_allie.png"),
+      love.graphics.newImage("assets/Prtcl_attack_note.png")
    }
 end
 

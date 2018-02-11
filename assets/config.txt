@@ -2,6 +2,7 @@ Video {
       fullscreen = true
 }
 
+
 Audio {
    start = 27,
    loops = {
@@ -60,7 +61,30 @@ GameplayVariable {
    concertDps = 2,
    concertInfluenceRate = 30,
    neutralName = "Habitations",
-   friendlyName = "Habitat partagé"
+   friendlyName = "Habitat partagé",
+   text = "Au carrefour des tentacules du grand capital et du pouvoir institutionnel, Nanterre.\
+\
+Au détour de ses mille chemins, la Maison Daniel Féry. Anciennement MJC, et en Majuscule SVP.\
+Repère emblématique de la culture populaire, locale et proximale, et parmi bien d’autres, humble monument du hiphop parisien ; espace de création artistique et de diffusion culturelle ; gymnase et cuisine des jeunes et moins jeunes artistes du coin et de tous les parages ; un morceau d’histoire, une adresse sûre, une âme collective et des souvenirs communs.\
+Mais depuis quelques saisons les grues ont pris d’assaut le ciel et le sol. C’est plus du goudron, c’est du foncier.\
+L’horizon est sous palissade.\
+La nouvelle est tombée, d’ici 2 ans la salle aura été rasée.\
+GENTRYFIGHT est une cartographie des possibles, une mise en scène simplifiée de l’idée folle que c’est encore jouable... garder le terrain...\
+Jeu réalisé en 48h à l'occasion d'une Urban game jam organisée en février 2018.\
+Un infini MERCI aux membres des équipes de la salle Daniel Féry. Merci à celles et ceux qui font briller et rugir cet espace. Pour les 2000 coups de mains, la disponibilité, et le sourire malgré les cernes et les heures supp’. Vous n’imaginez pas la portée de vos mains vertes !!\
+ \
+Enfin pour terminer, on dirait un détail, et pourtant... Daniel Féry était un jeune militant syndiqué, mort par étouffement avec d'autres manifestants au métro Charonne au cours d’une manifestation en solidarité avec l’Algérie indépendante le 8 Février 1962, qui fut sauvagement réprimée par les forces de police sous l’ordre de Maurice Papon. Il y a quelques jours à peine se commémorait le souvenir de ces disparus.\
+\
+11 février 2018, la police tue, encore et toujours.",
+
+   textCredits ="Billie Brelok : Lyriciste\
+   Gwendal Evrard : Graphisme\
+   Judicaëlle Live-Lun : Graphisme\
+   Jeremiaah : Beatmaker\
+   Marc Planard : Programmation\
+   Thomas Planques : Game design\
+   Axelle Ziegler : Programmation"
+   
 }
 
 Tower {
@@ -122,7 +146,7 @@ Ramène moi prima primo ce qui ne passera pas aux infos"
 }
 
 Enemy {
-   life = 150,
+   life = 160,
    color = {120,120,110},
    speed = 25,
    dps = 13,
@@ -132,7 +156,7 @@ Enemy {
 }
 
 Enemy {
-   life = 100,
+   life = 110,
    color = {120,120,210},
    speed = 45,
    dps = 8,
@@ -145,7 +169,7 @@ Enemy {
 }
 
 Enemy {
-   life = 50,
+   life = 60,
    color = {120,120,210},
    speed = 75,
    dps = 4,
