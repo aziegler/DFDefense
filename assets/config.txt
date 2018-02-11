@@ -87,37 +87,16 @@ Enfin pour terminer, on dirait un détail, et pourtant... Daniel Féry était un
 }
 
 Tower {
-   name = "Jardin collectif",
+   name = "Bibliothèque 2.0",
    extraName = {""},
    range = 200,
    dps = 4,
    influence = 50,
    influence_rate = 5,
    color = {200,100,100},
-   img = "assets/buildings/BtmG_Garden.png",
-   icon = "assets/UI/Icon_Garden.png",
-   tooltip = "Faible portée, grande puissance",
-   text = "La porte est ouverte\
-Le couvert et la main verte\
-Les cerises, le jasmin, la soupe de roses et d'orties\
-Et big up au jardin Gorki\
-\
-\"Si on peignait les cons en vert, les commissariat seraient des prairies\"\
-Fabe"
-}
-
-
-Tower {
-   name = "Bibliothèque 2.0",
-   extraName = {""},
-   range = 250,
-   dps = 2,
-   influence = 100,
-   influence_rate = 5,
-   color = {200,30,30},
    img = "assets/buildings/BtmG_library.png",
    icon = "assets/UI/Icon_Bibli.png",
-   tooltip = "Moyenne portée, moyenne puissance",
+   tooltip = "Faible portée, grande puissance",
    text = "Dealer de carburant pour bien se pimper dedans,\
 mais pas qu’au « siècle des lumières »\
 Nan nan, jveux les 5 continents et les 5 Océans,\
@@ -127,21 +106,43 @@ Et sur la même étagère\
 Minister A.M.E.R."
 }
 
+
 Tower {
    name = "Local associatif",
+   extraName = {""},
+   range = 250,
+   dps = 2,
+   influence = 100,
+   influence_rate = 5,
+   color = {200,30,30},
+   img = "assets/buildings/BtmG_assos.png",
+   icon = "assets/UI/Icon_Assos.png",
+   tooltip = "Moyenne portée, moyenne puissance",
+   text = "J'officie dans l’unofficiel, jus de ruelle, bout de ficelle\
+Dans le soutif ou dans la semelle SARL la parallèle\
+Rideau rideau mécano sous le matelas sous le manteau\
+Ramène moi prima primo ce qui ne passera pas aux infos"
+   
+}
+
+Tower {
+   name = "Jardin collectif",
    extraName = {""},
    range = 600,
    dps = 1,
    influence = 200,
    influence_rate = 5,
    color = {0,100,200},
-   img = "assets/buildings/BtmG_assos.png",
-   icon = "assets/UI/Icon_Assos.png",
+   img = "assets/buildings/BtmG_Garden.png",
+   icon = "assets/UI/Icon_Garden.png",
    tooltip = "Longue portée, faible puissance",
-   text = "J'officie dans l’unofficiel, jus de ruelle, bout de ficelle\
-Dans le soutif ou dans la semelle SARL la parallèle\
-Rideau rideau mécano sous le matelas sous le manteau\
-Ramène moi prima primo ce qui ne passera pas aux infos"
+   text = "La porte est ouverte\
+Le couvert et la main verte\
+Les cerises, le jasmin, la soupe de roses et d'orties\
+Et big up au jardin Gorki\
+\
+\"Si on peignait les cons en vert, les commissariat seraient des prairies\"\
+Fabe"
 }
 
 Enemy {
