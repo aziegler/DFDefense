@@ -25,12 +25,13 @@ end
 
 function partDraw(partList)
    for i,p in pairs(partList) do
-      local t = p.t/p.ttl
-      local x = p.from.x + (p.to.x-p.from.x) * t
-      local y = p.from.y + (p.to.y-p.from.y) * t
+      if p.t then
+         local t = p.t/p.ttl
+         local x = p.from.x + (p.to.x-p.from.x) * t
+         local y = p.from.y + (p.to.y-p.from.y) * t
 
-      love.graphics.setColor(255, 255, 255)
-      love.graphics.draw(p.img, x-p.img:getWidth()/2, y-p.img:getHeight()/2)
-
+         love.graphics.setColor(255, 255, 255)
+         love.graphics.draw(p.img, x-p.img:getWidth()/2, y-p.img:getHeight()/2)
+      end
    end
 end

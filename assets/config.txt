@@ -46,7 +46,7 @@ GameplayVariable {
    initialConcertInfluence = 620,
    concertRange = 450,
    concertDps = 2,
-   concertInfluenceRate = 16,
+   concertInfluenceRate = 30,
    neutralName = "Habitations",
    friendlyName = "Habitat partagé"
 }
@@ -54,10 +54,10 @@ GameplayVariable {
 Tower {
    name = "Jardin collectif",
    extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
-   range = 175,
+   range = 200,
    dps = 4,
    influence = 50,
-   influence_rate = 10,
+   influence_rate = 2,
    color = {200,100,100},
    img = "assets/buildings/BtmG_Garden.png",
    icon = "assets/UI/Icon_Garden.png",
@@ -65,9 +65,9 @@ Tower {
    text = "La porte est ouverte\
 Le couvert et la main verte\
 Les cerises, le jasmin, la soupe de roses et d'orties\
-ET big up au jardin Gorki\
+Et big up au jardin Gorki\
 \
-\"si on peignait les cons en vert, les commissariat seraient des prairies\"\
+\"Si on peignait les cons en vert, les commissariat seraient des prairies\"\
 Fabe"
 }
 
@@ -78,7 +78,7 @@ Tower {
    range = 250,
    dps = 2,
    influence = 100,
-   influence_rate = 8,
+   influence_rate = 2,
    color = {200,30,30},
    img = "assets/buildings/BtmG_library.png",
    icon = "assets/UI/Icon_Bibli.png",
@@ -98,7 +98,7 @@ Tower {
    range = 600,
    dps = 1,
    influence = 200,
-   influence_rate = 8,
+   influence_rate = 2,
    color = {0,100,200},
    img = "assets/buildings/BtmG_assos.png",
    icon = "assets/UI/Icon_Assos.png",
