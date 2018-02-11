@@ -592,8 +592,6 @@ function love.draw()
 
    love.graphics.draw(map,0,0)
 
-
-
    local drawList = {}
 
    if not gameState.gameOver then
