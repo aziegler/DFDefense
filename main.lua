@@ -461,8 +461,6 @@ function draw_enemy(enemy)
       love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
    end
-
-
 end
 
 function drawGauge(influenceRatio,x,y,small)
@@ -555,11 +553,11 @@ end
 function love.draw()
    love.graphics.scale(scale,scale)
 
-   love.graphics.draw(map,0,0)
    love.graphics.setColor(255,255,255)
 
    if gameState.title then
       love.graphics.setColor(130, 130, 130, 150)
+      love.graphics.draw(title_bg,0,0)
       local width = love.graphics.getWidth()
       local height = love.graphics.getHeight()
       love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
@@ -578,6 +576,9 @@ function love.draw()
 
       return
    end
+
+   love.graphics.draw(map,0,0)
+  
 
 
    local drawList = {}
