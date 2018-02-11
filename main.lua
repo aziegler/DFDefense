@@ -234,6 +234,7 @@ function love.load(arg)
    fonts = {
       title_large = love.graphics.newFont("assets/i8080.ttf",90),
       title_small = love.graphics.newFont("assets/steelfish rg.ttf",35),
+      title_x_small = love.graphics.newFont("assets/steelfish rg.ttf",22),
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
@@ -583,7 +584,7 @@ function love.draw()
          love.graphics.draw(imgUI.Button_play,400,700)
          love.graphics.draw(imgUI.Button_info,width - 800,700)
       else
-         love.graphics.setFont(fonts.small)
+         love.graphics.setFont(fonts.title_x_small)
          love.graphics.setColor(255, 255, 255, 255)
          love.graphics.printf(gameplayVariable.text,40,200,600)
          love.graphics.draw(imgUI.Button_play,width/2 - 100, 700)
