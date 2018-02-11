@@ -358,7 +358,8 @@ function compute_damage(dt)
                end
             end
          end
-         if building1.score > gameplayVariable.buildingTreshold then
+         if building1.score > gameplayVariable.buildingTreshold and
+         (building1.tower == nil or  not building1.tower.isBase ) then
             building1.enabled = true
          end
       end
