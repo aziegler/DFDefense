@@ -46,7 +46,7 @@ GameplayVariable {
    initialConcertInfluence = 620,
    concertRange = 450,
    concertDps = 2,
-   concertInfluenceRate = 40,
+   concertInfluenceRate = 30,
    neutralName = "Habitations",
    friendlyName = "Habitat partagé"
 }
@@ -54,7 +54,7 @@ GameplayVariable {
 Tower {
    name = "Jardin collectif",
    extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
-   range = 175,
+   range = 200,
    dps = 4,
    influence = 50,
    influence_rate = 2,
@@ -65,7 +65,7 @@ Tower {
    text = "La porte est ouverte\
 Le couvert et la main verte\
 Les cerises, le jasmin, la soupe de roses et d'orties\
-ET big up au jardin Gorki\
+Et big up au jardin Gorki\
 \
 \"Si on peignait les cons en vert, les commissariat seraient des prairies\"\
 Fabe"
