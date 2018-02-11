@@ -25,7 +25,8 @@ enemy_gq.list = {}
 local gameState = {
    title = true,
    gameOver = false,
-   info = false
+   info = false,
+   win = false
 }
 
 local partList = {}
@@ -224,6 +225,7 @@ function init()
    enemy_gq.list = {}
 
    gameState.gameOver = false
+   gameState.win = false
    partList = {}
    gameState.title = true
 end
@@ -364,8 +366,9 @@ function love.keypressed(key)
    if key == "escape" then
       love.event.quit()
    end
-   if key == "space" and gameState.gameOver then
+   if key == "space" and (gameState.gameOver or gameState.win) then
       gameState.gameOver = false
+      gameState.win = false
       init()
       love.load()
    end
@@ -373,9 +376,13 @@ end
 
 function love.update (dt)
 
-   if not gameState.gameOver and not gameState.title then
+   if not gameState.gameOver and not gameState.title and not gameState.win then
       voiceOn, tbs = audioUpdate()
 
+      if tbs == -1 then
+         gameState.win = true
+      end
+         
       compute_damage(dt)
 
       local baseTower = {}
@@ -467,8 +474,6 @@ function draw_enemy(enemy)
       love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
    end
-
-
 end
 
 function drawGauge(influenceRatio,x,y,small)
@@ -561,11 +566,11 @@ end
 function love.draw()
    love.graphics.scale(scale,scale)
 
-   love.graphics.draw(map,0,0)
    love.graphics.setColor(255,255,255)
 
    if gameState.title then
       love.graphics.setColor(130, 130, 130, 150)
+      love.graphics.draw(title_bg,0,0)
       local width = love.graphics.getWidth()
       local height = love.graphics.getHeight()
       love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
@@ -584,6 +589,9 @@ function love.draw()
 
       return
    end
+
+   love.graphics.draw(map,0,0)
+  
 
 
    local drawList = {}
@@ -638,6 +646,14 @@ function love.draw()
       love.graphics.setFont(fonts.title_large)
       love.graphics.setColor(0,0,0,255)
       love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 - 10,800)
+      love.graphics.setFont(fonts.title_small)
+      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 + 100,500)
+   end
+
+   if gameState.win then
+      love.graphics.setFont(fonts.title_large)
+      love.graphics.setColor(0,0,0,255)
+      love.graphics.printf("You won !!! ", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 - 10,800)
       love.graphics.setFont(fonts.title_small)
       love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 + 100,500)
    end

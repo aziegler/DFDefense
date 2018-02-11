@@ -2,6 +2,7 @@ tower_types = {}
 enemyBuilding = {}
 gameplayVariable = {}
 map = {}
+title_bg = {}
 
 local enemy_types = {}
 
@@ -195,8 +196,9 @@ function dataLoad(roads,buildings, towers, enemy_gq)
    enemyBuilding = {}
    gameplayVariable = {}
    map = {}
+   title_bg = {}
    enemy_types = {}
-   
+
 	
    dofile("assets/config.txt")
 
@@ -207,6 +209,7 @@ function dataLoad(roads,buildings, towers, enemy_gq)
    end
    layerData = love.image.newImageData("assets/layer.bmp")
    map = love.graphics.newImage("assets/Fond_de_carte.png")
+   title_bg = love.graphics.newImage("assets/fond_titre.png")
    loadRoads(roads)
 
    loadBuildings(buildings,towers)

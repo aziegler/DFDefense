@@ -2,7 +2,6 @@ Video {
       fullscreen = true
 }
 
-
 Audio {
    start = 27,
    loops = {
@@ -60,8 +59,8 @@ GameplayVariable {
    concertRange = 450,
    concertDps = 2,
    concertInfluenceRate = 30,
-   neutralName = "Habitations",
-   friendlyName = "Habitat partagé",
+   neutralName = "Habitations précaires",
+   friendlyName = "Habitations restaurées",
    text = "Au carrefour des tentacules du grand capital et du pouvoir institutionnel, Nanterre.\
 \
 Au détour de ses mille chemins, la Maison Daniel Féry. Anciennement MJC, et en Majuscule SVP.\
