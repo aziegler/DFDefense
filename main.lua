@@ -308,9 +308,6 @@ end
 
 function love.update (dt)
 
-
-
-
    voiceOn, tbs = audioUpdate()
 
    if not gameOver then
