@@ -209,6 +209,7 @@ function new_tower(idx)
       tower_type = tower_types[math.random(1,#tower_types)]
    end
 
+
    local tower = {}
    tower.width = math.random(10,30)
    tower.height = math.random(10,30)
@@ -222,8 +223,13 @@ function new_tower(idx)
    tower.dps = tower_type.dps
    tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
-   tower.name = tower_type.name
+   if tower_type.extraName then
+      tower.name = tower_type.name.." "..tower_type.extraName[math.random(1,#tower_type.extraName)]
+   else
+      tower.name = tower_type.name
+   end
    tower.hasGauge = true
+   tower.text = tower_type.text
    return tower
 end
 
