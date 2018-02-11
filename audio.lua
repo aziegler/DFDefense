@@ -22,15 +22,8 @@ end
 function loadAudio()
 
    local trackFiles = {
-      "assets/music/La mutante 4 Acap_01.wav",
-      "assets/music/kick_01-02.wav",
-      "assets/music/synth_01-02.wav",
-      "assets/music/SYNTHDELAY_01-02.wav",
-      "assets/music/hats & percs_01-02.wav",
-      "assets/music/bass_01-02.wav",
-      "assets/music/BEATVERB_01-02.wav",
-      "assets/music/SYNTHVERB_01-02.wav",
-      "assets/music/snares_01-01.wav",
+      "assets/music/voice.wav",
+      "assets/music/instru.wav",
    }
 
    local tracks = {}
@@ -44,19 +37,10 @@ function loadAudio()
 
    local groups = {
       voice = {
-         tracks["assets/music/La mutante 4 Acap_01.wav"]
+         tracks["assets/music/voice.wav"]
       },
-      drums = {
-         tracks["assets/music/kick_01-02.wav"],
-         tracks["assets/music/hats & percs_01-02.wav"],
-         tracks["assets/music/bass_01-02.wav"],
-         tracks["assets/music/snares_01-01.wav"]
-      },
-      synths = {
-         tracks["assets/music/synth_01-02.wav"],
-         tracks["assets/music/SYNTHDELAY_01-02.wav"],
-         tracks["assets/music/SYNTHVERB_01-02.wav"],
-         tracks["assets/music/BEATVERB_01-02.wav"],
+      instru = {
+         tracks["assets/music/instru.wav"]
       }
    }
 
