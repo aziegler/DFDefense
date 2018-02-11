@@ -1,6 +1,7 @@
 tower_types = {}
 enemyBuilding = {}
 gameplayVariable = {}
+map = {}
 
 local enemy_types = {}
 
@@ -195,6 +196,7 @@ function dataLoad(roads,buildings, towers, enemy_gq)
       roads.list[i].points = {}
    end
    layerData = love.image.newImageData("assets/layer.bmp")
+   map = love.graphics.newImage("assets/Fond_de_carte.png")
    loadRoads(roads)
 
    loadBuildings(buildings,towers)
