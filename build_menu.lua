@@ -2,9 +2,9 @@ local SIZE = 80
 local border = 0
 
 local pos = {
-   { 300, 75 }, -- garden
    { 175, 100 }, -- book
-   { 240, 50 }  -- assos
+   { 240, 50 },  -- assos
+   { 300, 75 }, -- garden
 }
 
 function get_menu_bbox(width, k, scale)

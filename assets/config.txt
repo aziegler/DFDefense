@@ -146,9 +146,9 @@ Fabe"
 }
 
 Enemy {
-   life = 16000,
+   life = 160,
    color = {120,120,110},
-   speed = 2500,
+   speed = 25,
    dps = 13,
    range = 200,
    img = { "assets/enemies/Chara_CRS01.png",
@@ -156,9 +156,9 @@ Enemy {
 }
 
 Enemy {
-   life = 11000,
+   life = 110,
    color = {120,120,210},
-   speed = 4500,
+   speed = 45,
    dps = 8,
    range = 175,
       img = {
@@ -169,9 +169,9 @@ Enemy {
 }
 
 Enemy {
-   life = 60000,
+   life = 60,
    color = {120,120,210},
-   speed = 7500,
+   speed = 75,
    dps = 4,
    range = 200,
       img = {
