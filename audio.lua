@@ -51,17 +51,22 @@ loop = 12
 start = 27
 tracks = {}
 
+local START = 0
+
 function audioLoad(audioConfig)
    audioGroups = loadAudio()
    for k,v in pairs(audioConfig.loops) do
       table.insert(tracks, { start = start + v.loop*loop,
                              voice = v.voice, tbs = v.tbs })
    end
-   setPosition(audioGroups, audioConfig.start)
-
    i = 1
    affTxt =  love.graphics.newText(fonts.small, ""..i )
+   START = audioConfig.start
+   setPosition(audioGroups, 3)
+end
 
+function audioStart()
+   setPosition(audioGroups, START)
 end
 
 function audioUpdate()
