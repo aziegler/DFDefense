@@ -25,6 +25,7 @@ enemy_gq.list = {}
 local gameOver = false
 local partList = {}
 
+
 function Audio (a)
    audioConfig = a
 end
@@ -76,7 +77,7 @@ function mousePick(x,y,button,istouch)
    if button == 2 then
       local idx,building = getBuilding(x, y)
 
-      if idx > -1 and building.score > gameplayVariable.buildingTreshold then
+      if idx > -1 and building.score > gameplayVariable.buildingTreshold and building.enabled then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
                                    y= building.y }
@@ -279,6 +280,7 @@ function compute_damage(dt)
    end
 
    for _,building1 in pairs(buildings.list) do
+      building1.enabled = false
       for tw_idx,tower in pairs(towers.list) do
          local width, height = tower.x-(building1.x+building1.width/2), tower.y-(building1.y+building1.height/2)
          local distance = (width*width + height*height)^0.5
@@ -296,6 +298,9 @@ function compute_damage(dt)
                end
             end
          end
+         if distance < tower.range then
+            building1.enabled = true
+         end
       end
    end
 end
@@ -307,13 +312,10 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-   
-   
-   
 
    voiceOn, tbs = audioUpdate()
 
-   if not gameOver then 
+   if not gameOver then
       for idx,enemy in pairs(enemies.list) do
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
@@ -323,12 +325,16 @@ function love.update (dt)
             enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
             enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
          end
-      end     
+      end
 
       compute_damage(dt)
 
+      local baseTower = {}
       for _,tower in pairs(towers.list) do
          tower.score = tower.score + tower.influence_rate * dt
+         if tower.isBase then
+            baseTower = tower
+         end
       end
 
       partUpdate(dt, partList)
@@ -338,15 +344,17 @@ function love.update (dt)
          enemy.time = enemy.time + dt
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         --table.remove(enemies.list,idx)
-         end
-
-         enemyCoolDown = enemyCoolDown + dt
-         if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
-            table.insert(enemies.list, new_enemy(roads.count))
-            enemyCoolDown = 0
+            baseTower.score = baseTower.score - enemy.life
+            table.remove(enemies.list,idx)
          end
       end
+
+      enemyCoolDown = enemyCoolDown + dt
+      if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
+         table.insert(enemies.list, new_enemy(roads.count))
+         enemyCoolDown = 0
+      end
+
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
@@ -541,7 +549,7 @@ function love.draw()
       love.graphics.setFont(fonts.title)
       love.graphics.setColor(255,255,255,255)
       love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 50,love.graphics.getHeight()/2 - 10,500)
-   end    
+   end
 
    --love.graphics.setColor(255,255,255,255)
    --drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[2]);
