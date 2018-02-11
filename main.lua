@@ -233,7 +233,7 @@ end
 function love.load(arg)
    fonts = {
       title_large = love.graphics.newFont("assets/i8080.ttf",90),
-      title_small = love.graphics.newFont("assets/arial.ttf",35),
+      title_small = love.graphics.newFont("assets/steelfish rg.ttf",35),
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
