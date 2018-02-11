@@ -181,9 +181,34 @@ function getTower(x,y)
    return -1, nil
 end
 
+function init()
+   roads = {}
+   roads.count = 3
+   roads.list = {}
+
+   enemyCoolDown = 0
+   enemies = {}
+   enemies.list = {}
+
+   hovered = nil
+
+   towers = {}
+   towers.list = {}
+
+   buildings = {}
+   buildings.list = {}
+
+   enemy_gq = {}
+   enemy_gq.list = {}
+
+   gameOver = false
+   partList = {}
+end
+
 function love.load(arg)
    fonts = {
-      title = love.graphics.newFont("assets/i8080.ttf",60),
+      title_large = love.graphics.newFont("assets/i8080.ttf",90),
+      title_small = love.graphics.newFont("assets/i8080.ttf",40),
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
@@ -221,12 +246,14 @@ function love.load(arg)
    enemy_gq.list[1].hasGauge = false
    enemy_gq.list[2].hasGauge = false
 
-   if videoSettings.fullscreen == false or arg[2] == "-w" then
-      scale = 0.5
-      love.window.setMode(1920*scale,1080*scale)
-   else
-      scale = 1
-      love.window.setFullscreen(true)
+   if arg then
+      if videoSettings.fullscreen == false or arg[2] == "-w" then
+         scale = 0.5
+         love.window.setMode(1920*scale,1080*scale)
+      else
+         scale = 1
+         love.window.setFullscreen(true)
+      end
    end
 
 end
@@ -308,6 +335,11 @@ end
 function love.keypressed(key)
    if key == "escape" then
       love.event.quit()
+   end
+   if key == "space" and gameOver then
+      gameOver = false
+      init()
+      love.load()
    end
 end
 
@@ -542,10 +574,11 @@ function love.draw()
    end
 
    if gameOver then
-      print"Game si Over"
-      love.graphics.setFont(fonts.title)
-      love.graphics.setColor(255,255,255,255)
-      love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 50,love.graphics.getHeight()/2 - 10,500)
+      love.graphics.setFont(fonts.title_large)
+      love.graphics.setColor(0,0,0,255)
+      love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 - 10,800)
+      love.graphics.setFont(fonts.title_small)
+      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 + 100,500)
    end
 
    --love.graphics.setColor(255,255,255,255)

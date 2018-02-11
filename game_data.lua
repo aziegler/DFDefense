@@ -190,7 +190,15 @@ function loadBG(B, T)
 end
 
 function dataLoad(roads,buildings, towers, enemy_gq)
-	dofile("assets/config.txt")
+
+   tower_types = {}
+   enemyBuilding = {}
+   gameplayVariable = {}
+   map = {}
+   enemy_types = {}
+   
+	
+   dofile("assets/config.txt")
 
    for i = 1, roads.count do
       roads.list[i] = {}
