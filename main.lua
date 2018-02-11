@@ -77,7 +77,7 @@ function mousePick(x,y,button,istouch)
    if button == 2 then
       local idx,building = getBuilding(x, y)
 
-      if idx > -1 and building.score > gameplayVariable.buildingTreshold and building.enabled then
+      if idx > -1 and building.enabled then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
                                    y= building.y }
@@ -298,7 +298,7 @@ function compute_damage(dt)
                end
             end
          end
-         if distance < tower.range then
+         if building1.score > gameplayVariable.buildingTreshold then
             building1.enabled = true
          end
       end
@@ -459,6 +459,7 @@ function draw_tower(tower)
 end
 
 function drawBuildings(img, building)
+ 
    love.graphics.draw(img,
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
