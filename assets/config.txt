@@ -26,14 +26,14 @@ Audio {
 	  { loop = 6, voice = false },
 	  { loop = 6, voice = true , tbs = 1},
 	  { loop = 6, voice = false }
-
    }
 }
 
 EnemyBuilding {
    range = 325,
    dps = 1,
-   name = "Station Défense 3000"
+   name = "Station Défense 3000",
+   text = "Test Défense 3000"
 }
 
 
@@ -53,7 +53,7 @@ GameplayVariable {
 
 Tower {
    name = "Jardin collectif",
-   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
+   extraName = {""},
    range = 200,
    dps = 4,
    influence = 50,
@@ -74,7 +74,7 @@ Fabe"
 
 Tower {
    name = "Bibliothèque",
-   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
+   extraName = {""},
    range = 250,
    dps = 2,
    influence = 100,
@@ -94,7 +94,7 @@ Minister A.M.E.R."
 
 Tower {
    name = "Local associatif",
-   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
+   extraName = {""},
    range = 600,
    dps = 1,
    influence = 200,
@@ -122,12 +122,26 @@ Enemy {
 Enemy {
    life = 90,
    color = {120,120,210},
-   speed = 60,
+   speed = 50,
    dps = 8,
-   range = 150,
+   range = 175,
       img = {
       "assets/enemies/Chara_Bt01.png",
       "assets/enemies/Chara_Bt02.png",
       "assets/enemies/Chara_Bt01.png"
+      }
+}
+
+Enemy {
+   life = 50,
+   color = {120,120,210},
+   speed = 80,
+   dps = 4,
+   range = 200,
+      img = {
+      "assets/enemies/Chara_Cd01.png",
+      "assets/enemies/Chara_Cd02.png",
+      "assets/enemies/Chara_Cd03.png",
+	  "assets/enemies/Chara_Cd04.png"
       }
 }
