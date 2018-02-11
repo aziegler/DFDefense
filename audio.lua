@@ -55,6 +55,7 @@ local START = 0
 
 function audioLoad(audioConfig)
    audioGroups = loadAudio()
+
    for k,v in pairs(audioConfig.loops) do
       table.insert(tracks, { start = start + v.loop*loop,
                              voice = v.voice, tbs = v.tbs })
@@ -74,7 +75,8 @@ function audioUpdate()
    local tbs = 0
 
    if i > #tracks then
-      return
+      -- Victoire
+      return false, -1
    end
 
    if tracks[i].voice then
@@ -105,7 +107,7 @@ function audioUpdate()
          i = i + 1
          if i > #tracks then
             -- i = 1
-            return false, nil
+            return false, -1
          end
          affTxt =  love.graphics.newText(fonts.small, ""..i )
       end
