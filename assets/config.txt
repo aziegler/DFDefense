@@ -48,6 +48,7 @@ GameplayVariable {
 
 Tower {
    name = "Jardin collectif",
+   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
    range = 175,
    dps = 4,
    influence = 50,
@@ -61,6 +62,7 @@ Tower {
 
 Tower {
    name = "Bibliothèque",
+   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
    range = 250,
    dps = 2,
    influence = 100,
@@ -73,6 +75,7 @@ Tower {
 
 Tower {
    name = "Local associatif",
+   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
    range = 600,
    dps = 1,
    influence = 200,
