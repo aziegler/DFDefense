@@ -312,8 +312,10 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-  
-   if not gameOver then 
+
+   voiceOn, tbs = audioUpdate()
+
+   if not gameOver then
       for idx,enemy in pairs(enemies.list) do
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
@@ -323,7 +325,7 @@ function love.update (dt)
             enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
             enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
          end
-      end     
+      end
 
       compute_damage(dt)
 
@@ -345,13 +347,14 @@ function love.update (dt)
             baseTower.score = baseTower.score - enemy.life
             table.remove(enemies.list,idx)
          end
-
-         enemyCoolDown = enemyCoolDown + dt
-         if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
-            table.insert(enemies.list, new_enemy(roads.count))
-            enemyCoolDown = 0
-         end
       end
+
+      enemyCoolDown = enemyCoolDown + dt
+      if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
+         table.insert(enemies.list, new_enemy(roads.count))
+         enemyCoolDown = 0
+      end
+
    end
 
    mouseModes.mousePos = { love.mouse.getX()/scale, love.mouse.getY()/scale }
@@ -546,7 +549,7 @@ function love.draw()
       love.graphics.setFont(fonts.title)
       love.graphics.setColor(255,255,255,255)
       love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 50,love.graphics.getHeight()/2 - 10,500)
-   end    
+   end
 
    --love.graphics.setColor(255,255,255,255)
    --drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[2]);
