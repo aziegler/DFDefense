@@ -73,7 +73,7 @@ function audioLoad(audioConfig)
       table.insert(tracks, { start = start + v.loop*loop,
                              voice = v.voice, tbs = v.tbs })
    end
---   setPosition(audioGroups, audioConfig.start)
+   setPosition(audioGroups, audioConfig.start)
 
    i = 1
    arialFont = love.graphics.newFont("assets/arial.ttf")
