@@ -34,7 +34,7 @@ Audio {
 	  { loop = 8, voice = false },
 	  { loop = 8, voice = false },
 	  { loop = 8, voice = true , tbs = 0.8},
-	  { loop = 8, voice = false }
+	  { loop = 8, voice = false },
 	  
 	  { loop = 9, voice = true , tbs = 0.6},
 	  { loop = 9, voice = false }
@@ -45,7 +45,7 @@ EnemyBuilding {
    range = 325,
    dps = 1,
    name = "Station Défense 3000",
-   text = "Test Défense 3000"
+   text = "Ici bientôt hôtel, bureaux, apparts de standing"
 }
 
 
