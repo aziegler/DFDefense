@@ -202,8 +202,11 @@ function love.load(arg)
    }
    imgUI = {
       Jauge = love.graphics.newImage("assets/UI/Jauge.png"),
+      BigJauge = love.graphics.newImage("assets/UI/big_jauge.png"),
       Rouge = love.graphics.newImage("assets/UI/Barre_rouge.png"),
+      BigRouge = love.graphics.newImage("assets/UI/Barre_rouge_large.png"),
       Bleu = love.graphics.newImage("assets/UI/Barre_bleue.png"),
+      BigBleu = love.graphics.newImage("assets/UI/Barre_bleue_large.png"),
       Hover_up = love.graphics.newImage("assets/UI/haut_texte.png"),
       Hover_down = love.graphics.newImage("assets/UI/bas_texte.png"),
       Hover_middle = love.graphics.newImage("assets/UI/milieu_texte.png")
@@ -381,13 +384,23 @@ function draw_enemy(enemy)
 
 end
 
-function draw_gauge(influenceRatio,x,y)
-   love.graphics.draw(imgUI.Jauge,x + 15,y - imgUI.Jauge:getHeight() - 10)
-   love.graphics.draw(imgUI.Rouge,x + 17,y - imgUI.Jauge:getHeight() -5, 0, 72 * influenceRatio / imgUI.Rouge:getWidth(), 1)
-   love.graphics.draw(imgUI.Bleu,
-                      x + 17 + (72 * influenceRatio),
-                      y - imgUI.Jauge:getHeight() -5, 0,
-                      72 * (1 - influenceRatio) / imgUI.Bleu:getWidth(), 1)
+function drawGauge(influenceRatio,x,y,small)
+   if small then 
+      love.graphics.draw(imgUI.Rouge,x + 17,y - imgUI.Jauge:getHeight() -5, 0, 72 * influenceRatio / imgUI.Rouge:getWidth(), 1)
+      love.graphics.draw(imgUI.Bleu,
+                         x + 17 + (72 * influenceRatio),
+                         y - imgUI.Jauge:getHeight() -5, 0,
+                         72 * (1 - influenceRatio) / imgUI.Bleu:getWidth(), 1)
+      love.graphics.draw(imgUI.Jauge,x + 15,y - imgUI.Jauge:getHeight() - 10,0)
+   else 
+      love.graphics.draw(imgUI.BigRouge,x + 34,y - imgUI.BigJauge:getHeight() - 5, 0, 144 * influenceRatio / imgUI.BigRouge:getWidth(), 1)
+      love.graphics.draw(imgUI.BigBleu,
+                         x + 34 + (144 * influenceRatio),
+                         y - imgUI.BigJauge:getHeight() -5, 0,
+                         144 * (1 - influenceRatio) / imgUI.BigBleu:getWidth(), 1)
+      love.graphics.draw(imgUI.BigJauge,x + 30,y - imgUI.BigJauge:getHeight() - 10,0)
+     
+   end
 end
 
 function draw_tower(tower)
@@ -409,7 +422,10 @@ function draw_tower(tower)
    local influenceRatio = math.max(0,math.min((tower.score + 200) / 400,1))
 
    if tower.hasGauge then
-      draw_gauge(influenceRatio, x, h)
+      drawGauge(influenceRatio, x, h, true)
+   elseif tower.isBase then
+      influenceRatio = math.max(0,math.min(tower.score / 1000,1))      
+      drawGauge(influenceRatio, x + tower.img:getWidth()/2 - 144 ,h +10, false)   
    end
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
@@ -423,7 +439,7 @@ function drawBuildings(img, building)
                       building.y+building.height-img:getHeight())
     local influenceRatio = math.max(0,math.min((building.score + 200) / 400,1))
     if building.hasGauge then
-      draw_gauge(influenceRatio, building.x+building.width/2-img:getWidth()/2, building.y+building.height-img:getHeight())
+      drawGauge(influenceRatio, building.x+building.width/2-img:getWidth()/2, building.y+building.height-img:getHeight(), true)
     end
 end
 
@@ -434,8 +450,8 @@ function drawBuildingsMiddle(img, building)
 end
 
 function drawHover(title,text,x,y)
-   local width = 300
-   local height = 200
+   local width = 450
+   local height = 300
    love.graphics.setColor(255,255,255,255)
    love.graphics.draw(imgUI.Hover_up,x,y,0,width/imgUI.Hover_up:getWidth(),1)
    love.graphics.draw(imgUI.Hover_down,x,y + height - imgUI.Hover_down:getHeight(),0,width/imgUI.Hover_down:getWidth(),1)
@@ -515,7 +531,7 @@ function love.draw()
    elseif not (hovered == nil) then
       local x = hovered.x+hovered.width
       local y = hovered.y-hovered.height/2
-      if hovered.name == "Daniel Féry" then
+      if hovered.isBase then
          x = hovered.x - hovered.width/2
          y = hovered.y + hovered.height
       end
