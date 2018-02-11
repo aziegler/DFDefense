@@ -1,6 +1,7 @@
 require "audio"
 require "game_data"
 require "build_menu"
+require "particles"
 
 local roads = {}
 roads.count = 3
@@ -22,6 +23,7 @@ local enemy_gq = {}
 enemy_gq.list = {}
 
 local gameOver = false
+local partList = {}
 
 function Audio (a)
    audioConfig = a
@@ -87,8 +89,17 @@ function mousePick(x,y,button,istouch)
       if not(clickedTower == nil) then
          for _, tower in pairs(towers.list) do
             local infl = tower.score * 0.1
-            tower.score = tower.score - infl
-            clickedTower.score = clickedTower.score + infl
+            if not (tower == clickedtower) then
+               tower.score = tower.score - infl
+               clickedTower.score = clickedTower.score + infl
+               table.insert(partList, { ttl = 0.5,
+                                        from = {
+                                           x = tower.x + tower.width/2,
+                                           y = tower.y + tower.height/2  },
+                                        to = {
+                                           x = clickedTower.x + clickedTower.width/2,
+                                           y = clickedTower.y + clickedTower.height/2}})
+            end
          end
       else
       local _, clickedBuilding = getBuilding(x,y)
@@ -98,13 +109,30 @@ function mousePick(x,y,button,istouch)
                local infl = math.min(tower.score * 0.1, 100 - clickedBuilding.score)
                tower.score = tower.score - infl
                clickedBuilding.score = clickedBuilding.score + infl
+               table.insert(partList, { ttl = 0.5,
+                                        from = {
+                                           x = tower.x + tower.width/2,
+                                           y = tower.y + tower.height/2  },
+                                        to = {
+                                           x = clickedBuilding.x + clickedBuilding.width/2,
+                                           y = clickedBuilding.y + clickedBuilding.height/2}})
+
             end
          end
          for _, building in pairs(buildings.list) do
             if building.score >= 100 then
                local infl = math.max(math.min(building.score * 0.1, 100 - clickedBuilding.score),0)
-               building.score = building.score - infl
-               clickedBuilding.score = clickedBuilding.score + infl
+               if not (building == clickedBuilding) then
+                  building.score = building.score - infl
+                  clickedBuilding.score = clickedBuilding.score + infl
+                  table.insert(partList, { ttl = 0.5,
+                                           from = {
+                                              x = building.x + building.width/2,
+                                              y = building.y + building.height/2 },
+                                           to = {
+                                              x = clickedBuilding.x + clickedBuilding.width/2,
+                                              y = clickedBuilding.y + clickedBuilding.height/2}})
+               end
             end
          end
 
@@ -160,10 +188,11 @@ function love.load(arg)
    }
    love.graphics.setFont(fonts.large)
 
+   partLoad()
    dataLoad(roads, buildings, towers, enemy_gq)
 
    audioLoad(audioConfig)
-   
+
 
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
@@ -294,9 +323,7 @@ function love.update (dt)
             enemy.y = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].y
             enemy.x = roads.list[enemy.road_index].points[math.floor(enemy.roadStep)].x
          end
-      end
-
-     
+      end     
 
       compute_damage(dt)
 
@@ -304,10 +331,21 @@ function love.update (dt)
          tower.score = tower.score + tower.influence_rate * dt
       end
 
-      enemyCoolDown = enemyCoolDown + dt
-      if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
-         table.insert(enemies.list, new_enemy(roads.count))
-         enemyCoolDown = 0
+      partUpdate(dt, partList)
+      voiceOn, tbs = audioUpdate()
+
+      for idx,enemy in pairs(enemies.list) do
+         enemy.time = enemy.time + dt
+         enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
+         if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
+         --table.remove(enemies.list,idx)
+         end
+
+         enemyCoolDown = enemyCoolDown + dt
+         if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
+            table.insert(enemies.list, new_enemy(roads.count))
+            enemyCoolDown = 0
+         end
       end
    end
 
@@ -344,10 +382,13 @@ end
 
 function draw_enemy(enemy)
    if enemy.img then
+      local speed = 0.25
+      local idx = 1 + math.floor(#enemy.img * (enemy.time % speed)/speed)
+      local img = enemy.img[idx]
       love.graphics.setColor(255, 255, 255, 255)
-      love.graphics.draw(enemy.img,
-                         enemy.x-enemy.img:getWidth()/2,
-                         enemy.y-enemy.img:getHeight())
+      love.graphics.draw(img,
+                         enemy.x-img:getWidth()/2,
+                         enemy.y-img:getHeight())
    else
       love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
@@ -361,21 +402,21 @@ function draw_enemy(enemy)
 end
 
 function drawGauge(influenceRatio,x,y,small)
-   if small then 
+   if small then
       love.graphics.draw(imgUI.Rouge,x + 17,y - imgUI.Jauge:getHeight() -5, 0, 72 * influenceRatio / imgUI.Rouge:getWidth(), 1)
       love.graphics.draw(imgUI.Bleu,
                          x + 17 + (72 * influenceRatio),
                          y - imgUI.Jauge:getHeight() -5, 0,
                          72 * (1 - influenceRatio) / imgUI.Bleu:getWidth(), 1)
       love.graphics.draw(imgUI.Jauge,x + 15,y - imgUI.Jauge:getHeight() - 10,0)
-   else 
+   else
       love.graphics.draw(imgUI.BigRouge,x + 34,y - imgUI.BigJauge:getHeight() - 5, 0, 144 * influenceRatio / imgUI.BigRouge:getWidth(), 1)
       love.graphics.draw(imgUI.BigBleu,
                          x + 34 + (144 * influenceRatio),
                          y - imgUI.BigJauge:getHeight() -5, 0,
                          144 * (1 - influenceRatio) / imgUI.BigBleu:getWidth(), 1)
       love.graphics.draw(imgUI.BigJauge,x + 30,y - imgUI.BigJauge:getHeight() - 10,0)
-     
+
    end
 end
 
@@ -400,8 +441,8 @@ function draw_tower(tower)
    if tower.hasGauge then
       drawGauge(influenceRatio, x, h, true)
    elseif tower.isBase then
-      influenceRatio = math.max(0,math.min(tower.score / 1000,1))      
-      drawGauge(influenceRatio, x + tower.img:getWidth()/2 - 144 ,h +10, false)   
+      influenceRatio = math.max(0,math.min(tower.score / 1000,1))
+      drawGauge(influenceRatio, x + tower.img:getWidth()/2 - 144 ,h +10, false)
    end
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
@@ -449,12 +490,6 @@ function love.draw()
 
    love.graphics.draw(map,0,0)
 
-   for i = 1, roads.count do
-      love.graphics.setColor(100,100,100)
-      for j = 1, roads.list[i].lastPoint - 1 do
-         love.graphics.points(roads.list[i].points[j].x,roads.list[i].points[j].y)
-      end
-   end
 
    local drawList = {}
    if not gameOver then
@@ -528,6 +563,7 @@ function love.draw()
       drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,x,y)
    end
 
+   partDraw(partList)
    audioDraw()
 
 end

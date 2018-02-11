@@ -23,7 +23,9 @@ end
 
 function Enemy (e)
    if e.img then
-      e.img = love.graphics.newImage(e.img)
+      for k,v in pairs(e.img) do
+         e.img[k] = love.graphics.newImage(v)
+      end
    end
    table.insert(enemy_types, e)
 end
@@ -226,6 +228,7 @@ function new_tower(idx)
    tower.dps = tower_type.dps
    tower.score = tower_type.influence
    tower.influence_rate = tower_type.influence_rate
+   tower.infList = {}
    if tower_type.extraName then
       tower.name = tower_type.name.." "..tower_type.extraName[math.random(1,#tower_type.extraName)]
    else
@@ -253,5 +256,6 @@ function new_enemy(roads)
    enemy.y = 5
    enemy.roadStep = 1
    enemy.life = enemy_type.life
+   enemy.time = math.random(0,10)
    return enemy
 end

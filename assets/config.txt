@@ -6,21 +6,21 @@ Audio {
    start = 27,
    loops = {
       { loop = 1, voice = false },
-      { loop = 1, voice = true, tbs = 2},
+      { loop = 1, voice = true, tbs = 3},
       { loop = 1, voice = false },
       { loop = 1, voice = false },
+      { loop = 1, voice = true , tbs = 2},
+      { loop = 1, voice = false },
+      { loop = 1, voice = true , tbs = 1.75},
+	  { loop = 1, voice = false },
       { loop = 1, voice = true , tbs = 1.5},
       { loop = 1, voice = false },
-      { loop = 1, voice = true , tbs = 1.25},
-	  { loop = 1, voice = false },
-      { loop = 1, voice = true , tbs = 1.1},
-      { loop = 1, voice = false },
       { loop = 1, voice = false },
 
-	  { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = true , tbs = 1.5},
 	  { loop = 1, voice = false },
 
-	  { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = true , tbs = 1.5},
 	  { loop = 1, voice = false },
 
 	  { loop = 1, voice = false },
@@ -32,7 +32,7 @@ Audio {
 
 EnemyBuilding {
    range = 325,
-   dps = 1.5,
+   dps = 1,
    name = "Station Défense 3000"
 }
 
@@ -43,7 +43,7 @@ EndGame {
 
 GameplayVariable {
    buildingTreshold = 20,
-   initialConcertInfluence = 600,
+   initialConcertInfluence = 620,
    concertRange = 450,
    concertDps = 2,
    concertInfluenceRate = 16,
@@ -115,7 +115,8 @@ Enemy {
    speed = 30,
    dps = 13,
    range = 200,
-   img = "assets/enemies/Chara_CRS01.png"
+   img = { "assets/enemies/Chara_CRS01.png",
+           "assets/enemies/Chara_CRS02.png" }
 }
 
 Enemy {
@@ -124,5 +125,9 @@ Enemy {
    speed = 60,
    dps = 8,
    range = 150,
-      img = "assets/enemies/costard.png"
+      img = {
+      "assets/enemies/Chara_Bt01.png",
+      "assets/enemies/Chara_Bt02.png",
+      "assets/enemies/Chara_Bt01.png"
+      }
 }
