@@ -52,6 +52,7 @@ GameplayVariable {
 
 Tower {
    name = "Jardin collectif",
+   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
    range = 175,
    dps = 4,
    influence = 50,
@@ -72,6 +73,7 @@ Fabe"
 
 Tower {
    name = "Bibliothèque",
+   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
    range = 250,
    dps = 2,
    influence = 100,
@@ -91,6 +93,7 @@ Minister A.M.E.R."
 
 Tower {
    name = "Local associatif",
+   extraName = {"Karl Marx","Billie Brelok","Au bonheur des fleurs"},
    range = 600,
    dps = 1,
    influence = 200,
