@@ -233,7 +233,7 @@ end
 function love.load(arg)
    fonts = {
       title_large = love.graphics.newFont("assets/i8080.ttf",90),
-      title_small = love.graphics.newFont("assets/i8080.ttf",40),
+      title_small = love.graphics.newFont("assets/arial.ttf",35),
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
@@ -266,7 +266,9 @@ function love.load(arg)
       Logo = love.graphics.newImage("assets/UI/Logogentryfight.png"),
       Button_play = love.graphics.newImage("assets/UI/btn_Jouer.png"),
       Button_info = love.graphics.newImage("assets/UI/btn_Info.png"),
-      Menu_BG = love.graphics.newImage("assets/UI/SupportIcon.png")
+      Menu_BG = love.graphics.newImage("assets/UI/SupportIcon.png"),
+      Avis_Demolition = love.graphics.newImage("assets/avisDeDEmolition.png"),
+      Victoire = love.graphics.newImage("assets/UI/victoire.png")
    }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
@@ -575,9 +577,9 @@ function love.draw()
          love.graphics.draw(imgUI.Button_play,400,700)
          love.graphics.draw(imgUI.Button_info,width - 800,700)
       else
-         love.graphics.setFont(fonts.large)
+         love.graphics.setFont(fonts.small)
          love.graphics.setColor(255, 255, 255, 255)
-         love.graphics.printf("Texte d'info",40,200,400)
+         love.graphics.printf(gameplayVariable.text,40,200,600)
          love.graphics.draw(imgUI.Button_play,width/2 - 100, 700)
       end
 
@@ -630,19 +632,29 @@ function love.draw()
    end
 
    if gameState.gameOver then
-      love.graphics.setFont(fonts.title_large)
-      love.graphics.setColor(0,0,0,255)
-      love.graphics.printf("Gentrified !!! ", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 - 10,800)
+      love.graphics.setColor(255, 255, 255, 200)
+      local width = love.graphics.getWidth()
+      local height = love.graphics.getHeight()
+      love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
+      love.graphics.setColor(255, 255, 255, 255)
+      love.graphics.draw(imgUI.Avis_Demolition,30,60)
+      love.graphics.setColor(0, 0, 0, 255)
       love.graphics.setFont(fonts.title_small)
-      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 + 100,500)
+      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight() - 150,500)
+      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 200, 300, 700)
    end
 
    if gameState.win then
-      love.graphics.setFont(fonts.title_large)
-      love.graphics.setColor(0,0,0,255)
-      love.graphics.printf("You won !!! ", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 - 10,800)
+      love.graphics.setColor(255, 255, 255, 200)
+      local width = love.graphics.getWidth()
+      local height = love.graphics.getHeight()
+      love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
+      love.graphics.setColor(255, 255, 255, 255)
+      love.graphics.draw(imgUI.Victoire,100,200,0,2,2)
+      love.graphics.setColor(0, 0, 0, 255)
       love.graphics.setFont(fonts.title_small)
-      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight()/2 + 100,500)
+      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight() - 150,500)
+      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 200, 300, 700)
    end
 
    --love.graphics.setColor(255,255,255,255)

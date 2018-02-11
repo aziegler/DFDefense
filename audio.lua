@@ -59,6 +59,7 @@ function audioLoad(audioConfig)
    for k,v in pairs(audioConfig.loops) do
       table.insert(tracks, { start = start + v.loop*loop,
                              voice = v.voice, tbs = v.tbs })
+      break
    end
    i = 1
    affTxt =  love.graphics.newText(fonts.small, ""..i )
