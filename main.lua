@@ -312,6 +312,7 @@ function love.update (dt)
    voiceOn, tbs = audioUpdate()
 
    for idx,enemy in pairs(enemies.list) do
+      enemy.time = enemy.time + dt
       enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
       if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
          --table.remove(enemies.list,idx)
@@ -371,10 +372,13 @@ end
 
 function draw_enemy(enemy)
    if enemy.img then
+      local speed = 0.25
+      local idx = 1 + math.floor(#enemy.img * (enemy.time % speed)/speed)
+      local img = enemy.img[idx]
       love.graphics.setColor(255, 255, 255, 255)
-      love.graphics.draw(enemy.img,
-                         enemy.x-enemy.img:getWidth()/2,
-                         enemy.y-enemy.img:getHeight())
+      love.graphics.draw(img,
+                         enemy.x-img:getWidth()/2,
+                         enemy.y-img:getHeight())
    else
       love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)

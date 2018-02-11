@@ -115,7 +115,8 @@ Enemy {
    speed = 30,
    dps = 13,
    range = 200,
-   img = "assets/enemies/Chara_CRS01.png"
+   img = { "assets/enemies/Chara_CRS01.png",
+           "assets/enemies/Chara_CRS02.png" }
 }
 
 Enemy {
@@ -124,5 +125,5 @@ Enemy {
    speed = 60,
    dps = 8,
    range = 150,
-      img = "assets/enemies/costard.png"
+      img = { "assets/enemies/costard.png" }
 }

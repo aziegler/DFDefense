@@ -22,7 +22,10 @@ end
 
 function Enemy (e)
    if e.img then
-      e.img = love.graphics.newImage(e.img)
+      for k,v in pairs(e.img) do
+         print(k,v)
+         e.img[k] = love.graphics.newImage(v)
+      end
    end
    table.insert(enemy_types, e)
 end
@@ -252,5 +255,6 @@ function new_enemy(roads)
    enemy.y = 5
    enemy.roadStep = 1
    enemy.life = enemy_type.life
+   enemy.time = math.random(0,10)
    return enemy
 end
