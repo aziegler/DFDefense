@@ -77,7 +77,7 @@ function mousePick(x,y,button,istouch)
    if button == 2 then
       local idx,building = getBuilding(x, y)
 
-      if idx > -1 and building.score > gameplayVariable.buildingTreshold and building.enabled then
+      if idx > -1 and building.enabled then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
                                    y= building.y }
@@ -298,7 +298,7 @@ function compute_damage(dt)
                end
             end
          end
-         if distance < tower.range then
+         if building1.score > gameplayVariable.buildingTreshold then
             building1.enabled = true
          end
       end
@@ -459,6 +459,7 @@ function draw_tower(tower)
 end
 
 function drawBuildings(img, building)
+ 
    love.graphics.draw(img,
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
@@ -477,6 +478,10 @@ end
 function drawHover(title,text,x,y)
    local width = 450
    local height = 300
+   if not text then
+      width = 200
+      height = 100
+   end
    love.graphics.setColor(255,255,255,255)
    love.graphics.draw(imgUI.Hover_up,x,y,0,width/imgUI.Hover_up:getWidth(),1)
    love.graphics.draw(imgUI.Hover_down,x,y + height - imgUI.Hover_down:getHeight(),0,width/imgUI.Hover_down:getWidth(),1)
@@ -484,8 +489,10 @@ function drawHover(title,text,x,y)
    love.graphics.setColor(255,255,255,255)
    love.graphics.setFont(fonts.large)
    love.graphics.printf(title,x + 10,y + 5,width - 20,"center")
-   love.graphics.setFont(fonts.small)
-   love.graphics.printf(text,x + 10,y + 75,width - 20,"center")
+   if text then
+      love.graphics.setFont(fonts.small)
+      love.graphics.printf(text,x + 10,y + 75,width - 20,"center")
+   end
 
 end
 
@@ -564,9 +571,6 @@ function love.draw()
       if hovered.isBase then
          x = hovered.x - hovered.width/2
          y = hovered.y + hovered.height
-      end
-      if hovered.text == nil then
-         hovered.text = "Lorem Ipsum"
       end
       drawHover(hovered.name.."\n"..math.floor(hovered.score),hovered.text,x,y)
    end
