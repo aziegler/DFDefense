@@ -23,21 +23,21 @@ Audio {
 	  { loop = 5, voice = true , tbs = 1.25},
 	  { loop = 5, voice = false },
 
-	  { loop = 6, voice = false },
-	  { loop = 6, voice = true , tbs = 1},
-	  { loop = 6, voice = false },
+	  { loop = 4, voice = false },
+	  { loop = 4, voice = true , tbs = 1},
+	  { loop = 4, voice = false },
 	  
-	  { loop = 7, voice = false },
-	  { loop = 7, voice = true , tbs = 1},
-	  { loop = 7, voice = false },
+	  { loop = 3, voice = false },
+	  { loop = 3, voice = true , tbs = 1},
+	  { loop = 3, voice = false },
 	  
-	  { loop = 8, voice = false },
-	  { loop = 8, voice = false },
-	  { loop = 8, voice = true , tbs = 0.8},
-	  { loop = 8, voice = false },
+	  { loop = 2, voice = false },
+	  { loop = 2, voice = false },
+	  { loop = 2, voice = true , tbs = 0.8},
+	  { loop = 2, voice = false },
 	  
-	  { loop = 9, voice = true , tbs = 0.6},
-	  { loop = 9, voice = false }
+	  { loop = 1, voice = true , tbs = 0.6},
+	  { loop = 1, voice = false }
    }
 }
 
