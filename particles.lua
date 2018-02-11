@@ -2,7 +2,8 @@ function partLoad()
    partImgs = {
       love.graphics.newImage("assets/Prtcl_ampoule.png"),
       love.graphics.newImage("assets/Prtcl_attack_allie.png"),
-      love.graphics.newImage("assets/Prtcl_attack_note.png")
+      love.graphics.newImage("assets/Prtcl_attack_note.png"),
+      love.graphics.newImage("assets/Prtcl_punch.png")
    }
 end
 
@@ -35,4 +36,39 @@ function partDraw(partList)
          love.graphics.draw(p.img, x-p.img:getWidth()/2, y-p.img:getHeight()/2)
       end
    end
+end
+
+persos = {}
+
+function persoLoad(w, h, roads)
+   persoChars = {
+      {
+         love.graphics.newImage("assets/inhabitants/Chara_Mariana1.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_Mariana1.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_Mariana2.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_Mariana2.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_Mariana3.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_Mariana3.png")
+      },
+      {
+         love.graphics.newImage("assets/inhabitants/Chara_girl01.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_girl01.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_girl02.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_girl02.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_girl03.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_girl03.png")
+      }
+   }
+
+   for i=1,30 do
+      local r = roads.list[math.random(1,#roads.list)]
+      local p = r.points[math.random(1, #r.points)]
+
+      local perso = { x =  p.x,
+                      y = p.y,
+                      time = 0,
+                      img = persoChars[math.random(1,#persoChars)] }
+      table.insert(persos, perso)
+   end
+
 end

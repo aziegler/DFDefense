@@ -282,6 +282,8 @@ function love.load(arg)
       end
    end
 
+   persoLoad(1920*scale, 1080*scale, roads)
+
 end
 
 function compute_damage(dt)
@@ -382,6 +384,10 @@ function love.update (dt)
          if tower.isBase then
             baseTower = tower
          end
+      end
+
+      for _,p in pairs(persos) do
+         p.time = p.time + dt
       end
 
       for idx,enemy in pairs(enemies.list) do
@@ -581,6 +587,13 @@ function love.draw()
 
 
    local drawList = {}
+
+   for _,p in pairs(persos) do
+      p.enemy = true
+      table.insert(drawList, p)
+   end
+
+
    if not gameState.gameOver then
       for _,enemy in pairs(enemies.list) do
          enemy.enemy = true
