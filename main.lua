@@ -219,7 +219,6 @@ function love.load(arg)
 
    audioLoad(audioConfig)
 
-
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),
       Goche = love.graphics.newImage("assets/buildings/BtmG_Tower.png"),
@@ -238,7 +237,8 @@ function love.load(arg)
       BigBleu = love.graphics.newImage("assets/UI/Barre_bleue_large.png"),
       Hover_up = love.graphics.newImage("assets/UI/haut_texte.png"),
       Hover_down = love.graphics.newImage("assets/UI/bas_texte.png"),
-      Hover_middle = love.graphics.newImage("assets/UI/milieu_texte.png")
+      Hover_middle = love.graphics.newImage("assets/UI/milieu_texte.png"),
+      Menu_BG = love.graphics.newImage("assets/UI/SupportIcon.png")
    }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
@@ -485,7 +485,7 @@ function draw_tower(tower)
 end
 
 function drawBuildings(img, building)
- 
+
    love.graphics.draw(img,
                       building.x+building.width/2-img:getWidth()/2,
                       building.y+building.height-img:getHeight())
