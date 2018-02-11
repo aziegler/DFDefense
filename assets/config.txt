@@ -6,21 +6,21 @@ Audio {
    start = 27,
    loops = {
       { loop = 1, voice = false },
-      { loop = 1, voice = true, tbs = 2},
+      { loop = 1, voice = true, tbs = 3},
       { loop = 1, voice = false },
       { loop = 1, voice = false },
+      { loop = 1, voice = true , tbs = 2},
+      { loop = 1, voice = false },
+      { loop = 1, voice = true , tbs = 1.75},
+	  { loop = 1, voice = false },
       { loop = 1, voice = true , tbs = 1.5},
       { loop = 1, voice = false },
-      { loop = 1, voice = true , tbs = 1.25},
-	  { loop = 1, voice = false },
-      { loop = 1, voice = true , tbs = 1.1},
-      { loop = 1, voice = false },
       { loop = 1, voice = false },
 
-	  { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = true , tbs = 1.5},
 	  { loop = 1, voice = false },
 
-	  { loop = 1, voice = true , tbs = 1.25},
+	  { loop = 1, voice = true , tbs = 1.5},
 	  { loop = 1, voice = false },
 
 	  { loop = 1, voice = false },
@@ -32,7 +32,7 @@ Audio {
 
 EnemyBuilding {
    range = 325,
-   dps = 1.5,
+   dps = 1,
    name = "Station Défense 3000"
 }
 
@@ -43,7 +43,7 @@ EndGame {
 
 GameplayVariable {
    buildingTreshold = 20,
-   initialConcertInfluence = 600,
+   initialConcertInfluence = 620,
    concertRange = 450,
    concertDps = 2,
    concertInfluenceRate = 16,
