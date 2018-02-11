@@ -125,5 +125,9 @@ Enemy {
    speed = 60,
    dps = 8,
    range = 150,
-      img = { "assets/enemies/costard.png" }
+      img = {
+      "assets/enemies/Chara_Bt01.png",
+      "assets/enemies/Chara_Bt02.png",
+      "assets/enemies/Chara_Bt01.png"
+      }
 }

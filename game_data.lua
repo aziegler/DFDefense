@@ -23,7 +23,6 @@ end
 function Enemy (e)
    if e.img then
       for k,v in pairs(e.img) do
-         print(k,v)
          e.img[k] = love.graphics.newImage(v)
       end
    end
