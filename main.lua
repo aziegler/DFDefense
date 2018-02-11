@@ -90,17 +90,17 @@ function mousePick(x,y,button,istouch)
       if not(clickedTower == nil) then
          for _, tower in pairs(towers.list) do
             local infl = tower.score * 0.1
-            tower.score = tower.score - infl
-            clickedTower.score = clickedTower.score + infl
-            table.insert(partList, { ttl = 0.5,
-                                     from = {
-                                        x = tower.x + tower.width/2,
-                                        y = tower.y + tower.height/2  },
-                                     to = {
-                                        x = clickedTower.x + clickedTower.width/2,
-                                        y = clickedTower.y + clickedTower.height/2}})
-
-
+            if not (tower == clickedtower) then
+               tower.score = tower.score - infl
+               clickedTower.score = clickedTower.score + infl
+               table.insert(partList, { ttl = 0.5,
+                                        from = {
+                                           x = tower.x + tower.width/2,
+                                           y = tower.y + tower.height/2  },
+                                        to = {
+                                           x = clickedTower.x + clickedTower.width/2,
+                                           y = clickedTower.y + clickedTower.height/2}})
+            end
          end
       else
       local _, clickedBuilding = getBuilding(x,y)
@@ -123,16 +123,17 @@ function mousePick(x,y,button,istouch)
          for _, building in pairs(buildings.list) do
             if building.score >= 100 then
                local infl = math.max(math.min(building.score * 0.1, 100 - clickedBuilding.score),0)
-               building.score = building.score - infl
-               clickedBuilding.score = clickedBuilding.score + infl
-               table.insert(partList, { ttl = 0.5,
-                                        from = {
-                                           x = building.x + building.width/2,
-                                           y = building.y + building.height/2 },
-                                        to = {
-                                           x = clickedBuilding.x + clickedBuilding.width/2,
-                                           y = clickedBuilding.y + clickedBuilding.height/2}})
-
+               if not (building == clickedBuilding) then
+                  building.score = building.score - infl
+                  clickedBuilding.score = clickedBuilding.score + infl
+                  table.insert(partList, { ttl = 0.5,
+                                           from = {
+                                              x = building.x + building.width/2,
+                                              y = building.y + building.height/2 },
+                                           to = {
+                                              x = clickedBuilding.x + clickedBuilding.width/2,
+                                              y = clickedBuilding.y + clickedBuilding.height/2}})
+               end
             end
          end
 
@@ -187,10 +188,11 @@ function love.load(arg)
    }
    love.graphics.setFont(fonts.large)
 
+   partLoad()
    dataLoad(roads, buildings, towers, enemy_gq)
 
    audioLoad(audioConfig)
-   
+
 
    imgBuildings = {
       Drouate = love.graphics.newImage("assets/buildings/BtmD_Tower.png"),

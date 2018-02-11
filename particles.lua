@@ -1,9 +1,20 @@
+function partLoad()
+   partImgs = {
+      love.graphics.newImage("assets/particule01.png"),
+      love.graphics.newImage("assets/particule02.png"),
+   }
+end
 
 function partUpdate(dt, partList)
    for i,p in pairs(partList) do
       if not p.t then
          p.t = 0
          p.ttl = math.random(0.25,0.5)
+         p.to.x = p.to.x + math.random(-20,20)
+         p.to.y = p.to.y + math.random(-20,20)
+         p.from.x = p.from.x + math.random(-20,20)
+         p.from.y = p.from.y + math.random(-20,20)
+         p.img = partImgs[math.random(1,#partImgs)]
       end
       p.t = p.t + dt
       if p.t >= p.ttl then
@@ -18,8 +29,8 @@ function partDraw(partList)
       local x = p.from.x + (p.to.x-p.from.x) * t
       local y = p.from.y + (p.to.y-p.from.y) * t
 
-      love.graphics.setColor(255, 255, 0)
-      love.graphics.circle("fill", x, y, 10)
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.draw(p.img, x-p.img:getWidth()/2, y-p.img:getHeight()/2)
 
    end
 end
