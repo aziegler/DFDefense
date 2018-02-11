@@ -25,6 +25,7 @@ enemy_gq.list = {}
 local gameOver = false
 local partList = {}
 
+
 function Audio (a)
    audioConfig = a
 end
@@ -307,12 +308,7 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-   
-   
-   
-
-   voiceOn, tbs = audioUpdate()
-
+  
    if not gameOver then 
       for idx,enemy in pairs(enemies.list) do
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
@@ -327,8 +323,12 @@ function love.update (dt)
 
       compute_damage(dt)
 
+      local baseTower = {}
       for _,tower in pairs(towers.list) do
          tower.score = tower.score + tower.influence_rate * dt
+         if tower.isBase then
+            baseTower = tower
+         end
       end
 
       partUpdate(dt, partList)
@@ -338,7 +338,8 @@ function love.update (dt)
          enemy.time = enemy.time + dt
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
-         --table.remove(enemies.list,idx)
+            baseTower.score = baseTower.score - enemy.life
+            table.remove(enemies.list,idx)
          end
 
          enemyCoolDown = enemyCoolDown + dt
