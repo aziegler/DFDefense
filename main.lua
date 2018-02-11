@@ -385,21 +385,21 @@ function draw_enemy(enemy)
 end
 
 function drawGauge(influenceRatio,x,y,small)
-   if small then 
+   if small then
       love.graphics.draw(imgUI.Rouge,x + 17,y - imgUI.Jauge:getHeight() -5, 0, 72 * influenceRatio / imgUI.Rouge:getWidth(), 1)
       love.graphics.draw(imgUI.Bleu,
                          x + 17 + (72 * influenceRatio),
                          y - imgUI.Jauge:getHeight() -5, 0,
                          72 * (1 - influenceRatio) / imgUI.Bleu:getWidth(), 1)
       love.graphics.draw(imgUI.Jauge,x + 15,y - imgUI.Jauge:getHeight() - 10,0)
-   else 
+   else
       love.graphics.draw(imgUI.BigRouge,x + 34,y - imgUI.BigJauge:getHeight() - 5, 0, 144 * influenceRatio / imgUI.BigRouge:getWidth(), 1)
       love.graphics.draw(imgUI.BigBleu,
                          x + 34 + (144 * influenceRatio),
                          y - imgUI.BigJauge:getHeight() -5, 0,
                          144 * (1 - influenceRatio) / imgUI.BigBleu:getWidth(), 1)
       love.graphics.draw(imgUI.BigJauge,x + 30,y - imgUI.BigJauge:getHeight() - 10,0)
-     
+
    end
 end
 
@@ -424,8 +424,8 @@ function draw_tower(tower)
    if tower.hasGauge then
       drawGauge(influenceRatio, x, h, true)
    elseif tower.isBase then
-      influenceRatio = math.max(0,math.min(tower.score / 1000,1))      
-      drawGauge(influenceRatio, x + tower.img:getWidth()/2 - 144 ,h +10, false)   
+      influenceRatio = math.max(0,math.min(tower.score / 1000,1))
+      drawGauge(influenceRatio, x + tower.img:getWidth()/2 - 144 ,h +10, false)
    end
    love.graphics.setColor(180, 50, 50, 255)
    love.graphics.circle("line",
