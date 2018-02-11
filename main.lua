@@ -183,7 +183,7 @@ end
 
 function love.load(arg)
    fonts = {
-      title = love.graphics.newFont("assets/arial.ttf",60),
+      title = love.graphics.newFont("assets/i8080.ttf",60),
       large = love.graphics.newFont("assets/arial.ttf",20),
       small = love.graphics.newFont("assets/arial.ttf",16)
    }
@@ -402,8 +402,6 @@ function draw_enemy(enemy)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
    end
 
-   love.graphics.setColor(50, 50, 180, 255)
-   love.graphics.circle("line", enemy.x, enemy.y, enemy.range)
    love.graphics.setColor(255,0,0)
    love.graphics.print(math.floor(enemy.life),enemy.x - 7 ,enemy.y - 5,0)
 
@@ -452,10 +450,6 @@ function draw_tower(tower)
       influenceRatio = math.max(0,math.min(tower.score / 1000,1))
       drawGauge(influenceRatio, x + tower.img:getWidth()/2 - 144 ,h +10, false)
    end
-   love.graphics.setColor(180, 50, 50, 255)
-   love.graphics.circle("line",
-                        tower.x+tower.width/2,
-                        tower.y+tower.height/2, tower.range)
 end
 
 function drawBuildings(img, building)
@@ -536,10 +530,6 @@ function love.draw()
             --love.graphics.setColor(100,100,100,255)
             drawBuildings(imgBuildings.Neutre, building)
          else
-            love.graphics.setColor(50, 50, 180, 255)
-            love.graphics.circle("line",
-                        building.x+building.width/2,
-                        building.y+building.height/2, enemyBuilding.range)
             love.graphics.setColor(255,255,255,255)
             drawBuildings(imgBuildings.Drouate, building)
          end
