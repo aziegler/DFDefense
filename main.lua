@@ -61,6 +61,8 @@ function mouseGui(x,y,button,istouch)
    tower.height = building.height
    tower.enabled = true
    tower.building = building
+   tower.anim_ttl = math.pi/4
+   tower.anim_ref = tower.anim_ttl
    --table.remove(buildings.list,mouseModes.buildingIdx)
    if building.tower then
       for k,v in pairs(towers.list) do
@@ -399,6 +401,11 @@ function love.update (dt)
       local baseTower = {}
       for _,tower in pairs(towers.list) do
          tower.score = tower.score + tower.influence_rate * dt
+         if tower.anim_ttl and tower.anim_ttl > 0 then
+            tower.anim_ttl = tower.anim_ttl - dt
+         else
+            tower.anim_ttl = 0
+         end
          if tower.isBase then
             baseTower = tower
          end
@@ -460,8 +467,6 @@ function love.update (dt)
    end
 end
 
-
-
 function collide(tower1,tower2)
    if (tower1.x < tower2.x + tower2.width and
       tower1.x + tower1.width > tower2.x and
@@ -478,9 +483,12 @@ function draw_enemy(enemy)
       local idx = 1 + math.floor(#enemy.img * (enemy.time % speed)/speed)
       local img = enemy.img[idx]
       love.graphics.setColor(255, 255, 255, 255)
-      love.graphics.draw(img,
+
+      if not (enemy.life and enemy.life < 20 and (enemy.time % speed)/speed < 0.5) then
+         love.graphics.draw(img,
                          enemy.x-img:getWidth()/2,
                          enemy.y-img:getHeight())
+      end
    else
       love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
@@ -511,12 +519,20 @@ function draw_tower(tower)
    local x = tower.x
    if tower.img then
       love.graphics.setColor(255, 255, 255)
-      h  = tower.y - tower.img:getHeight() + tower.height
-      if tower.center == true then
-         h = tower.y - tower.img:getHeight()/2 + tower.height/2
+
+      local img_scale = 1
+      if tower.anim_ttl and tower.anim_ttl > 0 then
+         local t = 1+tower.anim_ref-tower.anim_ttl
+         img_scale = 1+ (math.cos(math.pi+(t)*math.pi*6)/(t^3))/2
       end
-      x = tower.x - tower.img:getWidth()/2 + tower.width/2
-      love.graphics.draw(tower.img, x , h)
+
+      h  = tower.y - tower.img:getHeight()*img_scale + tower.height
+      if tower.center == true then
+         h = tower.y - img_scale*tower.img:getHeight()/2 + tower.height/2
+      end
+      x = tower.x - img_scale*tower.img:getWidth()/2 + tower.width/2
+
+      love.graphics.draw(tower.img, x , h, 0, img_scale, img_scale)
 
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
