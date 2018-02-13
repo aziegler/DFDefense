@@ -1,5 +1,3 @@
-package.path = "?.txt;"..package.path
-
 tower_types = {}
 enemyBuilding = {}
 gameplayVariable = {}
@@ -202,8 +200,10 @@ function dataLoad(roads,buildings, towers, enemy_gq)
    enemy_types = {}
 
 	
-   dofile("config.lua")
-
+   --dofile("config.lua")
+   chunk,errmsg = love.filesystem.load("config.lua")
+   chunk()
+   
    for i = 1, roads.count do
       roads.list[i] = {}
       roads.list[i].lastPoint = 1

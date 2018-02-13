@@ -231,7 +231,6 @@ function init()
 end
 
 function love.load(arg)
-   print(package.path)
    fonts = {
       title_large = love.graphics.newFont("assets/i8080.ttf",90),
       title_small = love.graphics.newFont("assets/steelfish rg.ttf",35),
