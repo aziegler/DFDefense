@@ -202,7 +202,7 @@ function dataLoad(roads,buildings, towers, enemy_gq)
    enemy_types = {}
 
 	
-   dofile("config.txt")
+   dofile("config.lua")
 
    for i = 1, roads.count do
       roads.list[i] = {}
