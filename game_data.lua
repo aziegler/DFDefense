@@ -199,11 +199,11 @@ function dataLoad(roads,buildings, towers, enemy_gq)
    title_bg = {}
    enemy_types = {}
 
-	
+
    --dofile("config.lua")
    chunk,errmsg = love.filesystem.load("config.lua")
    chunk()
-   
+
    for i = 1, roads.count do
       roads.list[i] = {}
       roads.list[i].lastPoint = 1
@@ -262,6 +262,7 @@ function new_enemy(roads)
    enemy.color.blue = enemy_type.color[3]
    enemy.img = enemy_type.img
    enemy.speed = enemy_type.speed
+   enemy.anim_speed = 0.25
    enemy.dps = enemy_type.dps
    enemy.range = enemy_type.range
    enemy.road_index = math.random(1,roads)

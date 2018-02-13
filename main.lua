@@ -277,15 +277,23 @@ function love.load(arg)
    enemy_gq.list[1].hasGauge = false
    enemy_gq.list[2].hasGauge = false
 
-   if arg then
-      if videoSettings.fullscreen == false or arg[#arg] == "-w" then
-         scale = 0.5
-         love.window.setMode(1920*scale,1080*scale)
+   love.window.setMode(0, 0)
+   screen_width = love.graphics.getWidth()
+   screen_height = love.graphics.getHeight()
+   print(screen_width, screen_height)
+
+   if screen_width ~= 1920 or screen_height ~= 1080 then
+      if screen_width/screen_height == 1920/1080 then
+         scale = screen_width/1920
       else
-         scale = 1
-         love.window.setFullscreen(true)
+         scale = 0.5
       end
+      love.window.setMode(1920*scale,1080*scale)
+   else
+      scale = 1
+      love.window.setFullscreen(true)
    end
+
 
    persoLoad(1920*scale, 1080*scale, roads)
 
@@ -467,7 +475,7 @@ end
 
 function draw_enemy(enemy)
    if enemy.img then
-      local speed = 0.25
+      local speed = enemy.anim_speed
       local idx = 1 + math.floor(#enemy.img * (enemy.time % speed)/speed)
       local img = enemy.img[idx]
       love.graphics.setColor(255, 255, 255, 255)

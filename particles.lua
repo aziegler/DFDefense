@@ -44,36 +44,40 @@ function persoLoad(w, h, roads)
    persoChars = {
       {
          love.graphics.newImage("assets/inhabitants/Chara_Mariana1.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_Mariana1.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_Mariana2.png"),
          love.graphics.newImage("assets/inhabitants/Chara_Mariana2.png"),
          love.graphics.newImage("assets/inhabitants/Chara_Mariana3.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_Mariana3.png")
       },
       {
          love.graphics.newImage("assets/inhabitants/Chara_girl01.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_girl01.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_girl02.png"),
          love.graphics.newImage("assets/inhabitants/Chara_girl02.png"),
          love.graphics.newImage("assets/inhabitants/Chara_girl03.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_girl03.png")
       },
       {
          love.graphics.newImage("assets/inhabitants/Chara_guy1.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_guy1.png"),
-         love.graphics.newImage("assets/inhabitants/Chara_guy2.png"),
          love.graphics.newImage("assets/inhabitants/Chara_guy2.png"),
       }
 
    }
 
    for i=1,30 do
-      local r = roads.list[math.random(1,#roads.list)]
-      local p = r.points[math.random(1, #r.points)]
-
+      local p = nil
+      while p == nil do
+         local r = roads.list[math.random(1,#roads.list)]
+         p = r.points[math.random(1, #r.points)]
+         if p.x < 350 then
+            p = nil
+         else
+            local p2 = r.points[#r.points]
+            d = ((p2.x-p.x)^2 + (p2.y-p.y)^2)^0.5
+            if d < 50 then
+               p = nil
+            end
+         end
+      end
       local perso = { x =  p.x + math.random(-25,25),
                       y = p.y + math.random(-25,25),
-                      time = 0,
+                      time = math.random(0,60),
+                      anim_speed = 0.5,
                       img = persoChars[math.random(1,#persoChars)] }
       table.insert(persos, perso)
    end
