@@ -278,22 +278,21 @@ function love.load(arg)
    enemy_gq.list[2].hasGauge = false
 
    love.window.setMode(0, 0)
-   screen_width = love.graphics.getWidth()
-   screen_height = love.graphics.getHeight()
-   print(screen_width, screen_height)
-
+   local screen_width = love.graphics.getWidth()
+   local screen_height = love.graphics.getHeight()
+   local diff = math.abs((screen_width/screen_height)-(1920/1080))
    if screen_width ~= 1920 or screen_height ~= 1080 then
-      if screen_width/screen_height == 1920/1080 then
-         scale = screen_width/1920
+      if diff < 0.001 then
+	 scale = screen_width/1920
+	 love.window.setFullscreen(true)
       else
-         scale = 0.5
+	 scale = 0.5
+	 love.window.setMode(1920*scale,1080*scale)
       end
-      love.window.setMode(1920*scale,1080*scale)
    else
       scale = 1
       love.window.setFullscreen(true)
    end
-
 
    persoLoad(1920*scale, 1080*scale, roads)
 
