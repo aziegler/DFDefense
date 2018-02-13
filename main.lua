@@ -153,10 +153,8 @@ function love.mousepressed(x,y,button,istouch)
       local x_mouse = mouseModes.mousePos[1]
       local y_mouse = mouseModes.mousePos[2]
       if gameState.info then
-         if 700 < x_mouse and 1300 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
-            gameState.info = false
-            gameState.title = false
-         end
+	 gameState.info = false
+	 gameState.title = false
       else
          if 300 < x_mouse and 900 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
             gameState.title = false
@@ -231,6 +229,8 @@ function init()
 end
 
 function love.load(arg)
+   math.randomseed(os.time())
+
    fonts = {
       title_large = love.graphics.newFont("assets/i8080.ttf",90),
       title_small = love.graphics.newFont("assets/steelfish rg.ttf",35),
@@ -278,7 +278,7 @@ function love.load(arg)
    enemy_gq.list[2].hasGauge = false
 
    if arg then
-      if videoSettings.fullscreen == false or arg[2] == "-w" then
+      if videoSettings.fullscreen == false or arg[#arg] == "-w" then
          scale = 0.5
          love.window.setMode(1920*scale,1080*scale)
       else
@@ -575,8 +575,8 @@ function love.draw()
    if gameState.title then
       love.graphics.setColor(130, 130, 130, 150)
       love.graphics.draw(title_bg,0,0)
-      local width = love.graphics.getWidth()
-      local height = love.graphics.getHeight()
+      local width = love.graphics.getWidth() / scale
+      local height = love.graphics.getHeight() /scale
       love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
 
       if not gameState.info then
@@ -585,10 +585,12 @@ function love.draw()
          love.graphics.draw(imgUI.Button_play,400,700)
          love.graphics.draw(imgUI.Button_info,width - 800,700)
       else
-         love.graphics.setFont(fonts.title_x_small)
+         love.graphics.setFont(fonts.title_small)
          love.graphics.setColor(255, 255, 255, 255)
-         love.graphics.printf(gameplayVariable.text,40,200,600)
-         love.graphics.draw(imgUI.Button_play,width/2 - 100, 700)
+         love.graphics.printf(gameplayVariable.text, 80, 80, 3 * width / 5)
+         love.graphics.draw(imgUI.Button_play,
+			    width - imgUI.Button_play:getWidth() - 40,
+			    height - imgUI.Button_play:getHeight() - 60)
       end
 
       return
