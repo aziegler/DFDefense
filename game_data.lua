@@ -1,3 +1,5 @@
+package.path = "?.txt;"..package.path
+
 tower_types = {}
 enemyBuilding = {}
 gameplayVariable = {}

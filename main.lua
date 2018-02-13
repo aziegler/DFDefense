@@ -1,5 +1,3 @@
-package.path = "assets/?.txt;"..package.path
-
 require "audio"
 require "game_data"
 require "build_menu"
