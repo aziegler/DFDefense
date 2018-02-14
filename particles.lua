@@ -59,6 +59,7 @@ function persoLoad(w, h, roads)
 
    }
 
+   persos = {}
    for i=1,30 do
       local p = nil
       while p == nil do

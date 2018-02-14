@@ -155,8 +155,9 @@ function love.mousepressed(x,y,button,istouch)
       local x_mouse = mouseModes.mousePos[1]
       local y_mouse = mouseModes.mousePos[2]
       if gameState.info then
-	 gameState.info = false
-	 gameState.title = false
+         gameState.info = false
+         gameState.title = false
+         audioStart()
       else
          if 300 < x_mouse and 900 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
             gameState.title = false
@@ -388,9 +389,9 @@ function love.keypressed(key)
 end
 
 function love.update (dt)
-
+   voiceOn, tbs = audioUpdate(gameState.title == false and gameState.info == false)
    if not gameState.gameOver and not gameState.title and not gameState.win then
-      voiceOn, tbs = audioUpdate()
+
 
       if tbs == -1 then
          gameState.win = true

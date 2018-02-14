@@ -43,7 +43,6 @@ function loadAudio()
          tracks["assets/music/instru.wav"]
       }
    }
-
    return groups
 end
 
@@ -53,24 +52,29 @@ tracks = {}
 
 local START = 0
 
+local loaded = false
 function audioLoad(audioConfig)
-   audioGroups = loadAudio()
+   if loaded == false then
+      audioGroups = loadAudio()
 
-   for k,v in pairs(audioConfig.loops) do
-      table.insert(tracks, { start = start + v.loop*loop,
-                             voice = v.voice, tbs = v.tbs })
+      for k,v in pairs(audioConfig.loops) do
+         table.insert(tracks, { start = start + v.loop*loop,
+                                voice = v.voice, tbs = v.tbs })
+      end
    end
+
    i = 1
    affTxt =  love.graphics.newText(fonts.small, ""..i )
    START = audioConfig.start
    setPosition(audioGroups, 3)
+   loaded = true
 end
 
 function audioStart()
    setPosition(audioGroups, START)
 end
 
-function audioUpdate()
+function audioUpdate(run)
    local voiceOn = false
    local tbs = 0
 
@@ -103,16 +107,14 @@ function audioUpdate()
    end
 
    if audioGroups.voice[1]:tell("seconds") >= tracks[i].start+loop then
-      if not love.keyboard.isDown("space") then
+      if run == true then
          i = i + 1
-         if i > #tracks then
-            -- i = 1
-            return false, -1
-         end
-         affTxt =  love.graphics.newText(fonts.small, ""..i )
+      end
+      if i > #tracks then
+         -- i = 1
+         return false, -1
       end
       setPosition(audioGroups, tracks[i].start)
-
    end
 
    return voiceOn, tbs
@@ -142,5 +144,4 @@ function audioDraw()
                       x + r*math.cos(angle),
                       y + r*math.sin(angle))
 
-   love.graphics.draw(affTxt, x-r,y-r)
 end
