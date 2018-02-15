@@ -55,6 +55,10 @@ function persoLoad(w, h, roads)
       {
          love.graphics.newImage("assets/inhabitants/Chara_guy1.png"),
          love.graphics.newImage("assets/inhabitants/Chara_guy2.png"),
+      },
+      {
+         love.graphics.newImage("assets/inhabitants/Chara_homme01.png"),
+         love.graphics.newImage("assets/inhabitants/Chara_homme02.png"),
       }
 
    }

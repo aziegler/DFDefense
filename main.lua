@@ -159,12 +159,7 @@ function love.mousepressed(x,y,button,istouch)
          gameState.title = false
          audioStart()
       else
-         if 300 < x_mouse and 900 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
-            gameState.title = false
-            audioStart()
-         elseif 800 < x_mouse and 1500 > x_mouse and 400 < y_mouse and 1000 > y_mouse then
-            gameState.info = true
-         end
+         gameState.info = true
       end
    else
       if mouseMode == mouseModes.pick then
@@ -388,8 +383,11 @@ function love.keypressed(key)
    end
 end
 
+local play_dt = 0
+
 function love.update (dt)
    voiceOn, tbs = audioUpdate(gameState.title == false and gameState.info == false)
+   play_dt = play_dt + dt
    if not gameState.gameOver and not gameState.title and not gameState.win then
 
 
@@ -603,18 +601,27 @@ function love.draw()
       local height = love.graphics.getHeight() /scale
       love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
 
+      local size = 1 + math.cos(5*play_dt)/20
+      local logoSize = 1 + 10/(0.001+play_dt*10)^3
       if not gameState.info then
          love.graphics.setColor(255, 255, 255, 255)
-         love.graphics.draw(imgUI.Logo,40, 300)
-         love.graphics.draw(imgUI.Button_play,400,700)
-         love.graphics.draw(imgUI.Button_info,width - 800,700)
+         love.graphics.draw(imgUI.Button_play,
+                            width/2 - (size*imgUI.Button_play:getWidth()/2),
+                            750, 0, size, size)
+         love.graphics.draw(imgUI.Logo,
+                            width/2-logoSize*imgUI.Logo:getWidth()/2,
+                            height/2-logoSize*imgUI.Logo:getHeight()/2,0,
+                            logoSize,logoSize)
+         --logoSize, logoSize)
+
       else
          love.graphics.setFont(fonts.title_small)
          love.graphics.setColor(255, 255, 255, 255)
          love.graphics.printf(gameplayVariable.text, 80, 80, 3 * width / 5)
          love.graphics.draw(imgUI.Button_play,
-			    width - imgUI.Button_play:getWidth() - 40,
-			    height - imgUI.Button_play:getHeight() - 60)
+                            width - imgUI.Button_play:getWidth()/2 - (size*imgUI.Button_play:getWidth()/2) - 40,
+			    height - imgUI.Button_play:getHeight()/2 - size*imgUI.Button_play:getHeight()/2 - 60,
+                0, size, size)
       end
 
       return
