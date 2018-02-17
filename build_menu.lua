@@ -53,9 +53,6 @@ function drawMenu()
 
    love.graphics.setColor(255,255,255)
    love.graphics.draw(imgUI.Menu_BG, menuFromX+imgUI.Menu_BG:getWidth()/2, menuFromY)
-   --love.graphics.rectangle("fill",
-     --                      menuFromX,menuFromY,
-   --                    width, SIZE+20)
 
    for k,v in pairs(tower_types) do
       local scale = 1

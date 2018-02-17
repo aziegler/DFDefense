@@ -375,6 +375,12 @@ function love.keypressed(key)
    if key == "escape" then
       love.event.quit()
    end
+   if key == "w" then
+      gameState.win = true
+   end
+   if key == "e" then
+      gameState.gameOver = true
+   end
    if key == "space" and (gameState.gameOver or gameState.win) then
       gameState.gameOver = false
       gameState.win = false
@@ -389,7 +395,6 @@ function love.update (dt)
    voiceOn, tbs = audioUpdate(gameState.title == false and gameState.info == false)
    play_dt = play_dt + dt
    if not gameState.gameOver and not gameState.title and not gameState.win then
-
 
       if tbs == -1 then
          gameState.win = true
@@ -595,11 +600,11 @@ function love.draw()
    love.graphics.setColor(255,255,255)
 
    if gameState.title then
-      love.graphics.setColor(130, 130, 130, 150)
+      love.graphics.setColor(130, 130, 130, 255)
       love.graphics.draw(title_bg,0,0)
       local width = love.graphics.getWidth() / scale
       local height = love.graphics.getHeight() /scale
-      love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
+      --love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
 
       local size = 0.85 + math.cos(5*play_dt)/20
       local logoSize = 1 + 10/(0.001+play_dt*10)^3
@@ -675,29 +680,28 @@ function love.draw()
    end
 
    if gameState.gameOver then
-      love.graphics.setColor(255, 255, 255, 200)
+      love.graphics.setColor(0,0,0,150) --(255, 255, 255, 200)
       local width = love.graphics.getWidth()
       local height = love.graphics.getHeight()
-      love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
+      love.graphics.rectangle("fill", 0, 0, width,  height)
       love.graphics.setColor(255, 255, 255, 255)
       love.graphics.draw(imgUI.Avis_Demolition,30,60)
-      love.graphics.setColor(0, 0, 0, 255)
       love.graphics.setFont(fonts.title_small)
       love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight() - 150,500)
-      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 200, 300, 700)
+      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 300, 300, 700)
    end
 
    if gameState.win then
-      love.graphics.setColor(255, 255, 255, 200)
+      love.graphics.setColor(0,0,0,150) --(255, 255, 255, 200)
       local width = love.graphics.getWidth()
       local height = love.graphics.getHeight()
-      love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
+      love.graphics.rectangle("fill", 0, 0, width,  height)
       love.graphics.setColor(255, 255, 255, 255)
       love.graphics.draw(imgUI.Victoire,100,200,0,2,2)
-      love.graphics.setColor(0, 0, 0, 255)
+      -- love.graphics.setColor(0, 0, 0, 255)
       love.graphics.setFont(fonts.title_small)
       love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight() - 150,500)
-      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 200, 300, 700)
+      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 300, 300, 700)
    end
 
    --love.graphics.setColor(255,255,255,255)
@@ -707,7 +711,7 @@ function love.draw()
 
    if mouseMode == mouseModes.gui then
       drawMenu()
-   elseif not (hovered == nil) then
+   elseif not (hovered == nil) and gameState.win == false and gameState.gameOver == false then
       local x = hovered.x+hovered.width
       local y = hovered.y-hovered.height/2
       if hovered.isBase then
