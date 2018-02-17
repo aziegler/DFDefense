@@ -601,19 +601,18 @@ function love.draw()
       local height = love.graphics.getHeight() /scale
       love.graphics.rectangle("fill", 20, 50, width - 40,  height - 100)
 
-      local size = 1 + math.cos(5*play_dt)/20
+      local size = 0.85 + math.cos(5*play_dt)/20
       local logoSize = 1 + 10/(0.001+play_dt*10)^3
       if not gameState.info then
          love.graphics.setColor(255, 255, 255, 255)
          love.graphics.draw(imgUI.Button_play,
                             width/2 - (size*imgUI.Button_play:getWidth()/2),
-                            750, 0, size, size)
+                            3*height/4 - (size*imgUI.Button_play:getHeight()/2),
+                                         0, size, size)
          love.graphics.draw(imgUI.Logo,
                             width/2-logoSize*imgUI.Logo:getWidth()/2,
-                            height/2-logoSize*imgUI.Logo:getHeight()/2,0,
+                            2*height/5-logoSize*imgUI.Logo:getHeight()/2,0,
                             logoSize,logoSize)
-         --logoSize, logoSize)
-
       else
          love.graphics.setFont(fonts.title_small)
          love.graphics.setColor(255, 255, 255, 255)
