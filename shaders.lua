@@ -13,14 +13,14 @@ function loadShaders()
    local pixelcodeHallo = [[
         vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords )
         {
-            float diff = 0.005;
+            float diff = 0.003;
             vec4 texcolor = Texel(texture, texture_coords);
             vec2 tc;
             vec4 tcol;
 
             if (texcolor.w < 0.5) {
-              for(int i = -10; i <= 10; i++) {
-                for(int j = -10; j <= 10; j++) {
+              for(int i = -20; i <= 20; i++) {
+                for(int j = -20; j <= 20; j++) {
                   tc.x = texture_coords.x + i*diff;
                   tc.y = texture_coords.y + j*diff;
                   tcol = Texel(texture, tc);
@@ -32,7 +32,7 @@ function loadShaders()
                   }
                 }
               }
-              texcolor /= 20*5;
+              texcolor /= 20*15;
               texcolor *= color;
             }
             return texcolor;

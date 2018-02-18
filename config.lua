@@ -26,18 +26,20 @@ Audio {
 	  { loop = 4, voice = false },
 	  { loop = 4, voice = true , tbs = 1},
 	  { loop = 4, voice = false },
-	  
+
 	  { loop = 3, voice = false },
 	  { loop = 3, voice = true , tbs = 1},
 	  { loop = 3, voice = false },
-	  
+
 	  { loop = 2, voice = false },
 	  { loop = 2, voice = false },
 	  { loop = 2, voice = true , tbs = 0.8},
 	  { loop = 2, voice = false },
-	  
+
 	  { loop = 1, voice = true , tbs = 0.6},
-	  { loop = 1, voice = false }
+	  { loop = 1, voice = false },
+      { loop = 1, voice = false },
+      { loop = 1, voice = false },
    }
 }
 
@@ -83,7 +85,7 @@ Jeremiaah : Beatmaker\
 Marc Planard : Programmation\
 Thomas Planques : Game design\
 Axelle Ziegler : Programmation"
-   
+
 }
 
 Tower {
@@ -122,7 +124,7 @@ Tower {
 Dans le soutif ou dans la semelle SARL la parallèle\
 Rideau rideau mécano sous le matelas sous le manteau\
 Ramène moi prima primo ce qui ne passera pas aux infos"
-   
+
 }
 
 Tower {
