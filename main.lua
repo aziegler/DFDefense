@@ -2,6 +2,7 @@ require "audio"
 require "game_data"
 require "build_menu"
 require "particles"
+require "shaders"
 
 local roads = {}
 roads.count = 3
@@ -231,6 +232,8 @@ end
 
 function love.load()
    math.randomseed(os.time())
+
+   loadShaders()
 
    fonts = {
       title_large = love.graphics.newFont("assets/i8080.ttf",90),
@@ -524,13 +527,19 @@ function draw_enemy(enemy)
 
       if enemy.life_ttl ~= nil then
          love.graphics.setColor(212, 49, 64, 255)
+         love.graphics.setShader(shaderHallo)
       end
 
-      if not (enemy.life and enemy.life < 20 and (enemy.time % speed)/speed < 0.5) then
-         love.graphics.draw(img,
+      if (enemy.life and enemy.life < 20 and (enemy.time % speed)/speed < 0.5) then
+         love.graphics.setColor(255, 255, 255, 255)
+         love.graphics.setShader(shaderWhite)
+      end
+
+      love.graphics.draw(img,
                          enemy.x-img:getWidth()/2,
                          enemy.y-img:getHeight())
-      end
+      love.graphics.setShader()
+
    else
       love.graphics.setColor(enemy.color.red, enemy.color.green, enemy.color.blue)
       love.graphics.rectangle("fill",enemy.x - 20,enemy.y - 20,40,40)
@@ -560,11 +569,6 @@ function draw_tower(tower)
    local h = tower.y
    local x = tower.x
    if tower.img then
-      love.graphics.setColor(255, 255, 255)
-
-      if tower.score_ttl and tower.score_ttl > 0 then
-         love.graphics.setColor(10, 120, 212)
-      end
 
       local img_scale = 1
       if tower.anim_ttl and tower.anim_ttl > 0 then
@@ -578,8 +582,16 @@ function draw_tower(tower)
       end
       x = tower.x - img_scale*tower.img:getWidth()/2 + tower.width/2
 
-      love.graphics.draw(tower.img, x , h, 0, img_scale, img_scale)
+      if tower.score_ttl and tower.score_ttl > 0 then
+         love.graphics.setColor(10, 120, 212)
+         love.graphics.setShader(shaderHallo)
+      else
+         love.graphics.setColor(255, 255, 255)
+      end
 
+      love.graphics.draw(tower.img, x , h, 0, img_scale, img_scale)
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.setShader()
    else
       love.graphics.setColor(tower.color.red,tower.color.green,tower.color.blue)
       love.graphics.rectangle("fill", tower.x, tower.y, tower.width, tower.height)
