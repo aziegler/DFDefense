@@ -34,10 +34,13 @@ $(OSX_NAME): $(LOVE_OSX_VERSION).zip $(LOVE_NAME)
 	mv love.app $(NAME).app
 	cp $(LOVE_NAME) $(NAME).app/Contents/Resources/
 	cp assets/Info.plist $(NAME).app/Contents/
-	zip -r -y $(OSX_NAME) $(NAME).app 
+	zip -r -y $(OSX_NAME) $(NAME).app
 	$(RM) -r $(NAME).app
 
 clean:
-	$(RM) -r $(NAME) $(LOVE_NAME) \
-		$(WIN_NAME) $(LOVE_WIN64_VERSION).zip \
-		$(OSX_NAME) $(LOVE_OSX_VERSION).zip 
+	$(RM) -r $(NAME) $(LOVE_NAME) $(WIN_NAME) $(OSX_NAME)
+
+fclean: clean
+	$(RM) $(LOVE_WIN64_VERSION).zip $(LOVE_OSX_VERSION).zip
+
+re: clean all

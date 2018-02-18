@@ -229,7 +229,7 @@ function init()
    gameState.title = true
 end
 
-function love.load(arg)
+function love.load()
    math.randomseed(os.time())
 
    fonts = {
@@ -283,7 +283,7 @@ function love.load(arg)
    local screen_width = love.graphics.getWidth()
    local screen_height = love.graphics.getHeight()
    local diff = math.abs((screen_width/screen_height)-(1920/1080))
-   print(arg[#arg])
+
    if diff > 0.001 or arg[#arg] == "-w" then
 	 scale = 0.5
 	 love.window.setMode(1920*scale,1080*scale)
