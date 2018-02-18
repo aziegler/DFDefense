@@ -1,9 +1,11 @@
 function partLoad()
    partImgs = {
-      love.graphics.newImage("assets/Prtcl_ampoule.png"),
+      --[[love.graphics.newImage("assets/Prtcl_ampoule.png"),
       love.graphics.newImage("assets/Prtcl_attack_allie.png"),
       love.graphics.newImage("assets/Prtcl_attack_note.png"),
-      love.graphics.newImage("assets/Prtcl_punch.png")
+         love.graphics.newImage("assets/Prtcl_punch.png")]]--
+      love.graphics.newImage("assets/EnergieRouge.png"),
+--      love.graphics.newImage("assets/EnergieBleue.png"),
    }
 end
 
@@ -11,11 +13,13 @@ function partUpdate(dt, partList)
    for i,p in pairs(partList) do
       if not p.t then
          p.t = 0.0001
-         p.ttl = math.random(0.25,0.5)
+         p.ttl = 0.3 + math.random()*0.3
          p.to.x = p.to.x + math.random(-20,20)
          p.to.y = p.to.y + math.random(-20,20)
          p.from.x = p.from.x + math.random(-20,20)
          p.from.y = p.from.y + math.random(-20,20)
+         p.size = 0.5 + math.random()*0.5
+
          p.img = partImgs[math.random(1,#partImgs)]
       end
       p.t = p.t + dt
@@ -33,7 +37,7 @@ function partDraw(partList)
          local y = p.from.y + (p.to.y-p.from.y) * t
 
          love.graphics.setColor(255, 255, 255)
-         love.graphics.draw(p.img, x-p.img:getWidth()/2, y-p.img:getHeight()/2)
+         love.graphics.draw(p.img, x-p.size*p.img:getWidth()/2, y-p.size*p.img:getHeight()/2, 0, p.size, p.size)
       end
    end
 end

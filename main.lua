@@ -88,7 +88,7 @@ function mousePick(x,y,button,istouch)
       if idx > -1 and building.enabled then
          mouseMode = mouseModes.gui
          mouseModes.menuPos = { x= building.x + building.width/2,
-                                   y= building.y }
+                                   y= building.y  }
          mouseModes.building = building
          mouseModes.buildingIdx = idx
       end
@@ -152,12 +152,15 @@ end
 
 function love.mousepressed(x,y,button,istouch)
    if gameState.title then
-      local x_mouse = mouseModes.mousePos[1]
-      local y_mouse = mouseModes.mousePos[2]
       if gameState.info then
-         gameState.info = false
-         gameState.title = false
-         audioStart()
+         if gameState.tuto ~= true then
+            gameState.tuto = true
+         else
+            gameState.tuto = false
+            gameState.info = false
+            gameState.title = false
+            audioStart()
+         end
       else
          gameState.info = true
       end
@@ -267,7 +270,8 @@ function love.load(arg)
       Button_info = love.graphics.newImage("assets/UI/btn_Info.png"),
       Menu_BG = love.graphics.newImage("assets/UI/SupportIcon.png"),
       Avis_Demolition = love.graphics.newImage("assets/avisDeDEmolition.png"),
-      Victoire = love.graphics.newImage("assets/UI/victoire.png")
+      Victoire = love.graphics.newImage("assets/UI/victoire.png"),
+      tuto = love.graphics.newImage("assets/UI/tuto.png")
    }
 
    enemy_gq.list[2].img = imgEnemyGQ.Police
@@ -279,16 +283,12 @@ function love.load(arg)
    local screen_width = love.graphics.getWidth()
    local screen_height = love.graphics.getHeight()
    local diff = math.abs((screen_width/screen_height)-(1920/1080))
-   if screen_width ~= 1920 or screen_height ~= 1080 then
-      if diff < 0.001 then
-	 scale = screen_width/1920
-	 love.window.setFullscreen(true)
-      else
+   print(arg[#arg])
+   if diff > 0.001 or arg[#arg] == "-w" then
 	 scale = 0.5
 	 love.window.setMode(1920*scale,1080*scale)
-      end
    else
-      scale = 1
+      scale = screen_width/1920
       love.window.setFullscreen(true)
    end
 
@@ -303,13 +303,22 @@ function compute_damage(dt)
          local distance = (width*width + height*height)^0.5
          if distance  < tower.range then
             enemy.life = enemy.life - tower.dps * dt
+
             if enemy.life < 0 then
                table.remove(enemies.list,en_idx)
                break
             end
          end
+
          if distance < enemy.range then
             tower.score = tower.score - enemy.dps * dt
+
+            if tower.old_score == nil then tower.old_score = tower.score end
+            if tower.score < tower.old_score - 10 then
+               tower.old_score = tower.score
+               tower.score_ttl = 0.25
+            end
+
             if tower.score < 0 then
                if tower.isBase then
                   gameState.gameOver = true
@@ -351,6 +360,13 @@ function compute_damage(dt)
          local distance = (width*width + height*height)^0.5
          if building1.score < -100 and distance < enemyBuilding.range then
             tower.score = tower.score - enemyBuilding.dps * dt
+
+            if tower.old_score == nil then tower.old_score = tower.score end
+            if tower.score < tower.old_score - 10 then
+               tower.old_score = tower.score
+               tower.score_ttl = 0.25
+            end
+
             if tower.score < 0 then
                if tower.isBase then
                   gameState.gameOver = true
@@ -413,6 +429,13 @@ function love.update (dt)
          if tower.isBase then
             baseTower = tower
          end
+
+         if tower.score_ttl ~= nil then
+            tower.score_ttl = tower.score_ttl - dt
+            if tower.score_ttl <= 0 then
+               tower.score_ttl = nil
+            end
+         end
       end
 
       for _,p in pairs(persos) do
@@ -420,6 +443,19 @@ function love.update (dt)
       end
 
       for idx,enemy in pairs(enemies.list) do
+         if enemy.old_life == nil then enemy.old_life = enemy.life end
+         if enemy.life < enemy.old_life - 10 then
+            enemy.old_life = enemy.life
+            enemy.life_ttl = 0.5
+         end
+
+         if enemy.life_ttl ~= nil and enemy.life_ttl > 0 then
+            enemy.life_ttl = enemy.life_ttl - dt
+            if enemy.life_ttl < 0 then
+               enemy.life_ttl = nil
+            end
+         end
+
          enemy.time = enemy.time + dt
          enemy.roadStep = (enemy.roadStep + (enemy.speed * dt))
          if enemy.roadStep > roads.list[enemy.road_index].lastPoint then
@@ -439,10 +475,8 @@ function love.update (dt)
          end
       end
 
-
       partUpdate(dt, partList)
       voiceOn, tbs = audioUpdate()
-
 
       enemyCoolDown = enemyCoolDown + dt
       if tbs and enemyCoolDown > tbs then --math.random(0,100) > 99 and voiceOn then
@@ -488,6 +522,10 @@ function draw_enemy(enemy)
       local img = enemy.img[idx]
       love.graphics.setColor(255, 255, 255, 255)
 
+      if enemy.life_ttl ~= nil then
+         love.graphics.setColor(212, 49, 64, 255)
+      end
+
       if not (enemy.life and enemy.life < 20 and (enemy.time % speed)/speed < 0.5) then
          love.graphics.draw(img,
                          enemy.x-img:getWidth()/2,
@@ -523,6 +561,10 @@ function draw_tower(tower)
    local x = tower.x
    if tower.img then
       love.graphics.setColor(255, 255, 255)
+
+      if tower.score_ttl and tower.score_ttl > 0 then
+         love.graphics.setColor(10, 120, 212)
+      end
 
       local img_scale = 1
       if tower.anim_ttl and tower.anim_ttl > 0 then
@@ -619,13 +661,17 @@ function love.draw()
                             2*height/5-logoSize*imgUI.Logo:getHeight()/2,0,
                             logoSize,logoSize)
       else
-         love.graphics.setFont(fonts.title_small)
          love.graphics.setColor(255, 255, 255, 255)
-         love.graphics.printf(gameplayVariable.text, 80, 80, 3 * width / 5)
-         love.graphics.draw(imgUI.Button_play,
-                            width - imgUI.Button_play:getWidth()/2 - (size*imgUI.Button_play:getWidth()/2) - 40,
-			    height - imgUI.Button_play:getHeight()/2 - size*imgUI.Button_play:getHeight()/2 - 60,
-                0, size, size)
+         if not gameState.tuto then
+            love.graphics.setFont(fonts.title_small)
+            love.graphics.printf(gameplayVariable.text, 80, 80, 3 * width / 5)
+            love.graphics.draw(imgUI.Button_play,
+                               width - imgUI.Button_play:getWidth()/2 - (size*imgUI.Button_play:getWidth()/2) - 40,
+                               height - imgUI.Button_play:getHeight()/2 - size*imgUI.Button_play:getHeight()/2 - 60,
+                               0, size, size)
+         else
+            love.graphics.draw(imgUI.tuto,0,0)
+         end
       end
 
       return
@@ -679,35 +725,31 @@ function love.draw()
       end
    end
 
+   local width = 1920 -- love.graphics.getWidth()
+   local height = 1080 --love.graphics.getHeight()
    if gameState.gameOver then
       love.graphics.setColor(0,0,0,150) --(255, 255, 255, 200)
-      local width = love.graphics.getWidth()
-      local height = love.graphics.getHeight()
       love.graphics.rectangle("fill", 0, 0, width,  height)
       love.graphics.setColor(255, 255, 255, 255)
       love.graphics.draw(imgUI.Avis_Demolition,30,60)
       love.graphics.setFont(fonts.title_small)
-      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight() - 150,500)
-      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 300, 300, 700)
+      love.graphics.printf("Espace pour réessayer", 0, height - 150, 1980, "center")
+      love.graphics.printf(gameplayVariable.textCredits,
+                           width-750, 50, 700, "right")
    end
 
    if gameState.win then
       love.graphics.setColor(0,0,0,150) --(255, 255, 255, 200)
-      local width = love.graphics.getWidth()
-      local height = love.graphics.getHeight()
       love.graphics.rectangle("fill", 0, 0, width,  height)
       love.graphics.setColor(255, 255, 255, 255)
-      love.graphics.draw(imgUI.Victoire,100,200,0,2,2)
-      -- love.graphics.setColor(0, 0, 0, 255)
+      love.graphics.draw(imgUI.Victoire,
+                         width/2 - 0.8*imgUI.Victoire:getWidth()/2,
+                         height/2 - 0.8*imgUI.Victoire:getHeight()/2,0,0.8,0.8)
       love.graphics.setFont(fonts.title_small)
-      love.graphics.printf("Espace pour réessayer", love.graphics.getWidth()/2 - 200,love.graphics.getHeight() - 150,500)
-      love.graphics.printf(gameplayVariable.textCredits,love.graphics.getWidth()/2 + 300, 300, 700)
+      love.graphics.printf("Espace pour réessayer", 0, height - 150,1980, "center")
+      love.graphics.printf(gameplayVariable.textCredits,
+                           width-750, 50, 700, "right")
    end
-
-   --love.graphics.setColor(255,255,255,255)
-   --drawBuildingsMiddle(imgEnemyGQ.Police, enemy_gq.list[2]);
-   --drawBuildings(imgEnemyGQ.Defense, enemy_gq.list[1]);
-
 
    if mouseMode == mouseModes.gui then
       drawMenu()

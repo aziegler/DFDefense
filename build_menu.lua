@@ -7,25 +7,11 @@ local pos = {
    { 300, 75 }, -- garden
 }
 
-function get_menu_bbox(width, k, scale)
-      x = border+mouseModes.menuPos.x-width/2 + (k-1)*SIZE
-      y = border+mouseModes.menuPos.y-SIZE
-      w = SIZE-border*2
-      h = SIZE-border*2
-
-      return { x, y, w, h }
-end
-
-function get_menu_width()
-   return #tower_types * SIZE
-end
-
 local menuFromX = 0
 local menuFromY = 0
 
 function pickMenu(x, y)
    local idx = 0
-   local width = get_menu_width()
 
    x = x - menuFromX
    y = y - menuFromY
@@ -41,15 +27,22 @@ end
 
 function drawMenu()
 
-   local width = get_menu_width()
-
    menuFromX = mouseModes.menuPos.x-imgUI.Menu_BG:getWidth()
    menuFromY = mouseModes.menuPos.y-SIZE-20
 
    picked = pickMenu(mouseModes.mousePos[1],
                      mouseModes.mousePos[2])
 
-
+   if picked > 0 then
+      local pos_x = mouseModes.menuPos.x
+      local pos_y = mouseModes.menuPos.y + mouseModes.building.height/2
+      love.graphics.setColor(212,49,64,100)
+      love.graphics.circle("fill", pos_x, pos_y, tower_types[picked].range, 100)
+      love.graphics.setColor(255,255,255)
+      love.graphics.setLineWidth(5)
+      love.graphics.circle("line", pos_x, pos_y, tower_types[picked].range, 100)
+      love.graphics.setLineWidth(1)
+   end
 
    love.graphics.setColor(255,255,255)
    love.graphics.draw(imgUI.Menu_BG, menuFromX+imgUI.Menu_BG:getWidth()/2, menuFromY)
@@ -64,20 +57,12 @@ function drawMenu()
       end
       love.graphics.setColor(255,255,255,255)
 
-      local bbox = get_menu_bbox(width, k, scale)
       if v.icon then
          love.graphics.draw(v.icon,
                             menuFromX + pos[k][1] - scale * v.icon:getWidth()/2,
                             menuFromY + pos[k][2] - scale * v.icon:getHeight()/2,
                             0,
                             scale, scale)
-      else
-         if picked == k then
-            love.graphics.setColor(v.color[1]/2, v.color[2]/2, v.color[3]/2)
-         else
-            love.graphics.setColor(v.color[1], v.color[2], v.color[3])
-         end
-         love.graphics.rectangle("fill", bbox[1], bbox[2], bbox[3], bbox[4])
       end
    end
 end
