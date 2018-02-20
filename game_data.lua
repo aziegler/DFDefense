@@ -8,10 +8,6 @@ local enemy_types = {}
 
 local layerData
 
-function Video (v)
-   videoSettings = v
-end
-
 function Tower (t)
    if t.img then
       t.img = love.graphics.newImage(t.img)
